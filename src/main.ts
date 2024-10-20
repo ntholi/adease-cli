@@ -1,9 +1,15 @@
 import { Command } from 'commander';
+import inquirer from 'inquirer';
 import chalk from 'chalk';
 
 interface Property {
   name: string;
   type: string;
+}
+
+interface Answers {
+  generateServiceFile: boolean;
+  runMigration: boolean;
 }
 
 const program = new Command();
@@ -17,8 +23,8 @@ program
   .description('Create a new table with specified properties')
   .argument('<tableName>', 'Name of the table to create')
   .argument('[properties...]', 'Properties in the format propertyName:dataType')
-  .action((tableName: string, properties: string[]) => {
-    console.log(chalk.green('Creating table'), chalk.yellow(tableName));
+  .action(async (tableName: string, properties: string[]) => {
+    console.log(chalk.green(`Creating table: ${tableName}`));
 
     const parsedProperties: Property[] = properties
       .filter((prop) => prop.includes(':'))
@@ -40,7 +46,29 @@ program
     } else {
       console.log(chalk.yellow('No valid properties provided.'));
     }
+
+    const answers: Answers = await inquirer.prompt([
+      {
+        type: 'confirm',
+        name: 'generateServiceFile',
+        message: 'Generate service file?',
+        default: false,
+      },
+      {
+        type: 'confirm',
+        name: 'runMigration',
+        message: 'Run migration?',
+        default: true,
+      },
+    ]);
+
     console.log(chalk.green('Table created successfully!'));
+    if (answers.generateServiceFile) {
+      console.log(chalk.green('Service file generated.'));
+    }
+    if (answers.runMigration) {
+      console.log(chalk.green('Migration run successfully.'));
+    }
   });
 
 program.parse(process.argv);
