@@ -8,6 +8,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "dev": "tsx src/main.ts",
     "start": "node dist/main.js",
     "prepublishOnly": "pnpm run build"
   },
@@ -24,6 +25,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.7.7",
+    "tsx": "^4.19.1",
     "typescript": "^5.6.3"
   },
   "engines": {

@@ -4,8 +4,8 @@ import chalk from 'chalk';
 const program = new Command();
 
 program
-  .version('1.0.0')
-  .description('Adease CLI tool')
+  .version('0.0.1-alpha.0')
+  .description('Adease CLI')
   .option('-n, --name <name>', 'Your name')
   .option('-g, --greet', 'Greet the user')
   .parse(process.argv);
