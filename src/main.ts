@@ -1,6 +1,9 @@
+#!/usr/bin/env node
+
 import { Command } from 'commander';
 import inquirer from 'inquirer';
 import chalk from 'chalk';
+import { handleSchema } from './schemaHandler';
 
 interface Property {
   name: string;
@@ -45,6 +48,7 @@ program
       });
     } else {
       console.log(chalk.yellow('No valid properties provided.'));
+      return;
     }
 
     const answers: Answers = await inquirer.prompt([
@@ -52,7 +56,7 @@ program
         type: 'confirm',
         name: 'generateServiceFile',
         message: 'Generate service file?',
-        default: false,
+        default: true,
       },
       {
         type: 'confirm',
@@ -62,12 +66,24 @@ program
       },
     ]);
 
-    console.log(chalk.green('Table created successfully!'));
+    console.log(chalk.blue('You chose to:'));
+    console.log(
+      chalk.yellow(`  Generate service file: ${answers.generateServiceFile}`)
+    );
+    console.log(chalk.yellow(`  Run migration: ${answers.runMigration}`));
+
+    try {
+      await handleSchema(tableName, parsedProperties);
+      console.log(chalk.green('Schema updated successfully!'));
+    } catch (error) {
+      console.error(chalk.red('Error updating schema:'), error);
+    }
+
     if (answers.generateServiceFile) {
-      console.log(chalk.green('Service file generated.'));
+      console.log(chalk.green('Service file generated. (placeholder)'));
     }
     if (answers.runMigration) {
-      console.log(chalk.green('Migration run successfully.'));
+      console.log(chalk.green('Migration run successfully. (placeholder)'));
     }
   });
 
