@@ -4,15 +4,16 @@ import { Command } from 'commander';
 import inquirer from 'inquirer';
 import chalk from 'chalk';
 import { handleSchema } from './schemaHandler';
-
-interface Property {
-  name: string;
-  type: string;
-}
+import { generateFiles } from './generators/pageGenerator';
 
 interface Answers {
   generateServiceFile: boolean;
   runMigration: boolean;
+}
+
+interface Property {
+  name: string;
+  type: string;
 }
 
 const program = new Command();
@@ -75,8 +76,15 @@ program
     try {
       await handleSchema(tableName, parsedProperties);
       console.log(chalk.green('Schema updated successfully!'));
+
+      // Generate additional files
+      await generateFiles(tableName, parsedProperties);
+      console.log(chalk.green('Additional files generated successfully!'));
     } catch (error) {
-      console.error(chalk.red('Error updating schema:'), error);
+      console.error(
+        chalk.red('Error updating schema or generating files:'),
+        error
+      );
     }
 
     if (answers.generateServiceFile) {
