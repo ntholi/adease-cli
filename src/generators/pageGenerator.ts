@@ -94,24 +94,21 @@ function generateFormContent(
 
   return `'use client';
 import { ${tableName} } from '@/db/schema';
-import {FormHeader, Form} from 'adease';
+import { Form} from 'adease';
 import { NumberInput, TextInput } from '@mantine/core';
-import { useRouter } from 'next/navigation';
-import { z } from 'zod';
 import { createInsertSchema } from 'drizzle-zod';
 
 type ${capitalizedTableName} = typeof ${tableName}.$inferSelect;
 
 type Props = {
-  value?: ${capitalizedTableName};
   onSubmit: (values: ${capitalizedTableName}) => Promise<${capitalizedTableName}>;
 };
 
 const ${capitalizedTableName}Schema = createInsertSchema(${tableName})
 
-export default function Form({ onSubmit, value }: Props) {
+export default function ${capitalizedTableName}Form({ onSubmit }: Props) {
   return (
-    <Form>
+    <Form action={onSubmit} schema={${capitalizedTableName}Schema}>
       ${formFields}
     </Form>
   );
