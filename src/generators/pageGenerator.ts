@@ -59,6 +59,9 @@ export default function Layout({ children }: PropsWithChildren) {
     <ListLayout
       getItems={get${capitalizeFirstLetter(tableName)}}
       path='/admin/${tableName}'
+      navigate={(path) => {
+        router.push(path);
+      }}
       renderItem={(item, path) => (
         <ListItem
           label={item.id}
