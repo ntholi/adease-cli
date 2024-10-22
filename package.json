@@ -4,12 +4,20 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "tsx src/main.ts",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
+  "main": "dist/main.js",
+  "bin": {
+    "adease-cli": "./dist/main.js"
+  },
+  "files": [
+    "dist"
+  ],
   "devDependencies": {
     "@types/node": "^22.7.7",
+    "tsx": "^4.19.1",
     "typescript": "^5.5.3",
     "vite": "^5.4.8"
   },

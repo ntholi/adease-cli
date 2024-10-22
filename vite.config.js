@@ -18,9 +18,4 @@ export default defineConfig({
     },
     target: 'esnext',
   },
-  resolve: {
-    alias: {
-      // Add any necessary aliases here
-    },
-  },
 });
