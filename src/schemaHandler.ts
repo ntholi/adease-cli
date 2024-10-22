@@ -7,7 +7,7 @@ interface Property {
 }
 
 export async function handleSchema(tableName: string, properties: Property[]) {
-  const schemaPath = path.join(process.cwd(), 'db', 'schema.ts');
+  const schemaPath = path.join(process.cwd(), 'src/db', 'schema.ts');
 
   try {
     await fs.access(schemaPath);
