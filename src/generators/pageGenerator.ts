@@ -53,8 +53,10 @@ function generateLayoutContent(tableName: string): string {
 import { PropsWithChildren } from 'react';
 import { get${capitalizeFirstLetter(tableName)} } from './actions';
 import {ListItem, ListLayout} from 'adease';
+import { useRouter } from 'next/navigation';
 
 export default function Layout({ children }: PropsWithChildren) {
+  const router = useRouter();
   return (
     <ListLayout
       getItems={get${capitalizeFirstLetter(tableName)}}
@@ -65,7 +67,6 @@ export default function Layout({ children }: PropsWithChildren) {
       renderItem={(item, path) => (
         <ListItem
           label={item.id}
-          description={item.name || ''}
           id={item.id}
           path={path}
         />
