@@ -1,6 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
-import { capitalize, singular } from '../utils/word';
+import { capitalize, singular, wordSpace } from '../utils/word';
 
 interface Property {
   name: string;
@@ -50,26 +50,19 @@ export default function Page() {
 }
 
 function generateLayoutContent(tableName: string): string {
-  return `'use client';
-import { PropsWithChildren } from 'react';
+  return `import { PropsWithChildren } from 'react';
 import { get${capitalize(tableName)} } from './actions';
 import {ListItem, ListLayout} from 'adease';
-import { useRouter } from 'next/navigation';
 
 export default function Layout({ children }: PropsWithChildren) {
-  const router = useRouter();
+
   return (
     <ListLayout
       getItems={get${capitalize(tableName)}}
-      path='/admin/${tableName}'
-      navigate={(path) => {
-        router.push(path);
-      }}
-      renderItem={(item, path) => (
+      renderItem={(item) => (
         <ListItem
           label={item.id}
           id={item.id}
-          path={path}
         />
       )}
     >
@@ -124,7 +117,7 @@ function generateIdPageContent(
   const fieldViews = properties
     .map(
       (prop) =>
-        `<FieldView label='${capitalize(prop.name)}'>{item.${
+        `<FieldView label='${capitalize(wordSpace(prop.name))}'>{item.${
           prop.name
         }}</FieldView>`
     )

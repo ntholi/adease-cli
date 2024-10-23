@@ -16,6 +16,10 @@ const IRREGULAR_SINGULARS = new Map(
   ])
 );
 
+export function wordSpace(string: string): string {
+  return string.replace(/([a-z])([A-Z])/g, '$1 $2');
+}
+
 export function capitalize(string: string): string {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
