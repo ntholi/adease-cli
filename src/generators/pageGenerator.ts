@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import { capitalize, singular } from '../utils/word';
 
 interface Property {
   name: string;
@@ -51,7 +52,7 @@ export default function Page() {
 function generateLayoutContent(tableName: string): string {
   return `'use client';
 import { PropsWithChildren } from 'react';
-import { get${capitalizeFirstLetter(tableName)} } from './actions';
+import { get${capitalize(tableName)} } from './actions';
 import {ListItem, ListLayout} from 'adease';
 import { useRouter } from 'next/navigation';
 
@@ -59,7 +60,7 @@ export default function Layout({ children }: PropsWithChildren) {
   const router = useRouter();
   return (
     <ListLayout
-      getItems={get${capitalizeFirstLetter(tableName)}}
+      getItems={get${capitalize(tableName)}}
       path='/admin/${tableName}'
       navigate={(path) => {
         router.push(path);
@@ -82,12 +83,12 @@ function generateFormContent(
   tableName: string,
   properties: Property[]
 ): string {
-  const capitalizedTableName = capitalizeFirstLetter(tableName);
+  const capitalizedTableName = capitalize(tableName);
   const formFields = properties
     .map((prop) => {
       const inputType =
         prop.type.toLowerCase() === 'number' ? 'NumberInput' : 'TextInput';
-      return `<${inputType} name='${prop.name}' label='${capitalizeFirstLetter(
+      return `<${inputType} name='${prop.name}' label='${capitalize(
         prop.name
       )}' />`;
     })
@@ -123,18 +124,21 @@ function generateIdPageContent(
   const fieldViews = properties
     .map(
       (prop) =>
-        `<FieldView label='${capitalizeFirstLetter(prop.name)}'>{item.${
+        `<FieldView label='${capitalize(prop.name)}'>{item.${
           prop.name
         }}</FieldView>`
     )
     .join('\n        ');
 
-  return `import {DeleteIconButton, FieldView, HeaderDisplay} from 'adease';
-import { Anchor, Box, Stack } from '@mantine/core';
-import Link from 'next/link';
+  return `import {
+  DetailsView,
+  DetailsViewHeader,
+  FieldView,
+  DetailsViewBody,
+} from 'adease';
 import { notFound } from 'next/navigation';
-import { delete${capitalizeFirstLetter(tableName)}, get${capitalizeFirstLetter(
-    tableName
+import { delete${capitalize(singular(tableName))}, get${capitalize(
+    singular(tableName)
   )} } from '../actions';
 
 type Props = {
@@ -142,31 +146,30 @@ type Props = {
     id: string | number;
   };
 };
-export default async function Page({ params: { id } }: Props) {
-  const item = await get${capitalizeFirstLetter(tableName)}(id);
+export default async function Page({ params }: Props) {
+  const { id } = await params;
+  const item = await get${capitalize(singular(tableName))}(id);
   if (!item) {
     return notFound();
   }
 
   return (
-    <Box p={'lg'}>
-      <HeaderDisplay
-        title={item.name || item.id.toString()}
-        actionButtons={[<DeleteIconButton action={delete${capitalizeFirstLetter(
-          tableName
-        )}} id={id} />]}
+    <DetailsView>
+      <DetailsViewHeader
+        id={id}
+        title={item.id.toString()}  
+        handleDelete={delete${capitalize(singular(tableName))}}
       />
-
-      <Stack p={'xl'}>
+      <DetailsViewBody>
         ${fieldViews}
-      </Stack>
-    </Box>
+      </DetailsViewBody>
+    </DetailsView>
   );
 }`;
 }
 
 function generateEditPageContent(tableName: string): string {
-  const capitalizedTableName = capitalizeFirstLetter(tableName);
+  const capitalizedTableName = capitalize(tableName);
   return `import { Box } from '@mantine/core';
 import { notFound } from 'next/navigation';
 import Form from '../../form';
@@ -197,7 +200,7 @@ export default async function EditPage({ params: { id } }: Props) {
 }
 
 function generateNewPageContent(tableName: string): string {
-  const capitalizedTableName = capitalizeFirstLetter(tableName);
+  const capitalizedTableName = capitalize(tableName);
   return `import { Box } from '@mantine/core';
 import Form from '../form';
 import { create${capitalizedTableName} } from '../actions';
@@ -209,8 +212,4 @@ export default async function NewPage() {
     </Box>
   );
 }`;
-}
-
-function capitalizeFirstLetter(string: string): string {
-  return string.charAt(0).toUpperCase() + string.slice(1);
 }
