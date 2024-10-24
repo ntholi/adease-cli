@@ -37,12 +37,16 @@ async function appendToSchema(
   properties: Property[]
 ) {
   const existingContent = await fs.readFile(schemaPath, 'utf-8');
-  const newTableSchema = generateTableSchema(tableName, properties);
 
+  if (existingContent.includes(`export const ${tableName} = pgTable`)) {
+    console.log(`Table "${tableName}" already exists in schema. Skipping...`);
+    return;
+  }
+
+  const newTableSchema = generateTableSchema(tableName, properties);
   const updatedContent = existingContent + '\n\n' + newTableSchema;
 
   await fs.writeFile(schemaPath, updatedContent);
-
   console.log(`New table appended to schema at ${schemaPath}`);
 }
 
