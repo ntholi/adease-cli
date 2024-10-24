@@ -25,11 +25,9 @@ type Props = {
   onSubmit: (values: ${capitalized}) => Promise<${capitalized}>;
 };
 
-const ${capitalized}Schema = createInsertSchema(${plural(tableName)});
-
 export default function ${capitalized}Form({ onSubmit }: Props) {
   return (
-    <Form action={onSubmit} schema={${capitalized}Schema}>
+    <Form action={onSubmit} schema={createInsertSchema(${plural(tableName)})}>
       ${formFields}
     </Form>
   );
