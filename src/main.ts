@@ -4,7 +4,7 @@ import { Command } from 'commander';
 import inquirer from 'inquirer';
 import chalk from 'chalk';
 import { handleSchema } from './schemaHandler';
-import { generateFiles } from './generators/pageGenerator';
+import { generateFiles } from './generators/pages';
 
 interface Answers {
   generateServiceFile: boolean;
