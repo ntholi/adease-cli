@@ -55,16 +55,10 @@ import { get${capitalize(tableName)} } from './actions';
 import {ListItem, ListLayout} from 'adease';
 
 export default function Layout({ children }: PropsWithChildren) {
-
   return (
     <ListLayout
       getItems={get${capitalize(tableName)}}
-      renderItem={(item) => (
-        <ListItem
-          label={item.id}
-          id={item.id}
-        />
-      )}
+      renderItem={(it) => <ListItem id={it.id} label={it.id} />}
     >
       {children}
     </ListLayout>
