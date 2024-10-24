@@ -3,7 +3,7 @@
 import { Command } from 'commander';
 import inquirer from 'inquirer';
 import chalk from 'chalk';
-import { handleSchema } from './schemaHandler';
+import { generateSchema } from './generators/schema';
 import { generateFiles } from './generators/pages';
 
 interface Answers {
@@ -74,7 +74,7 @@ program
     console.log(chalk.yellow(`  Run migration: ${answers.runMigration}`));
 
     try {
-      await handleSchema(tableName, parsedProperties);
+      await generateSchema(tableName, parsedProperties);
       console.log(chalk.green('Schema updated successfully!'));
 
       // Generate additional files

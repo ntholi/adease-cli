@@ -1,12 +1,11 @@
 import fs from 'fs/promises';
 import path from 'path';
+import { Property } from '../types';
 
-interface Property {
-  name: string;
-  type: string;
-}
-
-export async function handleSchema(tableName: string, properties: Property[]) {
+export async function generateSchema(
+  tableName: string,
+  properties: Property[]
+) {
   const schemaPath = path.join(process.cwd(), 'src/db', 'schema.ts');
 
   try {
