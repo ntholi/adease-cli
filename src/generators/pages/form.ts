@@ -19,13 +19,13 @@ import { Form} from 'adease';
 import { NumberInput, TextInput } from '@mantine/core';
 import { createInsertSchema } from 'drizzle-zod';
 
-type ${capitalized} = typeof ${plural(tableName)}.$inferSelect;
+type ${capitalized} = typeof ${plural(tableName)}.$inferInsert;
 
 type Props = {
   onSubmit: (values: ${capitalized}) => Promise<${capitalized}>;
 };
 
-const ${capitalized}Schema = createInsertSchema(${plural(tableName)})
+const ${capitalized}Schema = createInsertSchema(${plural(tableName)});
 
 export default function ${capitalized}Form({ onSubmit }: Props) {
   return (

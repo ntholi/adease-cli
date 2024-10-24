@@ -8,9 +8,9 @@ export function generateDetailsPage(
   const fieldViews = properties
     .map(
       (prop) =>
-        `<FieldView label='${capitalize(wordSpace(prop.name))}'>{item.${
-          prop.name
-        }}</FieldView>`
+        `<FieldView label='${capitalize(wordSpace(prop.name))}'>{${singular(
+          tableName
+        )}.${prop.name}}</FieldView>`
     )
     .join('\n        ');
 
@@ -32,8 +32,10 @@ type Props = {
 };
 export default async function Page({ params }: Props) {
   const { id } = await params;
-  const item = await get${capitalize(singular(tableName))}(Number(id));
-  if (!item) {
+  const ${singular(tableName)} = await get${capitalize(
+    singular(tableName)
+  )}(Number(id));
+  if (!${singular(tableName)}) {
     return notFound();
   }
 
@@ -41,7 +43,7 @@ export default async function Page({ params }: Props) {
     <DetailsView>
       <DetailsViewHeader
         id={Number(id)}
-        title={item.id.toString()}  
+        title={'${capitalize(wordSpace(singular(tableName)))}'}
         handleDelete={delete${capitalize(singular(tableName))}}
       />
       <DetailsViewBody>
