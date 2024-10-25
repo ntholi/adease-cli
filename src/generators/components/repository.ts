@@ -26,17 +26,17 @@ export async function generateBaseRepository() {
   );
   await fs.mkdir(path.dirname(pathName), { recursive: true });
 
-  try {
-    await fs.access(pathName);
-    console.log('Repository file already exists. Skipping...');
-  } catch (error) {
-    await fs.writeFile(pathName, getContent());
-  }
+  // try {
+  //   await fs.access(pathName);
+  //   console.log('Repository file already exists. Skipping...');
+  // } catch (error) {
+  await fs.writeFile(pathName, getContent());
+  // }
 }
 
 function getContent() {
   return `'use server';
-  
+
 import { db } from '@/db';
 import { count, eq, like, or } from 'drizzle-orm';
 import { PgColumn, PgTable } from 'drizzle-orm/pg-core';
@@ -78,8 +78,8 @@ class BaseRepository<
     properties: (keyof T)[],
     offset: number = 0,
     limit: number = 10
-  ): Promise<ModelSelect<T>[]> {
-    return await db
+  ): Promise<{ items: ModelSelect<T>[]; pages: number }> {
+    const data = await db
       .select()
       .from(this.table)
       .where(
@@ -91,6 +91,10 @@ class BaseRepository<
       )
       .limit(limit)
       .offset(offset);
+    return {
+      items: data,
+      pages: Math.ceil(data.length / limit),
+    };
   }
 
   async exists(id: ModelSelect<T>[PK]): Promise<boolean> {
