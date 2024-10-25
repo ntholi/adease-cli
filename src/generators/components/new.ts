@@ -1,15 +1,16 @@
-import { capitalize, singular } from '../../utils/word';
+import { singular } from '../../utils/word';
 
 export function generateNewPage(tableName: string): string {
-  const capitalizedTableName = capitalize(singular(tableName));
+  const service = `${singular(tableName)}Service`;
   return `import { Box } from '@mantine/core';
 import Form from '../form';
-import { create${capitalizedTableName} } from '../actions';
+import { ${service} } from '@/server/${tableName}/service';
+
 
 export default async function NewPage() {
   return (
     <Box p={'lg'}>
-      <Form onSubmit={create${capitalizedTableName}} />
+      <Form onSubmit={${service}.create} />
     </Box>
   );
 }`;

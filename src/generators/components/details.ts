@@ -5,6 +5,7 @@ export function generateDetailsPage(
   tableName: string,
   properties: Property[]
 ): string {
+  const service = `${singular(tableName)}Service`;
   const fieldViews = properties
     .map(
       (prop) =>
@@ -21,9 +22,8 @@ export function generateDetailsPage(
   DetailsViewBody,
 } from 'adease';
 import { notFound } from 'next/navigation';
-import { delete${capitalize(singular(tableName))}, get${capitalize(
-    singular(tableName)
-  )} } from '../actions';
+import { ${service} } from '@/server/${tableName}/service';
+
 
 type Props = {
   params: {
@@ -32,9 +32,7 @@ type Props = {
 };
 export default async function Page({ params }: Props) {
   const { id } = await params;
-  const ${singular(tableName)} = await get${capitalize(
-    singular(tableName)
-  )}(Number(id));
+  const ${singular(tableName)} = await ${service}.get(Number(id));
   if (!${singular(tableName)}) {
     return notFound();
   }
@@ -44,7 +42,7 @@ export default async function Page({ params }: Props) {
       <DetailsViewHeader
         id={Number(id)}
         title={'${capitalize(wordSpace(singular(tableName)))}'}
-        handleDelete={delete${capitalize(singular(tableName))}}
+        handleDelete={${service}.delete}
       />
       <DetailsViewBody>
         ${fieldViews}

@@ -8,12 +8,11 @@ import { ${tableName} } from '@/db/schema';
 
 type ${capitalize(singular(tableName))} = typeof ${tableName}.$inferInsert;
 
-export class ${capitalize(tableName)}Service {
-  private readonly ITEMS_PER_PAGE = 15;
-
-  constructor(private readonly repository = new ${capitalize(
-    tableName
-  )}Repository()) {}
+class ${capitalize(tableName)}Service {
+  constructor(
+    private readonly repository = new ${capitalize(tableName)}Repository(),
+    private readonly pageSize = 15
+  ) {}
 
   async first() {
     return this.repository.findFirst();
@@ -28,12 +27,12 @@ export class ${capitalize(tableName)}Service {
     search = '',
     searchProperties: (keyof typeof ${tableName})[] = []
   ) {
-    const offset = (page - 1) * this.ITEMS_PER_PAGE;
+    const offset = (page - 1) * this.pageSize;
     return this.repository.search(
       search,
       searchProperties,
       offset,
-      this.ITEMS_PER_PAGE
+      this.pageSize
     );
   }
 
@@ -53,5 +52,9 @@ export class ${capitalize(tableName)}Service {
     return this.repository.count();
   }
 }
+
+export const ${singular(tableName)}Service = new ${capitalize(
+    tableName
+  )}Service();
 `;
 }

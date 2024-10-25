@@ -1,8 +1,8 @@
 import { Property } from '../../types';
-import { capitalize, plural, wordSpace } from '../../utils/word';
+import { capitalize, plural, singular, wordSpace } from '../../utils/word';
 
 function generateForm(tableName: string, properties: Property[]): string {
-  const capitalized = capitalize(plural(tableName));
+  const capitalized = capitalize(singular(tableName));
   const formFields = properties
     .map((prop) => {
       const inputType =
@@ -23,11 +23,14 @@ type ${capitalized} = typeof ${plural(tableName)}.$inferInsert;
 
 type Props = {
   onSubmit: (values: ${capitalized}) => Promise<${capitalized}>;
+  defaultValues?: ${capitalized};
 };
 
-export default function ${capitalized}Form({ onSubmit }: Props) {
+export default function ${capitalized}Form({ onSubmit, defaultValues }: Props) {
   return (
-    <Form action={onSubmit} schema={createInsertSchema(${plural(tableName)})}>
+    <Form action={onSubmit} schema={createInsertSchema(${plural(
+      tableName
+    )})} defaultValues={defaultValues}>
       ${formFields}
     </Form>
   );

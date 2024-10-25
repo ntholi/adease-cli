@@ -1,11 +1,11 @@
-import { capitalize } from '../../utils/word';
+import { singular } from '../../utils/word';
 
 export function generateEditPage(tableName: string): string {
-  const capitalizedTableName = capitalize(tableName);
+  const service = `${singular(tableName)}Service`;
   return `import { Box } from '@mantine/core';
 import { notFound } from 'next/navigation';
 import Form from '../../form';
-import { get${capitalizedTableName}, update${capitalizedTableName} } from '../../actions';
+import { ${service} } from '@/server/${tableName}/service';
 
 type Props = {
   params: {
@@ -13,17 +13,18 @@ type Props = {
   };
 };
 
-export default async function EditPage({ params: { id } }: Props) {
-  const item = await get${capitalizedTableName}(id);
+export default async function EditPage({ params }: Props) {
+  const { id } = await params;
+  const item = await ${service}.get(Number(id));
   if (!item) return notFound();
-
+  
   return (
     <Box p={'lg'}>
       <Form
-        value={item}
+        defaultValues={item}
         onSubmit={async (value) => {
           'use server';
-          return await update${capitalizedTableName}(id, value);
+          return await ${service}.update(Number(id), value);
         }}
       />
     </Box>
