@@ -1,7 +1,24 @@
 import path from 'path';
 import fs from 'fs/promises';
+import { capitalize } from '../../utils/word';
 
-export async function generateRepository() {
+export function generateRepository(tableName: string) {
+  return `'use server';
+  
+import BaseRepository from '@/lib/repository/BaseRepository';
+import { ${tableName} } from '@/db/schema';
+
+export class ${capitalize(
+    tableName
+  )}Repository extends BaseRepository<typeof ${tableName}, 'id'> {
+  constructor() {
+    super(${tableName}, 'id');
+  }
+}
+`;
+}
+
+export async function generateBaseRepository() {
   const pathName = path.join(
     process.cwd(),
     'src/lib/repository',
@@ -18,26 +35,22 @@ export async function generateRepository() {
 }
 
 function getContent() {
-  return `import { count, eq, like, or } from 'drizzle-orm';
-import { NodePgDatabase } from 'drizzle-orm/node-postgres';
+  return `'use server';
+import { db } from '@/db';
+import { count, eq, like, or } from 'drizzle-orm';
 import { PgColumn, PgTable } from 'drizzle-orm/pg-core';
 
 type ModelInsert<T extends PgTable> = T['$inferInsert'];
 type ModelSelect<T extends PgTable> = T['$inferSelect'];
 
 class BaseRepository<
-  TSchema extends Record<string, PgTable>,
   T extends PgTable,
   PK extends keyof T & keyof ModelSelect<T>
 > {
-  constructor(
-    private db: NodePgDatabase<TSchema>,
-    private table: T,
-    private primaryKey: PK
-  ) {}
+  constructor(private table: T, private primaryKey: PK) {}
 
   async findById(id: ModelSelect<T>[PK]): Promise<ModelSelect<T> | undefined> {
-    const [result] = await this.db
+    const [result] = await db
       .select()
       .from(this.table)
       .where(eq(this.table[this.primaryKey] as PgColumn, id))
@@ -49,7 +62,7 @@ class BaseRepository<
     offset: number = 0,
     limit: number = 10
   ): Promise<ModelSelect<T>[]> {
-    return await this.db.select().from(this.table).limit(limit).offset(offset);
+    return await db.select().from(this.table).limit(limit).offset(offset);
   }
 
   async search(
@@ -58,7 +71,7 @@ class BaseRepository<
     offset: number = 0,
     limit: number = 10
   ): Promise<ModelSelect<T>[]> {
-    return await this.db
+    return await db
       .select()
       .from(this.table)
       .where(
@@ -73,7 +86,7 @@ class BaseRepository<
   }
 
   async exists(id: ModelSelect<T>[PK]): Promise<boolean> {
-    const [result] = await this.db
+    const [result] = await db
       .select({ count: count() })
       .from(this.table)
       .where(eq(this.table[this.primaryKey] as PgColumn, id))
@@ -82,10 +95,7 @@ class BaseRepository<
   }
 
   async create(data: ModelInsert<T>): Promise<ModelSelect<T>> {
-    const [inserted] = await this.db
-      .insert(this.table)
-      .values(data)
-      .returning();
+    const [inserted] = await db.insert(this.table).values(data).returning();
     return inserted;
   }
 
@@ -93,7 +103,7 @@ class BaseRepository<
     id: ModelSelect<T>[PK],
     data: Partial<ModelInsert<T>>
   ): Promise<ModelSelect<T>> {
-    const [updated] = await this.db
+    const [updated] = await db
       .update(this.table)
       .set(data)
       .where(eq(this.table[this.primaryKey] as PgColumn, id))
@@ -102,18 +112,18 @@ class BaseRepository<
   }
 
   async delete(id: ModelSelect<T>[PK]): Promise<void> {
-    await this.db
+    await db
       .delete(this.table)
       .where(eq(this.table[this.primaryKey] as PgColumn, id));
   }
 
   async count(): Promise<number> {
-    const [result] = await this.db.select({ count: count() }).from(this.table);
+    const [result] = await db.select({ count: count() }).from(this.table);
     return result?.count ?? 0;
   }
 
   async deleteAll(): Promise<void> {
-    await this.db.delete(this.table);
+    await db.delete(this.table);
   }
 }
 

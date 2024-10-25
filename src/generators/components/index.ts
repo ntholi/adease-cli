@@ -7,7 +7,7 @@ import { generateForm } from './form';
 import { generateLayout } from './layout';
 import { generateMainPage } from './mainPage';
 import { generateNewPage } from './new';
-import { generateRepository } from './repository';
+import { generateBaseRepository, generateRepository } from './repository';
 
 export async function generateFiles(tableName: string, properties: Property[]) {
   const files = [
@@ -35,9 +35,13 @@ export async function generateFiles(tableName: string, properties: Property[]) {
       path: `src/app/${tableName}/new/page.tsx`,
       content: generateNewPage(tableName),
     },
+    {
+      path: `src/server/${tableName}/repository.ts`,
+      content: generateRepository(tableName),
+    },
   ];
 
-  await generateRepository();
+  await generateBaseRepository();
   for (const file of files) {
     await fs.mkdir(path.dirname(file.path), { recursive: true });
     await fs.writeFile(file.path, file.content);
