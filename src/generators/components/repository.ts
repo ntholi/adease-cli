@@ -36,6 +36,7 @@ export async function generateBaseRepository() {
 
 function getContent() {
   return `'use server';
+  
 import { db } from '@/db';
 import { count, eq, like, or } from 'drizzle-orm';
 import { PgColumn, PgTable } from 'drizzle-orm/pg-core';
@@ -48,6 +49,13 @@ class BaseRepository<
   PK extends keyof T & keyof ModelSelect<T>
 > {
   constructor(private table: T, private primaryKey: PK) {}
+
+  async findFirst(): Promise<ModelSelect<T> | undefined> {
+    return await db.select()
+      .from(this.table)
+      .limit(1)
+      .then(([result]) => result);
+  }
 
   async findById(id: ModelSelect<T>[PK]): Promise<ModelSelect<T> | undefined> {
     const [result] = await db
@@ -67,7 +75,7 @@ class BaseRepository<
 
   async search(
     search: string,
-    properties: (keyof ModelSelect<T>)[],
+    properties: (keyof T)[],
     offset: number = 0,
     limit: number = 10
   ): Promise<ModelSelect<T>[]> {

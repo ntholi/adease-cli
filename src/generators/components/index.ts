@@ -8,6 +8,7 @@ import { generateLayout } from './layout';
 import { generateMainPage } from './mainPage';
 import { generateNewPage } from './new';
 import { generateBaseRepository, generateRepository } from './repository';
+import { generateService } from './service';
 
 export async function generateFiles(tableName: string, properties: Property[]) {
   const files = [
@@ -38,6 +39,10 @@ export async function generateFiles(tableName: string, properties: Property[]) {
     {
       path: `src/server/${tableName}/repository.ts`,
       content: generateRepository(tableName),
+    },
+    {
+      path: `src/server/${tableName}/service.ts`,
+      content: generateService(tableName),
     },
   ];
 
