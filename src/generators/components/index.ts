@@ -9,8 +9,15 @@ import { generateMainPage } from './mainPage';
 import { generateNewPage } from './new';
 import { generateBaseRepository, generateRepository } from './repository';
 import { generateService } from './service';
+import { Answers } from 'inquirer';
+import { generateActions } from './actions';
 
-export async function generateFiles(tableName: string, properties: Property[]) {
+export async function generateFiles(
+  tableName: string,
+  properties: Property[],
+  answers: Answers
+) {
+  const hasServiceFile = answers.generateServiceFile;
   const files = [
     {
       path: `src/app/${tableName}/page.tsx`,
@@ -37,14 +44,21 @@ export async function generateFiles(tableName: string, properties: Property[]) {
       content: generateNewPage(tableName),
     },
     {
+      path: `src/app/${tableName}/actions.ts`,
+      content: generateActions(tableName, hasServiceFile),
+    },
+    {
       path: `src/server/${tableName}/repository.ts`,
       content: generateRepository(tableName),
     },
-    {
+  ];
+
+  if (hasServiceFile) {
+    files.push({
       path: `src/server/${tableName}/service.ts`,
       content: generateService(tableName),
-    },
-  ];
+    });
+  }
 
   await generateBaseRepository();
   for (const file of files) {

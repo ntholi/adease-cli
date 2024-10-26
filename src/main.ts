@@ -69,16 +69,17 @@ program
 
     console.log(chalk.blue('You chose to:'));
     console.log(
-      chalk.yellow(`  Generate service file: ${answers.generateServiceFile}`)
+      chalk.yellow(
+        `  Generate service file with role based authorization: ${answers.generateServiceFile}`
+      )
     );
-    console.log(chalk.yellow(`  Run migration: ${answers.runMigration}`));
 
     try {
       await generateSchema(tableName, parsedProperties);
       console.log(chalk.green('Schema updated successfully!'));
 
       // Generate additional files
-      await generateFiles(tableName, parsedProperties);
+      await generateFiles(tableName, parsedProperties, answers);
       console.log(chalk.green('Additional files generated successfully!'));
     } catch (error) {
       console.error(

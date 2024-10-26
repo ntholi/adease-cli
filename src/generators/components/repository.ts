@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs/promises';
-import { capitalize } from '../../utils/word';
+import { capitalize, singular } from '../../utils/word';
 
 export function generateRepository(tableName: string) {
   return `'use server';
@@ -15,6 +15,10 @@ export class ${capitalize(
     super(${tableName}, 'id');
   }
 }
+
+const ${singular(tableName)}Repository = new ${capitalize(
+    singular(tableName)
+  )}Repository();
 `;
 }
 
@@ -74,17 +78,18 @@ class BaseRepository<
   }
 
   async search(
+    page: number = 1,
     search: string,
-    properties: (keyof T)[],
-    offset: number = 0,
+    searchProperties: (keyof T)[],
     limit: number = 10
   ): Promise<{ items: ModelSelect<T>[]; pages: number }> {
+    const offset = (page - 1) * limit;
     const data = await db
       .select()
       .from(this.table)
       .where(
         or(
-          ...properties.map((property) =>
+          ...searchProperties.map((property) =>
             like(this.table[property as keyof T] as PgColumn, \`%$\{search}%\`)
           )
         )

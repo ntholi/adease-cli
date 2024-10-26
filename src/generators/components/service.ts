@@ -27,11 +27,10 @@ class ${capitalize(tableName)}Service {
     search = '',
     searchProperties: (keyof typeof ${tableName})[] = []
   ) {
-    const offset = (page - 1) * this.pageSize;
     return this.repository.search(
+      page,
       search,
       searchProperties,
-      offset,
       this.pageSize
     );
   }
