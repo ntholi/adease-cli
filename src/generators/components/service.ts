@@ -15,11 +15,11 @@ class ${capitalize(tableName)}Service {
   )}Repository()) {}
 
   async first() {
-    return this.repository.findFirst();
+    return withAuth(async () => this.repository.findFirst(), []);
   }
 
   async get(id: number) {
-    return this.repository.findById(id);
+    return withAuth(async () => this.repository.findById(id), []);
   }
 
   async search(
@@ -28,23 +28,26 @@ class ${capitalize(tableName)}Service {
     searchProperties: (keyof typeof ${tableName})[] = [],
     pageSize: number = 15
   ) {
-    return this.repository.search(page, search, searchProperties, pageSize);
+    return withAuth(
+      async () => this.repository.search(page, search, searchProperties, pageSize),
+      []
+    );
   }
 
   async create(data: ${capitalize(singular(tableName))}) {
-    return this.repository.create(data);
+    return withAuth(async () => this.repository.create(data), []);
   }
 
   async update(id: number, data: ${capitalize(singular(tableName))}) {
-    return this.repository.update(id, data);
+    return withAuth(async () => this.repository.update(id, data), []);
   }
 
   async delete(id: number) {
-    return this.repository.delete(id);
+    return withAuth(async () => this.repository.delete(id), []);
   }
 
   async count() {
-    return this.repository.count();
+    return withAuth(async () => this.repository.count(), []);
   }
 }
 
