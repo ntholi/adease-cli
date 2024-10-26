@@ -3,7 +3,9 @@ import { capitalize, singular } from '../../utils/word';
 export function generateLayout(tableName: string): string {
   const typeName = capitalize(singular(tableName));
 
-  return `import { PropsWithChildren } from 'react';
+  return `'use client';
+  
+import { PropsWithChildren } from 'react';
 import { ListItem, ListLayout } from 'adease';
 import { getAll${typeName}s } from './actions';
 

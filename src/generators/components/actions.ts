@@ -17,23 +17,23 @@ import { ${tableName} } from '@/db/schema';
 
 type ${typeName} = typeof ${tableName}.$inferInsert;
 
-export function get${typeName}(id: number) {
+export async function get${typeName}(id: number) {
   return ${hasServiceFile ? `${service}.get(id)` : `${service}.findById(id)`};
 }
 
-export function getAll${typeName}s(page: number = 1, search = '') {
+export async function getAll${typeName}s(page: number = 1, search = '') {
   return ${service}.search(page, search, []);
 }
 
-export function create${typeName}(${singularName}: ${typeName}) {
+export async function create${typeName}(${singularName}: ${typeName}) {
   return ${service}.create(${singularName});
 }
 
-export function update${typeName}(id: number, ${singularName}: ${typeName}) {
+export async function update${typeName}(id: number, ${singularName}: ${typeName}) {
   return ${service}.update(id, ${singularName});
 }
 
-export function delete${typeName}(id: number) {
+export async function delete${typeName}(id: number) {
   return ${service}.delete(id);
 }
 `;
