@@ -12,6 +12,7 @@ import { generateService } from './service';
 import { Answers } from 'inquirer';
 import { generateActions } from './actions';
 import { generateWithAuthFile } from './withAuth';
+import { generateRouteHandlers } from './route';
 
 export async function generateFiles(
   tableName: string,
@@ -60,6 +61,23 @@ export async function generateFiles(
       content: generateService(tableName),
     });
     await generateWithAuthFile();
+  }
+
+  if (answers.generateApiRoutes) {
+    const { mainRoute, idRoute } = generateRouteHandlers(
+      tableName,
+      hasServiceFile
+    );
+    files.push(
+      {
+        path: `src/app/api/${tableName}/route.ts`,
+        content: mainRoute,
+      },
+      {
+        path: `src/app/api/${tableName}/[id]/route.ts`,
+        content: idRoute,
+      }
+    );
   }
 
   await generateBaseRepository();

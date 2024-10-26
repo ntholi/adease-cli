@@ -8,6 +8,7 @@ import { generateFiles } from './generators/components';
 
 interface Answers {
   generateServiceFile: boolean;
+  generateApiRoutes: boolean;
   runMigration: boolean;
 }
 
@@ -57,6 +58,12 @@ program
         type: 'confirm',
         name: 'generateServiceFile',
         message: 'Generate service file?',
+        default: true,
+      },
+      {
+        type: 'confirm',
+        name: 'generateApiRoutes',
+        message: 'Generate API route handlers?',
         default: true,
       },
       {
