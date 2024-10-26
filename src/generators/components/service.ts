@@ -3,16 +3,15 @@ import { capitalize, singular } from '../../utils/word';
 export function generateService(tableName: string) {
   return `'use server'
   
-import { ${capitalize(tableName)}Repository } from './repository';
+import { ${capitalize(singular(tableName))}Repository } from './repository';
 import { ${tableName} } from '@/db/schema';
 
 type ${capitalize(singular(tableName))} = typeof ${tableName}.$inferInsert;
 
 class ${capitalize(tableName)}Service {
-  constructor(
-    private readonly repository = new ${capitalize(tableName)}Repository(),
-    private readonly pageSize = 15
-  ) {}
+  constructor(private readonly repository = new ${capitalize(
+    singular(tableName)
+  )}Repository()) {}
 
   async first() {
     return this.repository.findFirst();
@@ -25,14 +24,10 @@ class ${capitalize(tableName)}Service {
   async search(
     page: number = 1,
     search = '',
-    searchProperties: (keyof typeof ${tableName})[] = []
+    searchProperties: (keyof typeof ${tableName})[] = [],
+    pageSize: number = 15
   ) {
-    return this.repository.search(
-      page,
-      search,
-      searchProperties,
-      this.pageSize
-    );
+    return this.repository.search(page, search, searchProperties, pageSize);
   }
 
   async create(data: ${capitalize(singular(tableName))}) {

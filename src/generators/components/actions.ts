@@ -21,7 +21,7 @@ export function get${typeName}(id: number) {
   return ${service}.get(id);
 }
 
-export function search${typeName}(page: number = 1, search = '') {
+export function getAll${typeName}s(page: number = 1, search = '') {
   return ${service}.search(page, search, []);
 }
 

@@ -9,14 +9,14 @@ import BaseRepository from '@/lib/repository/BaseRepository';
 import { ${tableName} } from '@/db/schema';
 
 export class ${capitalize(
-    tableName
+    singular(tableName)
   )}Repository extends BaseRepository<typeof ${tableName}, 'id'> {
   constructor() {
     super(${tableName}, 'id');
   }
 }
 
-const ${singular(tableName)}Repository = new ${capitalize(
+export const ${singular(tableName)}Repository = new ${capitalize(
     singular(tableName)
   )}Repository();
 `;
@@ -81,9 +81,9 @@ class BaseRepository<
     page: number = 1,
     search: string,
     searchProperties: (keyof T)[],
-    limit: number = 10
+    pageSize: number = 15
   ): Promise<{ items: ModelSelect<T>[]; pages: number }> {
-    const offset = (page - 1) * limit;
+    const offset = (page - 1) * pageSize;
     const data = await db
       .select()
       .from(this.table)
@@ -94,11 +94,11 @@ class BaseRepository<
           )
         )
       )
-      .limit(limit)
+      .limit(pageSize)
       .offset(offset);
     return {
       items: data,
-      pages: Math.ceil(data.length / limit),
+      pages: Math.ceil(data.length / pageSize),
     };
   }
 
