@@ -20,14 +20,14 @@ import { ${tableName} } from '@/db/schema';
 import { createInsertSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
-const ${singularName}Schema = createInsertSchema(${tableName});
+const schema = createInsertSchema(${tableName});
 
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
     const page = parseInt(searchParams.get('page') ?? '1');
     const search = searchParams.get('search') ?? '';
-    
+
     const result = await ${service}.search(page, search, []);
     return NextResponse.json(result);
   } catch (error) {
@@ -38,9 +38,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    
-    const validatedData = ${singularName}Schema.parse(body);
-    const result = await ${service}.create(validatedData);
+    const result = await ${service}.create(schema.parse(body));
     return NextResponse.json(result, { status: 201 });
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -57,24 +55,18 @@ import { ${tableName} } from '@/db/schema';
 import { createInsertSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
-const ${singularName}Schema = createInsertSchema(${tableName});
+const schema = createInsertSchema(${tableName});
 
 type Props = {
   params: { id: string }
 };
 
-export async function GET(request: NextRequest, { params }: Props) {
+export async function GET(_: NextRequest, { params }: Props) {
   try {
-    const id = parseInt(params.id);
-    if (isNaN(id)) {
-      return NextResponse.json({ error: 'Invalid ID format' }, { status: 400 });
-    }
-
-    const result = await ${service}.get(id);
+    const result = await ${service}.get(Number(params.id));
     if (!result) {
       return NextResponse.json({ error: 'Not found' }, { status: 404 });
     }
-
     return NextResponse.json(result);
   } catch (error) {
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
@@ -83,19 +75,15 @@ export async function GET(request: NextRequest, { params }: Props) {
 
 export async function PUT(request: NextRequest, { params }: Props) {
   try {
-    const id = parseInt(params.id);
-    if (isNaN(id)) {
-      return NextResponse.json({ error: 'Invalid ID format' }, { status: 400 });
-    }
-
     const body = await request.json();
-    const validatedData = ${singularName}Schema.parse(body);
     
-    const result = await ${service}.update(id, validatedData);
+    const result = await ${service}.update(
+      Number(params.id),
+      schema.parse(body)
+    );
     if (!result) {
       return NextResponse.json({ error: 'Not found' }, { status: 404 });
     }
-
     return NextResponse.json(result);
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -105,18 +93,9 @@ export async function PUT(request: NextRequest, { params }: Props) {
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: Props) {
+export async function DELETE(_: NextRequest, { params }: Props) {
   try {
-    const id = parseInt(params.id);
-    if (isNaN(id)) {
-      return NextResponse.json({ error: 'Invalid ID format' }, { status: 400 });
-    }
-
-    const result = await ${service}.delete(id);
-    if (!result) {
-      return NextResponse.json({ error: 'Not found' }, { status: 404 });
-    }
-
+    await ${service}.delete(Number(params.id));
     return new NextResponse(null, { status: 204 });
   } catch (error) {
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
