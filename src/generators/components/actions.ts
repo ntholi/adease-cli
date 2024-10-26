@@ -5,7 +5,7 @@ export function generateActions(tableName: string, hasServiceFile: boolean) {
   const typeName = capitalize(singularName);
   const service = hasServiceFile
     ? `${singularName}Service`
-    : `${capitalize(tableName)}Repository`;
+    : `${singularName}Repository`;
 
   const serviceImport = hasServiceFile
     ? `import { ${singularName}Service } from '@/server/${tableName}/service';`
@@ -18,7 +18,7 @@ import { ${tableName} } from '@/db/schema';
 type ${typeName} = typeof ${tableName}.$inferInsert;
 
 export function get${typeName}(id: number) {
-  return ${service}.get(id);
+  return ${hasServiceFile ? `${service}.get(id)` : `${service}.findById(id)`};
 }
 
 export function getAll${typeName}s(page: number = 1, search = '') {
