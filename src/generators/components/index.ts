@@ -11,6 +11,7 @@ import { generateBaseRepository, generateRepository } from './repository';
 import { generateService } from './service';
 import { Answers } from 'inquirer';
 import { generateActions } from './actions';
+import { generateWithAuthFile } from './withAuth';
 
 export async function generateFiles(
   tableName: string,
@@ -58,6 +59,7 @@ export async function generateFiles(
       path: `src/server/${tableName}/service.ts`,
       content: generateService(tableName),
     });
+    await generateWithAuthFile();
   }
 
   await generateBaseRepository();

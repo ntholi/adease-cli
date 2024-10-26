@@ -5,6 +5,7 @@ export function generateService(tableName: string) {
   
 import { ${capitalize(singular(tableName))}Repository } from './repository';
 import { ${tableName} } from '@/db/schema';
+import withAuth from '@/lib/auth/withAuth';
 
 type ${capitalize(singular(tableName))} = typeof ${tableName}.$inferInsert;
 
