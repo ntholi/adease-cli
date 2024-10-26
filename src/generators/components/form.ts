@@ -2,7 +2,7 @@ import { Property } from '../../types';
 import { capitalize, plural, singular, wordSpace } from '../../utils/word';
 
 function generateForm(tableName: string, properties: Property[]): string {
-  const capitalized = capitalize(singular(tableName));
+  const typeName = capitalize(singular(tableName));
   const formFields = properties
     .map((prop) => {
       const inputType =
@@ -19,14 +19,14 @@ import { Form} from 'adease';
 import { NumberInput, TextInput } from '@mantine/core';
 import { createInsertSchema } from 'drizzle-zod';
 
-type ${capitalized} = typeof ${plural(tableName)}.$inferInsert;
+type ${typeName} = typeof ${plural(tableName)}.$inferInsert;
 
 type Props = {
-  onSubmit: (values: ${capitalized}) => Promise<${capitalized}>;
-  defaultValues?: ${capitalized};
+  onSubmit: (values: ${typeName}) => Promise<${typeName}>;
+  defaultValues?: ${typeName};
 };
 
-export default function ${capitalized}Form({ onSubmit, defaultValues }: Props) {
+export default function ${typeName}Form({ onSubmit, defaultValues }: Props) {
   return (
     <Form action={onSubmit} schema={createInsertSchema(${plural(
       tableName

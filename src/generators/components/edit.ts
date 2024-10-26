@@ -1,11 +1,11 @@
-import { singular } from '../../utils/word';
+import { capitalize, singular } from '../../utils/word';
 
 export function generateEditPage(tableName: string): string {
-  const service = `${singular(tableName)}Service`;
+  const typeName = capitalize(singular(tableName));
   return `import { Box } from '@mantine/core';
 import { notFound } from 'next/navigation';
 import Form from '../../form';
-import { ${service} } from '@/server/${tableName}/service';
+import { get${typeName}, update${typeName} } from '../../actions';
 
 type Props = {
   params: {
@@ -15,7 +15,7 @@ type Props = {
 
 export default async function EditPage({ params }: Props) {
   const { id } = await params;
-  const item = await ${service}.get(Number(id));
+  const item = await get${typeName}(Number(id));
   if (!item) return notFound();
   
   return (
@@ -24,7 +24,7 @@ export default async function EditPage({ params }: Props) {
         defaultValues={item}
         onSubmit={async (value) => {
           'use server';
-          return await ${service}.update(Number(id), value);
+          return await update${typeName}(Number(id), value);
         }}
       />
     </Box>
