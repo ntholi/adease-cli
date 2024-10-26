@@ -1,9 +1,9 @@
 import { capitalize, singular } from '../../utils/word';
 
 export function generateService(tableName: string) {
-  return `'use server'
-  
-import { ${capitalize(singular(tableName))}Repository } from './repository';
+  return `import { ${capitalize(
+    singular(tableName)
+  )}Repository } from './repository';
 import { ${tableName} } from '@/db/schema';
 import withAuth from '@/lib/auth/withAuth';
 

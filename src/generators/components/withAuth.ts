@@ -4,9 +4,36 @@ import fs from 'fs/promises';
 export async function generateWithAuthFile() {
   const pathName = path.join(process.cwd(), 'src/lib/auth/withAuth.ts');
   await fs.mkdir(path.dirname(pathName), { recursive: true });
-  await fs.writeFile(pathName, getContent());
+  await fs.writeFile(pathName, withAuthContent());
 
   await generateAuthType();
+}
+
+function withAuthContent(): string {
+  return `'use server';
+
+import { auth } from '@/auth';
+import { users } from '@/db/schema';
+
+type Role = (typeof users.$inferSelect)['role'];
+
+export default async function withAuth<T>(
+  fn: () => Promise<T>,
+  roles: Role[] = []
+) {
+  const session = await auth();
+
+  if (!session) {
+    throw new Error('Unauthorized');
+  }
+
+  if (roles.length && !roles.includes(session.user.role)) {
+    throw new Error('Unauthorized');
+  }
+
+  return await fn();
+}
+`;
 }
 
 async function generateAuthType() {
@@ -32,25 +59,4 @@ declare module 'next-auth' {
 }
 `
   );
-}
-
-function getContent(): string {
-  return `'use server';
-
-import { auth } from '@/auth';
-import { users } from '@/db/schema';
-
-type Role = (typeof users.$inferSelect)['role'];
-
-export default async function withAuth<T>(
-  fn: () => Promise<T>,
-  roles: Role[] = []
-) {
-  const session = await auth();
-  if (!session || !roles.includes(session.user.role)) {
-    throw new Error('Unauthorized');
-  }
-  return await fn();
-}
-`;
 }

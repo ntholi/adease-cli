@@ -3,9 +3,7 @@ import fs from 'fs/promises';
 import { capitalize, singular } from '../../utils/word';
 
 export function generateRepository(tableName: string) {
-  return `'use server';
-  
-import BaseRepository from '@/lib/repository/BaseRepository';
+  return `import BaseRepository from '@/lib/repository/BaseRepository';
 import { ${tableName} } from '@/db/schema';
 
 export class ${capitalize(
@@ -39,9 +37,7 @@ export async function generateBaseRepository() {
 }
 
 function getContent() {
-  return `'use server';
-
-import { db } from '@/db';
+  return `import { db } from '@/db';
 import { count, eq, like, or } from 'drizzle-orm';
 import { PgColumn, PgTable } from 'drizzle-orm/pg-core';
 
