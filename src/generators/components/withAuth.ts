@@ -42,11 +42,15 @@ import { users } from '@/db/schema';
 
 type Role = (typeof users.$inferSelect)['role'];
 
-export default async function withAuth(fn: Function, roles: Role[] = []) {
+export default async function withAuth<T>(
+  fn: () => Promise<T>,
+  roles: Role[] = []
+) {
   const session = await auth();
   if (!session || !roles.includes(session.user.role)) {
     throw new Error('Unauthorized');
   }
   return await fn();
-}`;
+}
+`;
 }
