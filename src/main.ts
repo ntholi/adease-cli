@@ -3,8 +3,8 @@
 import { Command } from 'commander';
 import inquirer from 'inquirer';
 import chalk from 'chalk';
-import { generateSchema } from './generators/schema';
-import { generateFiles } from './generators/components';
+import { generateSchema } from './codegen/generators/schema';
+import { generateFiles } from './codegen';
 
 interface Answers {
   generateServiceFile: boolean;

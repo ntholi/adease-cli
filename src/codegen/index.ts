@@ -1,18 +1,21 @@
 import fs from 'fs/promises';
 import path from 'path';
-import { Property } from '../../types';
-import { generateDetailsPage } from './details';
-import { generateEditPage } from './edit';
-import { generateForm } from './form';
-import { generateLayout } from './layout';
-import { generateMainPage } from './mainPage';
-import { generateNewPage } from './new';
-import { generateBaseRepository, generateRepository } from './repository';
-import { generateService } from './service';
+import { Property } from '../types';
+import { generateDetailsPage } from './generators/details';
+import { generateEditPage } from './generators/edit';
+import { generateForm } from './generators/form';
+import { generateLayout } from './generators/layout';
+import { generateMainPage } from './generators/mainPage';
+import { generateNewPage } from './generators/new';
+import {
+  generateBaseRepository,
+  generateRepository,
+} from './generators/repository';
+import { generateService } from './generators/service';
 import { Answers } from 'inquirer';
-import { generateActions } from './actions';
-import { generateWithAuthFile } from './withAuth';
-import { generateRouteHandlers } from './route';
+import { generateActions } from './generators/actions';
+import { generateWithAuthFile } from './generators/withAuth';
+import { generateRouteHandlers } from './generators/route';
 
 export async function generateFiles(
   tableName: string,

@@ -1,6 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
-import { Property } from '../types';
+import { Property } from '../../types';
 
 export async function generateSchema(
   tableName: string,
