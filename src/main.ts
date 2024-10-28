@@ -1,21 +1,9 @@
-#!/usr/bin/env node
-
-import { Command } from 'commander';
-import inquirer from 'inquirer';
 import chalk from 'chalk';
-import { generateSchema } from './codegen/generators/schema';
-import { generateFiles } from './codegen';
-
-interface Answers {
-  generateServiceFile: boolean;
-  generateApiRoutes: boolean;
-  runMigration: boolean;
-}
-
-interface Property {
-  name: string;
-  type: string;
-}
+import { Command } from 'commander';
+import { Field } from './types/Field';
+import Answers from './types/Answers';
+import { generateAll } from './commands/create';
+import inquirer from 'inquirer';
 
 const program = new Command();
 
@@ -25,82 +13,49 @@ program
 
 program
   .command('create')
-  .description('Create a new table with specified properties')
+  .description('Create a new table with specified fields')
   .argument('<tableName>', 'Name of the table to create')
-  .argument('[properties...]', 'Properties in the format propertyName:dataType')
-  .action(async (tableName: string, properties: string[]) => {
+  .argument('[fields...]', 'Fields in the format fieldName:fieldType')
+  .action(async (tableName: string, rawFields: string[]) => {
     console.log(chalk.green(`Creating table: ${tableName}`));
-
-    const parsedProperties: Property[] = properties
-      .filter((prop) => prop.includes(':'))
-      .map((prop) => {
-        const [name, type] = prop.split(':');
+    const fields = rawFields
+      .filter((field) => field.includes(':'))
+      .map((field) => {
+        const [name, type] = field.split(':');
         if (!name || !type) {
-          console.log(chalk.red(`Invalid property format: ${prop}. Skipping.`));
+          console.log(chalk.red(`Invalid field format: ${field}. Skipping.`));
           return null;
         }
         return { name, type };
       })
-      .filter((prop): prop is Property => prop !== null);
+      .filter((field): field is Field => field !== null);
 
-    if (parsedProperties.length > 0) {
-      console.log(chalk.blue('Properties:'));
-      parsedProperties.forEach((prop) => {
-        console.log(chalk.yellow(`  ${prop.name}: ${prop.type}`));
+    if (fields.length > 0) {
+      console.log(chalk.blue('Fields:'));
+      fields.forEach((field) => {
+        console.log(chalk.yellow(`  ${field.name}: ${field.type}`));
       });
     } else {
-      console.log(chalk.yellow('No valid properties provided.'));
+      console.log(chalk.yellow('No valid fields provided.'));
       return;
     }
 
     const answers: Answers = await inquirer.prompt([
       {
         type: 'confirm',
-        name: 'generateServiceFile',
+        name: 'serviceFile',
         message: 'Generate service file?',
         default: true,
       },
       {
         type: 'confirm',
-        name: 'generateApiRoutes',
+        name: 'apiRoutes',
         message: 'Generate API route handlers?',
-        default: true,
-      },
-      {
-        type: 'confirm',
-        name: 'runMigration',
-        message: 'Run migration?',
         default: true,
       },
     ]);
 
-    console.log(chalk.blue('You chose to:'));
-    console.log(
-      chalk.yellow(
-        `  Generate service file with role based authorization: ${answers.generateServiceFile}`
-      )
-    );
-
-    try {
-      await generateSchema(tableName, parsedProperties);
-      console.log(chalk.green('Schema updated successfully!'));
-
-      // Generate additional files
-      await generateFiles(tableName, parsedProperties, answers);
-      console.log(chalk.green('Additional files generated successfully!'));
-    } catch (error) {
-      console.error(
-        chalk.red('Error updating schema or generating files:'),
-        error
-      );
-    }
-
-    if (answers.generateServiceFile) {
-      console.log(chalk.green('Service file generated. (placeholder)'));
-    }
-    if (answers.runMigration) {
-      console.log(chalk.green('Migration run successfully. (placeholder)'));
-    }
+    await generateAll(answers);
   });
 
 program.parse(process.argv);

@@ -1,4 +1,4 @@
-export interface Property {
+export type Field = {
   name: string;
   type: string;
-}
+};
