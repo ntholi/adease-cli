@@ -55,7 +55,7 @@ program
       },
     ]);
 
-    await generateAll(answers);
+    await generateAll(tableName, fields, answers);
   });
 
 program.parse(process.argv);

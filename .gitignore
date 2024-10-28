@@ -24,3 +24,4 @@ dist-ssr
 *.sw?
 /src/app
 /src/db
+/src/admin
