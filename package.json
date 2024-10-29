@@ -1,6 +1,6 @@
 {
   "name": "adease-cli",
-  "private": true,
+  "private": false,
   "version": "0.0.0-alpha.1",
   "type": "module",
   "scripts": {
