@@ -20,6 +20,9 @@ importers:
       inquirer:
         specifier: ^12.0.0
         version: 12.0.0(@types/node@22.7.7)
+      pluralize:
+        specifier: ^8.0.0
+        version: 8.0.0
     devDependencies:
       '@mantine/core':
         specifier: ^7.13.3
@@ -30,6 +33,9 @@ importers:
       '@types/node':
         specifier: ^22.7.7
         version: 22.7.7
+      '@types/pluralize':
+        specifier: ^0.0.33
+        version: 0.0.33
       adease:
         specifier: 0.0.1-alpha.13
         version: 0.0.1-alpha.13
@@ -756,6 +762,9 @@ packages:
   '@types/node@22.7.7':
     resolution: {integrity: sha512-SRxCrrg9CL/y54aiMCG3edPKdprgMVGDXjA3gB8UmmBW5TcXzRUYAh8EWzTnSJFAd1rgImPELza+A3bJ+qxz8Q==}
 
+  '@types/pluralize@0.0.33':
+    resolution: {integrity: sha512-JOqsl+ZoCpP4e8TDke9W79FDcSgPAR0l6pixx2JHkhnRjvShyYiAYw2LVsnA7K08Y6DeOnaU6ujmENO4os/cYg==}
+
   adease@0.0.1-alpha.13:
     resolution: {integrity: sha512-u17WOsxw3/QJzjE9x3pE8VFBDVMERhI9D+WiapirE/hNES+7kuidg9gSaL9cnx6TOjNr9gge5Cm/zo4yZ9FoCA==}
 
@@ -1022,6 +1031,10 @@ packages:
 
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
+
+  pluralize@8.0.0:
+    resolution: {integrity: sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==}
+    engines: {node: '>=4'}
 
   postcss@8.4.31:
     resolution: {integrity: sha512-PS08Iboia9mts/2ygV3eLpY5ghnUcfLV/EXTOW1E2qYxJKGGBUtNjN76FYHnMs36RmARn41bC0AZmn+rR0OVpQ==}
@@ -1810,6 +1823,8 @@ snapshots:
     dependencies:
       undici-types: 6.19.8
 
+  '@types/pluralize@0.0.33': {}
+
   adease@0.0.1-alpha.13:
     dependencies:
       '@mantine/core': 7.13.3(@mantine/hooks@7.13.3(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -2120,6 +2135,8 @@ snapshots:
   os-tmpdir@1.0.2: {}
 
   picocolors@1.1.1: {}
+
+  pluralize@8.0.0: {}
 
   postcss@8.4.31:
     dependencies:

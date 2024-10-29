@@ -1,8 +1,8 @@
-import IndexPage from '../generators/IndexPage';
+import FormGenerator from '../generators/Form';
 import Answers from '../types/Answers';
 import { Field } from '../types/Field';
 
-const generators = [IndexPage];
+const generators = [FormGenerator];
 
 export async function generateAll(
   tableName: string,

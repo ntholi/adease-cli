@@ -4,6 +4,7 @@ import { readConfig } from '../utils/config';
 import fs from 'fs/promises';
 import ejs from 'ejs';
 import { Field } from '../types/Field';
+import pluralize from 'pluralize';
 
 export abstract class BaseGenerator {
   private outputDir: string;
@@ -30,7 +31,24 @@ export abstract class BaseGenerator {
     const compiled = ejs.compile(template);
     const outputFilePath = path.join(this.outputDir, outputPath);
     await fs.mkdir(path.dirname(outputFilePath), { recursive: true });
-    await fs.writeFile(outputFilePath, compiled({}));
+
+    const templateData = {
+      tableName: this.tableName,
+      properties: this.fields,
+      typeName: this.pascalCase(this.tableName),
+      plural: (str: string) => `${str}s`,
+      capitalize: (str: string) => str.charAt(0).toUpperCase() + str.slice(1),
+      wordSpace: (str: string) => str.replace(/([A-Z])/g, ' $1').trim(),
+    };
+
+    await fs.writeFile(outputFilePath, compiled(templateData));
+  }
+
+  private pascalCase(str: string): string {
+    return str
+      .split(/[-_\s]+/)
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join('');
   }
 
   abstract generate(): Promise<void>;
