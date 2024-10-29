@@ -36,7 +36,7 @@ export abstract class BaseGenerator {
       tableName: this.tableName,
       properties: this.fields,
       typeName: this.pascalCase(this.tableName),
-      plural: (str: string) => `${str}s`,
+      plural: (str: string) => pluralize(str),
       capitalize: (str: string) => str.charAt(0).toUpperCase() + str.slice(1),
       wordSpace: (str: string) => str.replace(/([A-Z])/g, ' $1').trim(),
     };
