@@ -1,8 +1,8 @@
-import { DetailsPage, EditPage, Form } from '../generators';
+import { DetailsPage, EditPage, Form, IndexPage } from '../generators';
 import Answers from '../types/Answers';
 import { Field } from '../types/Field';
 
-const generators = [DetailsPage, EditPage, Form];
+const generators = [DetailsPage, EditPage, Form, IndexPage];
 
 export async function generateAll(
   tableName: string,
