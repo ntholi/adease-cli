@@ -1,0 +1,30 @@
+import { Box } from '@mantine/core';
+import { notFound } from 'next/navigation';
+import Form from '../../form';
+import { get<%- TableName %>, update<%- TableName %> } from '../../actions';
+
+type Props = {
+  params: {
+    id: string;
+  };
+};
+
+export default async function <%- TableName %>Edit({ params }: Props) {
+  const { id } = await params;
+  const <%- tableName %> = await get<%- TableName %>(Number(id));
+  if (!<%- tableName %>) {
+    return notFound();
+  }
+
+  return (
+    <Box p={'lg'}>
+      <Form
+        defaultValues={<%- tableName %>}
+        onSubmit={async (value) => {
+          'use server';
+          return await update<%- TableName %>(Number(id), value);
+        }}
+      />
+    </Box>
+  );
+}

@@ -1,9 +1,9 @@
-import DetailsPage from '../generators/DetailsPage';
+import EditPage from '../generators/EditPage';
 import FormGenerator from '../generators/Form';
 import Answers from '../types/Answers';
 import { Field } from '../types/Field';
 
-const generators = [FormGenerator];
+const generators = [EditPage];
 
 export async function generateAll(
   tableName: string,
