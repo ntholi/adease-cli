@@ -1,0 +1,10 @@
+'use server';
+
+import { <%= tableName %> } from '@/db/schema';
+<%- serviceImport %>
+
+type <%= TableName %> = typeof <%= tableName %>.$inferInsert;
+
+export async function get<%= TableName %>(id: number) {
+  return <%- hasService ? `${tableName}Service.get(id)` : `${tableName}Repository.findById(id)` %>;
+}

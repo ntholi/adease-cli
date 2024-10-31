@@ -25,36 +25,41 @@ export abstract class BaseGenerator {
 
   protected async compile(
     templatePath: string,
-    outputPath: string
+    outputPath: string,
+    templateData?: Record<string, any>
   ): Promise<void> {
     const template = await fs.readFile(templatePath, 'utf8');
     const compiled = ejs.compile(template);
     const outputFilePath = path.join(this.outputDir, outputPath);
     await fs.mkdir(path.dirname(outputFilePath), { recursive: true });
 
-    const templateData = {
+    const data = {
       tableName: pluralize.plural(this.tableName),
       TableName: this.pascalCase(pluralize.singular(this.tableName)),
       fields: this.fields,
       TableWord: this.pascalCase(this.asWord(this.tableName)),
-      capitalize: (str: string) => str.charAt(0).toUpperCase() + str.slice(1),
+      capitalize: this.capitalize,
       singular: (str: string) => pluralize.singular(str),
       plural: (str: string) => pluralize.plural(str),
       asWord: this.asWord,
     };
 
-    await fs.writeFile(outputFilePath, compiled(templateData));
+    await fs.writeFile(outputFilePath, compiled({ ...data, ...templateData }));
   }
 
-  private pascalCase(str: string): string {
+  protected pascalCase(str: string): string {
     return str
       .split(/[-_\s]+/)
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join('');
   }
 
-  private asWord(str: string): string {
+  protected asWord(str: string): string {
     return str.replace(/([A-Z])/g, ' $1').trim();
+  }
+
+  protected capitalize(str: string): string {
+    return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
   abstract generate(): Promise<void>;
