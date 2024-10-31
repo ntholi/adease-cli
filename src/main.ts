@@ -4,6 +4,7 @@ import { Field } from './types/Field';
 import Answers from './types/Answers';
 import { generateAll } from './commands/create';
 import inquirer from 'inquirer';
+import pluralize from 'pluralize';
 
 const program = new Command();
 

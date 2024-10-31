@@ -1,26 +1,26 @@
 'use client';
-import { <%- plural(tableName) %> } from '@/db/schema';
+import { <%- tableName %> } from '@/db/schema';
 import { Form } from 'adease';
 import { NumberInput, TextInput } from '@mantine/core';
 import { createInsertSchema } from 'drizzle-zod';
 
-type <%- typeName %> = typeof <%- plural(tableName) %>.$inferInsert;
+type <%- TableName %> = typeof <%- tableName %>.$inferInsert;
 
 type Props = {
-  onSubmit: (values: <%- typeName %>) => Promise<<%- typeName %>>;
-  defaultValues?: <%- typeName %>;
+  onSubmit: (values: <%- TableName %>) => Promise<<%- TableName %>>;
+  defaultValues?: <%- TableName %>;
 };
 
-export default function <%- typeName %>Form({ onSubmit, defaultValues }: Props) {
+export default function <%- TableName %>Form({ onSubmit, defaultValues }: Props) {
   return (
     <Form 
       action={onSubmit} 
-      schema={createInsertSchema(<%- plural(tableName) %>)} 
+      schema={createInsertSchema(<%- tableName %>)} 
       defaultValues={defaultValues}
     >
-      <% properties.forEach(function(prop) { %>
+      <% fields.forEach(function(prop) { %>
       <%_ const inputType = prop.type.toLowerCase() === 'number' ? 'NumberInput' : 'TextInput' _%>
-      <<%- inputType %> name="<%- prop.name %>" label="<%- capitalize(wordSpace(prop.name)) %>" />
+      <<%- inputType %> name="<%- prop.name %>" label="<%- capitalize(asWord(prop.name)) %>" />
       <% }); %>
     </Form>
   );

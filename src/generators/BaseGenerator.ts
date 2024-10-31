@@ -33,12 +33,12 @@ export abstract class BaseGenerator {
     await fs.mkdir(path.dirname(outputFilePath), { recursive: true });
 
     const templateData = {
-      tableName: this.tableName,
-      properties: this.fields,
-      typeName: this.pascalCase(this.tableName),
-      plural: (str: string) => pluralize(str),
+      tableName: pluralize.plural(this.tableName),
+      TableName: this.pascalCase(pluralize.singular(this.tableName)),
+      fields: this.fields,
+      TableWord: this.pascalCase(this.asWord(this.tableName)),
       capitalize: (str: string) => str.charAt(0).toUpperCase() + str.slice(1),
-      wordSpace: (str: string) => str.replace(/([A-Z])/g, ' $1').trim(),
+      asWord: this.asWord,
     };
 
     await fs.writeFile(outputFilePath, compiled(templateData));
@@ -49,6 +49,10 @@ export abstract class BaseGenerator {
       .split(/[-_\s]+/)
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join('');
+  }
+
+  private asWord(str: string): string {
+    return str.replace(/([A-Z])/g, ' $1').trim();
   }
 
   abstract generate(): Promise<void>;
