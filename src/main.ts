@@ -42,18 +42,18 @@ program
     }
 
     const answers: Answers = await inquirer.prompt([
-      {
-        type: 'confirm',
-        name: 'serviceFile',
-        message: 'Generate service file?',
-        default: true,
-      },
-      {
-        type: 'confirm',
-        name: 'apiRoutes',
-        message: 'Generate API route handlers?',
-        default: true,
-      },
+      // {
+      //   type: 'confirm',
+      //   name: 'serviceFile',
+      //   message: 'Generate service file?',
+      //   default: true,
+      // },
+      // {
+      //   type: 'confirm',
+      //   name: 'apiRoutes',
+      //   message: 'Generate API route handlers?',
+      //   default: true,
+      // },
     ]);
 
     await generateAll(tableName, fields, answers);

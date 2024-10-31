@@ -1,3 +1,4 @@
+import DetailsPage from '../generators/DetailsPage';
 import FormGenerator from '../generators/Form';
 import Answers from '../types/Answers';
 import { Field } from '../types/Field';

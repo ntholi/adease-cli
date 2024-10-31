@@ -1,0 +1,35 @@
+import {
+  DetailsView,
+  DetailsViewHeader,
+  FieldView,
+  DetailsViewBody,
+} from 'adease';
+import { notFound } from 'next/navigation';
+import { get<%- TableName %>, delete<%- TableName %> } from '../actions';
+
+type Props = {
+  params: {
+    id: string;
+  };
+};
+
+export default async function <%- TableName %>Details({ params }: Props) {
+  const { id } = await params;
+  const <%- tableName %> = await get<%- TableName %>(Number(id));
+  if (!<%- tableName %>) {
+    return notFound();
+  }
+
+  return (
+    <DetailsView>
+      <DetailsViewHeader
+        id={Number(id)}
+        title={'<%- singular(TableWord) %>'}
+        handleDelete={<%- tableName %>}
+      />
+      <DetailsViewBody><% fields.forEach(function(prop) { %>
+        <FieldView name='<%- prop.name %>' label='<%- capitalize(asWord(prop.name)) %>' /><% }); %>
+      </DetailsViewBody>
+    </DetailsView>
+  );
+}

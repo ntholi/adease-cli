@@ -38,6 +38,8 @@ export abstract class BaseGenerator {
       fields: this.fields,
       TableWord: this.pascalCase(this.asWord(this.tableName)),
       capitalize: (str: string) => str.charAt(0).toUpperCase() + str.slice(1),
+      singular: (str: string) => pluralize.singular(str),
+      plural: (str: string) => pluralize.plural(str),
       asWord: this.asWord,
     };
 
