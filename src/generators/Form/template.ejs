@@ -18,9 +18,8 @@ export default function <%- TableName %>Form({ onSubmit, defaultValues }: Props)
       schema={createInsertSchema(<%- tableName %>)} 
       defaultValues={defaultValues}
     ><% fields.forEach(function(prop) { %>
-      <%_ const inputType = prop.type.toLowerCase() === 'number' ? 'NumberInput' : 'TextInput' _%>
-      <<%- inputType %> name="<%- prop.name %>" label="<%- capitalize(asWord(prop.name)) %>" />
-      <% }); %>
+      <%_ const inputType = prop.type.toLowerCase() === 'number' ? 'NumberInput' : prop.type.toLowerCase() === 'date'? 'DateInput' : 'TextInput' _%>
+      <<%- inputType %> name="<%- prop.name %>" label="<%- capitalize(asWord(prop.name)) %>" /><% }); %>
     </Form>
   );
 }
