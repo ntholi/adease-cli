@@ -7,7 +7,7 @@ import { Field } from '../../types/Field';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-class FormGenerator extends BaseGenerator {
+class Form extends BaseGenerator {
   constructor(tableName: string, fields: Field[], answers: Answers) {
     super(tableName, fields, answers);
   }
@@ -17,4 +17,4 @@ class FormGenerator extends BaseGenerator {
   }
 }
 
-export default FormGenerator;
+export default Form;
