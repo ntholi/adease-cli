@@ -19,6 +19,9 @@ class ActionsGenerator extends BaseGenerator {
       serviceImport: this.answers.serviceFile
         ? `import { ${tableName}Service } from '@/server/${tableName}/service';`
         : `import { ${tableName}Repository } from '@/server/${tableName}/repository';`,
+      serviceName: this.answers.serviceFile
+        ? `${tableName}Service`
+        : `${tableName}Repository`,
       hasService: this.answers.serviceFile,
     });
   }

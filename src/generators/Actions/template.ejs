@@ -8,3 +8,19 @@ type <%= TableName %> = typeof <%= tableName %>.$inferInsert;
 export async function get<%= TableName %>(id: number) {
   return <%- hasService ? `${tableName}Service.get(id)` : `${tableName}Repository.findById(id)` %>;
 }
+
+export async function getAll<%= TableName %>s(page: number = 1, search = '') {
+  return <%= serviceName %>.search(page, search, []);
+}
+
+export async function create<%= TableName %>(<%= singular(tableName) %>: <%= TableName %>) {
+  return <%= serviceName %>.create(<%= singular(tableName) %>);
+}
+
+export async function update<%= TableName %>(id: number, <%= singular(tableName) %>: <%= TableName %>) {
+  return <%= serviceName %>.update(id, <%= singular(tableName) %>);
+}
+
+export async function delete<%= TableName %>(id: number) {
+  return <%= serviceName %>.delete(id);
+}
