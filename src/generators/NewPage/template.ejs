@@ -1,0 +1,11 @@
+import { Box } from '@mantine/core';
+import Form from '../Form';
+import { create<%= TableName %> } from '../actions';
+
+export default async function NewPage() {
+  return (
+    <Box p={'lg'}>
+      <Form onSubmit={create<%- TableName %>} />
+    </Box>
+  );
+}
