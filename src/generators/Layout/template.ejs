@@ -1,0 +1,16 @@
+'use client';
+  
+import { PropsWithChildren } from 'react';
+import { ListItem, ListLayout } from 'adease';
+import { getAll<%- TableName %>s } from './actions';
+
+export default function Layout({ children }: PropsWithChildren) {
+  return (
+    <ListLayout
+      getItems={getAll<%- TableName %>s}
+      renderItem={(it) => <ListItem id={it.id} label={it.id} />}
+    >
+      {children}
+    </ListLayout>
+  );
+}
