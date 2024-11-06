@@ -12,13 +12,33 @@ class DrizzleSchemaGenerator extends BaseGenerator {
     super(tableName, fields, answers, false);
   }
 
+  private mapFieldType(type: string): string {
+    switch (type.toLowerCase()) {
+      case 'string':
+        return 'varchar';
+      case 'number':
+        return 'integer';
+      case 'boolean':
+        return 'boolean';
+      case 'date':
+        return 'timestamp';
+      default:
+        return 'text';
+    }
+  }
+
   async generate(): Promise<void> {
     if (this.answers.database !== 'drizzle') return;
 
+    const mappedFields = this.fields.map((field) => ({
+      ...field,
+      type: this.mapFieldType(field.type),
+    }));
+
     await this.compile(
       path.join(__dirname, 'template.ejs'),
-      '../../db/schema/index.ts',
-      { fields: this.fields }
+      '../../../db/schema/index.ts',
+      { fields: mappedFields }
     );
   }
 }

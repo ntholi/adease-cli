@@ -1,8 +1,8 @@
+import { pgTable, serial, varchar, integer, timestamp } from 'drizzle-orm/pg-core';
+
 export const <%= tableName %> = pgTable('<%= tableName %>', {
   id: serial('id').primaryKey(),
-<% fields.forEach(function(field) { %>
-  <%= field.name %>: <%= field.type.toLowerCase() %>('<%= field.name %>'),
-<% }); %>
+  <%- fields.map(field => `  ${field.name}: ${field.type.toLowerCase()}(\'${field.name}\'),`).join('\n') %>
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
-}); 
+});

@@ -12,12 +12,35 @@ class FirebaseSchemaGenerator extends BaseGenerator {
     super(tableName, fields, answers, false);
   }
 
+  private mapFieldType(type: string): string {
+    switch (type.toLowerCase()) {
+      case 'string':
+        return 'string';
+      case 'number':
+        return 'number';
+      case 'boolean':
+        return 'boolean';
+      case 'date':
+        return 'Date';
+      case 'float':
+        return 'number';
+      default:
+        return 'any';
+    }
+  }
+
   async generate(): Promise<void> {
     if (this.answers.database !== 'firebase') return;
 
+    const mappedFields = this.fields.map((field) => ({
+      ...field,
+      type: this.mapFieldType(field.type),
+    }));
+
     await this.compile(
       path.join(__dirname, 'template.ejs'),
-      `../../${this.tableName}.ts`
+      `../../${this.tableName}.ts`,
+      { fields: mappedFields }
     );
   }
 }
