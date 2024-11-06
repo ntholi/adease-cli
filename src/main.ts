@@ -5,6 +5,7 @@ import Answers from './types/Answers';
 import { generateAll } from './commands/create';
 import inquirer from 'inquirer';
 import pluralize from 'pluralize';
+import { DatabaseType } from './types/DatabaseType';
 
 const program = new Command();
 
@@ -42,18 +43,29 @@ program
     }
 
     const answers: Answers = await inquirer.prompt([
-      // {
-      //   type: 'confirm',
-      //   name: 'serviceFile',
-      //   message: 'Generate service file?',
-      //   default: true,
-      // },
-      // {
-      //   type: 'confirm',
-      //   name: 'apiRoutes',
-      //   message: 'Generate API route handlers?',
-      //   default: true,
-      // },
+      {
+        type: 'list',
+        name: 'database',
+        message: 'Which database adapter would you like to use?',
+        choices: [
+          { name: 'Drizzle', value: 'drizzle' },
+          { name: 'Prisma', value: 'prisma' },
+          { name: 'Firebase', value: 'firebase' },
+        ],
+        default: 'drizzle',
+      },
+      {
+        type: 'confirm',
+        name: 'serviceFile',
+        message: 'Generate service file?',
+        default: true,
+      },
+      {
+        type: 'confirm',
+        name: 'apiRoutes',
+        message: 'Generate API route handlers?',
+        default: true,
+      },
     ]);
 
     await generateAll(tableName, fields, answers);

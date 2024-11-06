@@ -1,3 +1,6 @@
+import DrizzleSchemaGenerator from '../generators/Schema/DrizzleSchema';
+import PrismaSchemaGenerator from '../generators/Schema/PrismaSchema';
+import FirebaseSchemaGenerator from '../generators/Schema/FirebaseSchema';
 import { DetailsPage, EditPage, Form, IndexPage, Actions } from '../generators';
 import Layout from '../generators/Layout';
 import NewPage from '../generators/NewPage';
@@ -5,6 +8,9 @@ import Answers from '../types/Answers';
 import { Field } from '../types/Field';
 
 const generators = [
+  DrizzleSchemaGenerator,
+  PrismaSchemaGenerator,
+  FirebaseSchemaGenerator,
   DetailsPage,
   EditPage,
   Form,

@@ -1,0 +1,13 @@
+import { collection } from 'firebase/firestore';
+import { db } from '../firebase';
+
+export interface <%= TableName %> {
+  id: string;
+<% fields.forEach(function(field) { %>
+  <%= field.name %>: <%= field.type %>;
+<% }); %>
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export const <%= tableName %>Collection = collection(db, '<%= tableName %>'); 

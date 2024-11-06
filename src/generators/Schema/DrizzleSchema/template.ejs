@@ -1,0 +1,8 @@
+export const <%= tableName %> = pgTable('<%= tableName %>', {
+  id: serial('id').primaryKey(),
+<% fields.forEach(function(field) { %>
+  <%= field.name %>: <%= field.type.toLowerCase() %>('<%= field.name %>'),
+<% }); %>
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+}); 

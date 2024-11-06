@@ -27,11 +27,9 @@ export abstract class BaseGenerator {
     templatePath: string,
     outputPath: string,
     templateData?: Record<string, any>
-  ): Promise<void> {
+  ): Promise<string> {
     const template = await fs.readFile(templatePath, 'utf8');
     const compiled = ejs.compile(template);
-    const outputFilePath = path.join(this.outputDir, outputPath);
-    await fs.mkdir(path.dirname(outputFilePath), { recursive: true });
 
     const data = {
       tableName: pluralize.plural(this.tableName),
@@ -44,7 +42,15 @@ export abstract class BaseGenerator {
       asWord: this.asWord,
     };
 
-    await fs.writeFile(outputFilePath, compiled({ ...data, ...templateData }));
+    const content = compiled({ ...data, ...templateData });
+
+    if (outputPath) {
+      const outputFilePath = path.join(this.outputDir, outputPath);
+      await fs.mkdir(path.dirname(outputFilePath), { recursive: true });
+      await fs.writeFile(outputFilePath, content);
+    }
+
+    return content;
   }
 
   protected pascalCase(str: string): string {
