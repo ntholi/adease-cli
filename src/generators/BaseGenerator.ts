@@ -12,7 +12,8 @@ export abstract class BaseGenerator {
   constructor(
     protected readonly tableName: string,
     protected readonly fields: Field[],
-    protected readonly answers: Answers
+    protected readonly answers: Answers,
+    protected readonly shouldOverride: boolean = true
   ) {
     const config = readConfig();
     this.outputDir = path.join(
@@ -42,11 +43,22 @@ export abstract class BaseGenerator {
       asWord: this.asWord,
     };
 
-    const content = compiled({ ...data, ...templateData });
+    let content = compiled({ ...data, ...templateData });
 
     if (outputPath) {
       const outputFilePath = path.join(this.outputDir, outputPath);
       await fs.mkdir(path.dirname(outputFilePath), { recursive: true });
+
+      if (!this.shouldOverride) {
+        try {
+          const existingContent = await fs.readFile(outputFilePath, 'utf8');
+          if (existingContent.includes(this.tableName)) {
+            return content;
+          }
+          content = `${existingContent}\n${content}`;
+        } catch (error) {}
+      }
+
       await fs.writeFile(outputFilePath, content);
     }
 
