@@ -7,21 +7,24 @@ import { Field } from '../types/Field';
 import pluralize from 'pluralize';
 
 export abstract class BaseGenerator {
-  private outputDir: string;
-
   constructor(
     protected readonly tableName: string,
     protected readonly fields: Field[],
     protected readonly answers: Answers,
-    protected readonly shouldOverride: boolean = true
+    protected readonly shouldOverride: boolean = true,
+    private readonly outputDir: string = ''
   ) {
     const config = readConfig();
-    this.outputDir = path.join(
-      process.cwd(),
-      config.baseDir,
-      config.adminDir,
-      tableName
-    );
+    if (!outputDir) {
+      this.outputDir = path.join(
+        process.cwd(),
+        config.baseDir,
+        config.adminDir,
+        tableName
+      );
+    } else {
+      this.outputDir = path.join(process.cwd(), outputDir);
+    }
   }
 
   protected async compile(

@@ -9,7 +9,7 @@ const __dirname = path.dirname(__filename);
 
 class DrizzleSchemaGenerator extends BaseGenerator {
   constructor(tableName: string, fields: Field[], answers: Answers) {
-    super(tableName, fields, answers, false);
+    super(tableName, fields, answers, false, '/db/schema');
   }
 
   private mapFieldType(type: string): string {
@@ -35,11 +35,9 @@ class DrizzleSchemaGenerator extends BaseGenerator {
       type: this.mapFieldType(field.type),
     }));
 
-    await this.compile(
-      path.join(__dirname, 'template.ejs'),
-      '../../../db/schema/index.ts',
-      { fields: mappedFields }
-    );
+    await this.compile(path.join(__dirname, 'template.ejs'), `index.ts`, {
+      fields: mappedFields,
+    });
   }
 }
 
