@@ -7,6 +7,7 @@ import { Field } from '../types/Field';
 import pluralize from 'pluralize';
 
 export abstract class BaseGenerator {
+  protected readonly baseDir: string;
   constructor(
     protected readonly tableName: string,
     protected readonly fields: Field[],
@@ -15,6 +16,7 @@ export abstract class BaseGenerator {
     private readonly outputDir: string = ''
   ) {
     const config = readConfig();
+    this.baseDir = config.baseDir;
     if (!outputDir) {
       this.outputDir = path.join(
         process.cwd(),

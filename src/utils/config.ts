@@ -19,3 +19,12 @@ export function readConfig(): Config {
     };
   }
 }
+
+export function baseDir(): string {
+  const config = readConfig();
+  return config.baseDir;
+}
+
+export function addBaseDir(path: string): string {
+  return path.startsWith('/') ? path : `${baseDir()}/${path}`;
+}
