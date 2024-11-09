@@ -12,7 +12,10 @@ export abstract class BaseGenerator {
     protected readonly tableName: string,
     protected readonly fields: Field[],
     protected readonly answers: Answers,
-    protected readonly shouldOverride: boolean = true,
+    protected readonly overrideMode:
+      | 'override'
+      | 'append'
+      | 'skip' = 'override',
     private readonly outputDir: string = ''
   ) {
     const config = readConfig();
@@ -54,13 +57,18 @@ export abstract class BaseGenerator {
       const outputFilePath = path.join(this.outputDir, outputPath);
       await fs.mkdir(path.dirname(outputFilePath), { recursive: true });
 
-      if (!this.shouldOverride) {
+      if (this.overrideMode === 'append') {
         try {
           const existingContent = await fs.readFile(outputFilePath, 'utf8');
           if (existingContent.includes(this.tableName)) {
             return content;
           }
           content = `${existingContent}\n${content}`;
+        } catch (error) {}
+      } else if (this.overrideMode === 'skip') {
+        try {
+          await fs.access(outputFilePath);
+          return content;
         } catch (error) {}
       }
 

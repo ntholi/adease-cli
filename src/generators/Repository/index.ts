@@ -8,17 +8,17 @@ import { withBaseDir } from '../../utils/config';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-class BaseRepositoryGenerator extends BaseGenerator {
+class RepositoryGenerator extends BaseGenerator {
   constructor(tableName: string, fields: Field[], answers: Answers) {
-    super(tableName, fields, answers, 'skip', withBaseDir('lib'));
+    super(tableName, fields, answers, 'skip', withBaseDir('services'));
   }
 
   async generate(): Promise<void> {
     await this.compile(
       path.join(__dirname, 'template.ejs'),
-      'BaseRepository.ts'
+      `${this.tableName}/repository.ts`
     );
   }
 }
 
-export default BaseRepositoryGenerator;
+export default RepositoryGenerator;

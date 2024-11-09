@@ -9,7 +9,7 @@ const __dirname = path.dirname(__filename);
 
 class PrismaSchemaGenerator extends BaseGenerator {
   constructor(tableName: string, fields: Field[], answers: Answers) {
-    super(tableName, fields, answers, false);
+    super(tableName, fields, answers, 'append');
   }
 
   private mapFieldType(type: string): string {

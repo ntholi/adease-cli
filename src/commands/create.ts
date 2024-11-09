@@ -8,6 +8,7 @@ import Answers from '../types/Answers';
 import { Field } from '../types/Field';
 import Service from '../generators/Service';
 import BaseRepository from '../generators/BaseRepository';
+import Repository from '../generators/Repository';
 
 const generators = [
   DrizzleSchemaGenerator,
@@ -22,6 +23,7 @@ const generators = [
   NewPage,
   Service,
   BaseRepository,
+  Repository,
 ];
 
 export async function generateAll(

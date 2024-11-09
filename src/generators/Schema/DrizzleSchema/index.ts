@@ -9,7 +9,7 @@ const __dirname = path.dirname(__filename);
 
 class DrizzleSchemaGenerator extends BaseGenerator {
   constructor(tableName: string, fields: Field[], answers: Answers) {
-    super(tableName, fields, answers, false, '/db/schema');
+    super(tableName, fields, answers, 'append', '/db/schema');
   }
 
   private mapFieldType(type: string): string {
