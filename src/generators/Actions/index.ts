@@ -1,9 +1,8 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 import Answers from '../../types/Answers';
-import { BaseGenerator } from '../BaseGenerator';
 import { Field } from '../../types/Field';
-import pluralize from 'pluralize';
+import { BaseGenerator } from '../BaseGenerator';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -14,16 +13,11 @@ class ActionsGenerator extends BaseGenerator {
   }
 
   async generate(): Promise<void> {
-    const tableName = pluralize.plural(this.tableName);
-    await this.compile(path.join(__dirname, 'template.ejs'), 'actions.ts', {
-      serviceImport: this.answers.serviceFile
-        ? `import { ${tableName}Service } from '@/services/${tableName}/service';`
-        : `import { ${tableName}Repository } from '@/services/${tableName}/repository';`,
-      serviceName: this.answers.serviceFile
-        ? `${tableName}Service`
-        : `${tableName}Repository`,
-      hasService: this.answers.serviceFile,
-    });
+    const templateFile = this.answers.serviceFile
+      ? 'service.ejs'
+      : 'repository.ejs';
+
+    await this.compile(path.join(__dirname, templateFile), 'actions.ts', {});
   }
 }
 

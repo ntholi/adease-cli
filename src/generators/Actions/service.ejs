@@ -1,0 +1,26 @@
+'use services';
+
+import { <%= tableName %> } from '@/db/schema';
+import { <%= tableName %>Service } from '@/services/<%= tableName %>/service';
+
+type <%= TableName %> = typeof <%= tableName %>.$inferInsert;
+
+export async function get<%= TableName %>(id: number) {
+  return <%= tableName %>Service.get(id);
+}
+
+export async function getAll<%= TableName %>s(page: number = 1, search = '') {
+  return <%= tableName %>Service.search(page, search, []);
+}
+
+export async function create<%= TableName %>(<%= singular(tableName) %>: <%= TableName %>) {
+  return <%= tableName %>Service.create(<%= singular(tableName) %>);
+}
+
+export async function update<%= TableName %>(id: number, <%= singular(tableName) %>: <%= TableName %>) {
+  return <%= tableName %>Service.update(id, <%= singular(tableName) %>);
+}
+
+export async function delete<%= TableName %>(id: number) {
+  return <%= tableName %>Service.delete(id);
+} 

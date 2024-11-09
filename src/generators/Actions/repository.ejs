@@ -1,26 +1,26 @@
 'use services';
 
 import { <%= tableName %> } from '@/db/schema';
-<%- serviceImport %>
+import { <%= tableName %>Repository } from '@/services/<%= tableName %>/repository';
 
 type <%= TableName %> = typeof <%= tableName %>.$inferInsert;
 
 export async function get<%= TableName %>(id: number) {
-  return <%- hasService ? `${tableName}Service.get(id)` : `${tableName}Repository.findById(id)` %>;
+  return <%= tableName %>Repository.findById(id);
 }
 
 export async function getAll<%= TableName %>s(page: number = 1, search = '') {
-  return <%= serviceName %>.search(page, search, []);
+  return <%= tableName %>Repository.search(page, search, []);
 }
 
 export async function create<%= TableName %>(<%= singular(tableName) %>: <%= TableName %>) {
-  return <%= serviceName %>.create(<%= singular(tableName) %>);
+  return <%= tableName %>Repository.create(<%= singular(tableName) %>);
 }
 
 export async function update<%= TableName %>(id: number, <%= singular(tableName) %>: <%= TableName %>) {
-  return <%= serviceName %>.update(id, <%= singular(tableName) %>);
+  return <%= tableName %>Repository.update(id, <%= singular(tableName) %>);
 }
 
 export async function delete<%= TableName %>(id: number) {
-  return <%= serviceName %>.delete(id);
-}
+  return <%= tableName %>Repository.delete(id);
+} 
