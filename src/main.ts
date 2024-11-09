@@ -47,7 +47,6 @@ program
         console.log(chalk.yellow('No valid fields provided.'));
         return;
       }
-      console.log('--------------------------------');
 
       let answers: Answers;
       if (options.yes) {
@@ -57,6 +56,7 @@ program
           apiRoutes: true,
         };
       } else {
+        console.log('--------------------------------');
         answers = await inquirer.prompt([
           {
             type: 'list',
