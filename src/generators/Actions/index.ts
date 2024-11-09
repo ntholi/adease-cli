@@ -17,8 +17,8 @@ class ActionsGenerator extends BaseGenerator {
     const tableName = pluralize.plural(this.tableName);
     await this.compile(path.join(__dirname, 'template.ejs'), 'actions.ts', {
       serviceImport: this.answers.serviceFile
-        ? `import { ${tableName}Service } from '@/server/${tableName}/service';`
-        : `import { ${tableName}Repository } from '@/server/${tableName}/repository';`,
+        ? `import { ${tableName}Service } from '@/services/${tableName}/service';`
+        : `import { ${tableName}Repository } from '@/services/${tableName}/repository';`,
       serviceName: this.answers.serviceFile
         ? `${tableName}Service`
         : `${tableName}Repository`,

@@ -21,7 +21,7 @@ export default async function <%- TableName %>Edit({ params }: Props) {
       <Form
         defaultValues={<%- tableName %>}
         onSubmit={async (value) => {
-          'use server';
+          'use services';
           return await update<%- TableName %>(Number(id), value);
         }}
       />

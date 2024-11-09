@@ -8,19 +8,17 @@ import { withBaseDir } from '../../utils/config';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-class ServiceGenerator extends BaseGenerator {
+class BaseRepositoryGenerator extends BaseGenerator {
   constructor(tableName: string, fields: Field[], answers: Answers) {
-    super(tableName, fields, answers, false, withBaseDir('services'));
+    super(tableName, fields, answers, false, withBaseDir('lib'));
   }
 
   async generate(): Promise<void> {
-    if (!this.answers.serviceFile) return;
-
     await this.compile(
       path.join(__dirname, 'template.ejs'),
-      `${this.tableName}/service.ts`
+      'BaseRepository.ts'
     );
   }
 }
 
-export default ServiceGenerator;
+export default BaseRepositoryGenerator;

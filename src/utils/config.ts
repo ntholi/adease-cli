@@ -25,6 +25,6 @@ export function baseDir(): string {
   return config.baseDir;
 }
 
-export function addBaseDir(path: string): string {
+export function withBaseDir(path: string): string {
   return path.startsWith('/') ? path : `${baseDir()}/${path}`;
 }
