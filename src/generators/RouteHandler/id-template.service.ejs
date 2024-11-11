@@ -1,0 +1,30 @@
+import { NextRequest } from 'next/server';
+import { handleRoute } from '@/utils/routeHandler';
+import { <%= tableName %>Service } from '@/repositories/<%= tableName %>/service';
+
+
+type Props = {
+  params: { id: string };
+};
+
+export async function GET(_: NextRequest, { params }: Props) {
+  return handleRoute(async () => {
+    const id = parseInt(params.id);
+    return <%= tableName %>Service.get(id);
+  });
+}
+
+export async function PUT(request: NextRequest, { params }: Props) {
+  return handleRoute(async () => {
+    const id = parseInt(params.id);
+    const data = await request.json();
+    return <%= tableName %>Service.update(id, data);
+  });
+}
+
+export async function DELETE(_: NextRequest, { params }: Props) {
+  return handleRoute(async () => {
+    const id = parseInt(params.id);
+    return <%= tableName %>Service.delete(id);
+  });
+} 

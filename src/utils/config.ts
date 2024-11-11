@@ -22,5 +22,5 @@ export function readConfig(): Config {
 
 export function baseDir(path: string): string {
   const config = readConfig();
-  return path.startsWith('/') ? path : `${config.baseDir}/${path}`;
+  return `${config.baseDir}/${path.startsWith('/') ? path.slice(1) : path}`;
 }

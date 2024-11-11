@@ -9,6 +9,8 @@ import { Field } from '../types/Field';
 import Service from '../generators/Service';
 import BaseRepository from '../generators/BaseRepository';
 import Repository from '../generators/Repository';
+import RouteHandlerGenerator from '../generators/RouteHandler';
+import RouteUtils from '../generators/RouteUtils';
 
 const generators = [
   DrizzleSchemaGenerator,
@@ -24,6 +26,8 @@ const generators = [
   Service,
   BaseRepository,
   Repository,
+  RouteHandlerGenerator,
+  RouteUtils,
 ];
 
 export async function generateAll(
