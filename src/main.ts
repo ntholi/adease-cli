@@ -4,8 +4,6 @@ import { Field } from './types/Field';
 import Answers from './types/Answers';
 import { generateAll } from './commands/create';
 import inquirer from 'inquirer';
-import pluralize from 'pluralize';
-import { DatabaseType } from './types/DatabaseType';
 
 const program = new Command();
 
