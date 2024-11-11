@@ -20,11 +20,7 @@ export function readConfig(): Config {
   }
 }
 
-export function baseDir(): string {
+export function baseDir(path: string): string {
   const config = readConfig();
-  return config.baseDir;
-}
-
-export function withBaseDir(path: string): string {
-  return path.startsWith('/') ? path : `${baseDir()}/${path}`;
+  return path.startsWith('/') ? path : `${config.baseDir}/${path}`;
 }

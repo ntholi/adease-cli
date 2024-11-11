@@ -3,14 +3,14 @@ import { fileURLToPath } from 'url';
 import Answers from '../../types/Answers';
 import { BaseGenerator } from '../BaseGenerator';
 import { Field } from '../../types/Field';
-import { withBaseDir } from '../../utils/config';
+import { baseDir } from '../../utils/config';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 class BaseRepositoryGenerator extends BaseGenerator {
   constructor(tableName: string, fields: Field[], answers: Answers) {
-    super(tableName, fields, answers, 'skip', withBaseDir('lib'));
+    super(tableName, fields, answers, 'skip', baseDir('lib'));
   }
 
   async generate(): Promise<void> {
