@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename);
 
 class ServiceGenerator extends BaseGenerator {
   constructor(tableName: string, fields: Field[], answers: Answers) {
-    super(tableName, fields, answers, false, withBaseDir('services'));
+    super(tableName, fields, answers, false, withBaseDir('repositories'));
   }
 
   async generate(): Promise<void> {

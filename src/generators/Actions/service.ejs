@@ -1,7 +1,7 @@
-'use services';
+'use server';
 
 import { <%= tableName %> } from '@/db/schema';
-import { <%= tableName %>Service } from '@/services/<%= tableName %>/service';
+import { <%= tableName %>Service } from '@/repositories/<%= tableName %>/service';
 
 type <%= TableName %> = typeof <%= tableName %>.$inferInsert;
 
