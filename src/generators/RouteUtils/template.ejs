@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-export async function handleRoute<T>(handler: () => Promise<T>) {
+export async function routeException<T>(handler: () => Promise<T>) {
   try {
     const result = await handler();
     return NextResponse.json(result);

@@ -13,7 +13,7 @@ class RouteUtilsGenerator extends BaseGenerator {
   }
 
   async generate(): Promise<void> {
-    await this.compile(path.join(__dirname, 'template.ejs'), 'routeHandler.ts');
+    await this.compile(path.join(__dirname, 'template.ejs'), 'exceptions.ts');
   }
 }
 
