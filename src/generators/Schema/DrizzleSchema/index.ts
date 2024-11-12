@@ -1,4 +1,3 @@
-import path from 'path';
 import { BaseGenerator } from '../../BaseGenerator';
 import { Field } from '../../../types/Field';
 import Answers from '../../../types/Answers';
