@@ -1,11 +1,7 @@
 import path from 'path';
-import { fileURLToPath } from 'url';
 import { BaseGenerator } from '../../BaseGenerator';
 import { Field } from '../../../types/Field';
 import Answers from '../../../types/Answers';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 class DrizzleSchemaGenerator extends BaseGenerator {
   constructor(tableName: string, fields: Field[], answers: Answers) {
@@ -35,7 +31,7 @@ class DrizzleSchemaGenerator extends BaseGenerator {
       type: this.mapFieldType(field.type),
     }));
 
-    await this.compile(path.join(__dirname, 'template.ejs'), `index.ts`, {
+    await this.compile('Schema/DrizzleSchema/template.ejs', `index.ts`, {
       fields: mappedFields,
     });
   }

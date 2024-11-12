@@ -5,6 +5,10 @@ import fs from 'fs/promises';
 import ejs from 'ejs';
 import { Field } from '../types/Field';
 import pluralize from 'pluralize';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export abstract class BaseGenerator {
   protected readonly baseDir: string;
@@ -37,7 +41,10 @@ export abstract class BaseGenerator {
     outputPath: string,
     templateData?: Record<string, any>
   ): Promise<string> {
-    const template = await fs.readFile(templatePath, 'utf8');
+    const template = await fs.readFile(
+      path.join(__dirname, templatePath),
+      'utf8'
+    );
     const compiled = ejs.compile(template);
 
     const data = {
