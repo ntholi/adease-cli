@@ -8,7 +8,26 @@ class Form extends BaseGenerator {
   }
 
   async generate(): Promise<void> {
-    await this.compile('Form/template.ejs', 'Form.tsx');
+    const inputFields = this.fields.map((field) => {
+      let type = 'TextInput';
+      if (field.type.toLowerCase() === 'number') type = 'NumberInput';
+      if (field.type.toLowerCase() === 'date') type = 'DateInput';
+      if (field.type.toLowerCase() === 'boolean') type = 'Checkbox';
+      return { name: field.name, type };
+    });
+
+    const imports = this.fields.map((field) => {
+      let importType = 'TextInput';
+      if (field.type.toLowerCase() === 'number') importType = 'NumberInput';
+      if (field.type.toLowerCase() === 'date') importType = 'DateInput';
+      if (field.type.toLowerCase() === 'boolean') importType = 'Checkbox';
+      return importType;
+    });
+
+    await this.compile('Form/template.ejs', 'Form.tsx', {
+      imports: [...new Set(imports)],
+      inputFields: inputFields,
+    });
   }
 }
 

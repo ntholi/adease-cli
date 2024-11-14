@@ -1,14 +1,7 @@
 'use client';
 import { <%- tableName %> } from '@/db/schema';
 import { Form } from 'adease';
-import { <%- fields.map(field => {
-  switch(field.type.toLowerCase()) {
-    case 'number': return 'NumberInput';
-    case 'date': return 'DateInput';
-    case 'boolean': return 'Checkbox';
-    default: return 'TextInput';
-  }
-}).filter((value, index, self) => self.indexOf(value) === index).join(', ') %> } from '@mantine/core';
+import { <%- imports.join(', ') %> } from '@mantine/core';
 import { createInsertSchema } from 'drizzle-zod';
 
 type <%- TableName %> = typeof <%- tableName %>.$inferInsert;
@@ -24,17 +17,8 @@ export default function <%- TableName %>Form({ onSubmit, defaultValues }: fields
       action={onSubmit} 
       schema={createInsertSchema(<%- tableName %>)} 
       defaultValues={defaultValues}
-    ><% fields.forEach(function(field) { %>
-      <% if (field.type.toLowerCase() === 'number') { %>
-        <NumberInput name="<%- field.name %>" label="<%- capitalize(asWord(field.name)) %>" />
-      <% } else if (field.type.toLowerCase() === 'date') { %>
-        <DateInput name="<%- field.name %>" label="<%- capitalize(asWord(field.name)) %>" />
-      <% } else if (field.type.toLowerCase() === 'boolean') { %>
-        <Checkbox name="<%- field.name %>" label="<%- capitalize(asWord(field.name)) %>" />
-      <% } else { %>
-        <TextInput name="<%- field.name %>" label="<%- capitalize(asWord(field.name)) %>" />
-      <% } %>
-    <% }); %>
+    ><% inputFields.forEach(function(field) { %>
+        <<%- field.type %> name="<%- field.name %>" label="<%- capitalize(asWord(field.name)) %>" /><% }); %>
     </Form>
   );
 }
