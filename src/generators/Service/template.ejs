@@ -5,7 +5,7 @@ import withAuth from '@/utils/withAuth';
 type <%= TableName %> = typeof <%= tableName %>.$inferInsert;
 
 class <%- TableName %>Service {
-  constructor(private readonly repository: <%- TableName %>Repository) {}
+  constructor(private readonly repository: <%- TableName %>Repository = new <%- TableName %>Repository()) {}
 
   async first() {
     return withAuth(async () => this.repository.findFirst(), []);
@@ -44,4 +44,4 @@ class <%- TableName %>Service {
   }
 }
 
-export default <%- TableName %>Service;
+export const <%- tableName %>Service = new <%- TableName %>Service();
