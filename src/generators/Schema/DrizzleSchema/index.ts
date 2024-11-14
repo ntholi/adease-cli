@@ -1,10 +1,12 @@
 import { BaseGenerator } from '../../BaseGenerator';
 import { Field } from '../../../types/Field';
 import Answers from '../../../types/Answers';
+import { glob } from 'glob';
+import { baseDir } from '../../../utils/config';
 
 class DrizzleSchemaGenerator extends BaseGenerator {
   constructor(tableName: string, fields: Field[], answers: Answers) {
-    super(tableName, fields, answers, 'append', '/db/schema');
+    super(tableName, fields, answers, 'append', baseDir('db'));
   }
 
   private mapFieldType(type: string): string {
@@ -30,10 +32,18 @@ class DrizzleSchemaGenerator extends BaseGenerator {
       type: this.mapFieldType(field.type),
     }));
 
-    await this.compile('Schema/DrizzleSchema/template.ejs', `index.ts`, {
+    await this.compile('Schema/DrizzleSchema/template.ejs', findSchemaPath(), {
       fields: mappedFields,
     });
   }
+}
+
+function findSchemaPath(): string {
+  const schemaFolder = glob.sync(baseDir('db/schema'));
+  if (schemaFolder.length > 0) {
+    return `schema/index.ts`;
+  }
+  return 'schema.ts';
 }
 
 export default DrizzleSchemaGenerator;
