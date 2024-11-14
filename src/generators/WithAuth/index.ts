@@ -3,14 +3,14 @@ import { BaseGenerator } from '../BaseGenerator';
 import { Field } from '../../types/Field';
 import { baseDir } from '../../utils/config';
 
-class ExceptionsGenerator extends BaseGenerator {
+class WithAuth extends BaseGenerator {
   constructor(tableName: string, fields: Field[], answers: Answers) {
     super(tableName, fields, answers, 'skip', baseDir('utils'));
   }
 
   async generate(): Promise<void> {
-    await this.compile('Exceptions/template.ejs', 'exceptions.ts');
+    await this.compile('WithAuth/template.ejs', '/withAuth.ts');
   }
 }
 
-export default ExceptionsGenerator;
+export default WithAuth;
