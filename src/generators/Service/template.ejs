@@ -1,6 +1,8 @@
 import <%- TableName %>Repository from './repository';
-import { <%- TableName %> } from '@/db/schema';
+import { <%= tableName %> } from '@/db/schema';
 import withAuth from '@/utils/withAuth';
+
+type <%= TableName %> = typeof <%= tableName %>.$inferInsert;
 
 class <%- TableName %>Service {
   constructor(private readonly repository: <%- TableName %>Repository) {}
@@ -16,7 +18,7 @@ class <%- TableName %>Service {
   async search(
     page: number = 1,
     search = '',
-    searchProperties: (keyof typeof <%- TableName %>)[] = [],
+    searchProperties: (keyof typeof <%- tableName %>)[] = [],
     pageSize: number = 15
   ) {
     return withAuth(

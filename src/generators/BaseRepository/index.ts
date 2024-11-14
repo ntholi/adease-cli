@@ -5,7 +5,7 @@ import { baseDir } from '../../utils/config';
 
 class BaseRepositoryGenerator extends BaseGenerator {
   constructor(tableName: string, fields: Field[], answers: Answers) {
-    super(tableName, fields, answers, 'skip', baseDir('lib'));
+    super(tableName, fields, answers, 'skip', baseDir('repositories'));
   }
 
   async generate(): Promise<void> {

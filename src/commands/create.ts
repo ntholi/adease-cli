@@ -10,7 +10,7 @@ import Service from '../generators/Service';
 import BaseRepository from '../generators/BaseRepository';
 import Repository from '../generators/Repository';
 import RouteHandlerGenerator from '../generators/RouteHandler';
-import RouteUtils from '../generators/RouteUtils';
+import Exceptions from '../generators/Exceptions';
 
 const generators = [
   DrizzleSchemaGenerator,
@@ -27,7 +27,7 @@ const generators = [
   BaseRepository,
   Repository,
   RouteHandlerGenerator,
-  RouteUtils,
+  Exceptions,
 ];
 
 export async function generateAll(
