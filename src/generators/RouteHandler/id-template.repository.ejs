@@ -3,27 +3,27 @@ import { routeException } from '@/utils/exceptions';
 import { <%= tableName %>Repository } from '@/repositories/<%= tableName %>/repository';
 
 type Props = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
 export async function GET(_: NextRequest, { params }: Props) {
   return routeException(async () => {
-    const id = parseInt(params.id);
-    return <%= tableName %>Repository.findById(id);
+    const { id } = await params;
+    return <%= tableName %>Repository.findById(Number(id));
   });
 }
 
 export async function PUT(request: NextRequest, { params }: Props) {
   return routeException(async () => {
-    const id = parseInt(params.id);
+    const { id } = await params;
     const data = await request.json();
-    return <%= tableName %>Repository.update(id, data);
+    return <%= tableName %>Repository.update(Number(id), data);
   });
 }
 
 export async function DELETE(_: NextRequest, { params }: Props) {
   return routeException(async () => {
-    const id = parseInt(params.id);
-    return <%= tableName %>Repository.delete(id);
+    const { id } = await params;
+    return <%= tableName %>Repository.delete(Number(id));
   });
 } 

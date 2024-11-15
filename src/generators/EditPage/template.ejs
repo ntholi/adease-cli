@@ -4,9 +4,7 @@ import Form from '../../Form';
 import { get<%- TableName %>, update<%- TableName %> } from '../../actions';
 
 type Props = {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>;
 };
 
 export default async function <%- TableName %>Edit({ params }: Props) {

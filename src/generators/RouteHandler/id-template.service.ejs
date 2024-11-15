@@ -4,27 +4,27 @@ import { <%= tableName %>Service } from '@/repositories/<%= tableName %>/service
 
 
 type Props = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
 export async function GET(_: NextRequest, { params }: Props) {
   return routeException(async () => {
-    const id = parseInt(params.id);
-    return <%= tableName %>Service.get(id);
+    const { id } = await params;
+    return <%= tableName %>Service.get(Number(id));
   });
 }
 
 export async function PUT(request: NextRequest, { params }: Props) {
   return routeException(async () => {
-    const id = parseInt(params.id);
+    const { id } = await params;
     const data = await request.json();
-    return <%= tableName %>Service.update(id, data);
+    return <%= tableName %>Service.update(Number(id), data);
   });
 }
 
 export async function DELETE(_: NextRequest, { params }: Props) {
   return routeException(async () => {
-    const id = parseInt(params.id);
-    return <%= tableName %>Service.delete(id);
+    const { id } = await params;
+    return <%= tableName %>Service.delete(Number(id));
   });
 } 

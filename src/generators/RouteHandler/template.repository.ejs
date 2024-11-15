@@ -4,7 +4,7 @@ import { <%= tableName %>Repository } from '@/repositories/<%= tableName %>/repo
 
 export async function GET(request: NextRequest) {
   return routeException(async () => {
-    const searchParams = request.nextUrl.searchParams;
+    const searchParams = await request.nextUrl.searchParams;
     const page = parseInt(searchParams.get('page') || '1');
     const search = searchParams.get('search') || '';
     
