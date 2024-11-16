@@ -4,7 +4,7 @@ import {
   FieldView,
   DetailsViewBody,
 } from 'adease';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { get<%- TableName %>, delete<%- TableName %> } from '../actions';
 
 type Props = {
@@ -14,17 +14,20 @@ type Props = {
 export default async function <%- TableName %>Details({ params }: Props) {
   const { id } = await params;
   const <%- tableName %> = await get<%- TableName %>(Number(id));
+  
   if (!<%- tableName %>) {
     return notFound();
   }
 
+  async function handleDelete() {
+    'use server';
+    await delete<%- TableName %>(Number(id));
+    redirect('/<%- adminDir %>/<%- plural(tableName) %>');
+  }
+
   return (
     <DetailsView>
-      <DetailsViewHeader
-        id={Number(id)}
-        title={'<%- singular(TableWord) %>'}
-        handleDelete={delete<%- TableName %>}
-      />
+      <DetailsViewHeader title={'<%- singular(TableWord) %>'} handleDelete={handleDelete} />
       <DetailsViewBody><% fields.forEach(function(prop) { %>
         <FieldView label='<%- capitalize(asWord(prop.name)) %>'>{<%- tableName %>.<%- prop.name %>}</FieldView><% }); %>
       </DetailsViewBody>

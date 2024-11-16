@@ -12,6 +12,8 @@ const __dirname = path.dirname(__filename);
 
 export abstract class BaseGenerator {
   protected readonly baseDir: string;
+  protected readonly adminDir: string;
+
   constructor(
     protected readonly tableName: string,
     protected readonly fields: Field[],
@@ -24,10 +26,12 @@ export abstract class BaseGenerator {
   ) {
     const config = readConfig();
     this.baseDir = config.baseDir;
+    this.adminDir = config.adminDir;
     if (!outputDir) {
       this.outputDir = path.join(
         process.cwd(),
         config.baseDir,
+        'app',
         config.adminDir,
         tableName
       );
@@ -52,6 +56,7 @@ export abstract class BaseGenerator {
       TableName: this.pascalCase(pluralize.singular(this.tableName)),
       fields: this.fields,
       TableWord: this.pascalCase(this.asWord(this.tableName)),
+      adminDir: this.adminDir,
       capitalize: this.capitalize,
       singular: (str: string) => pluralize.singular(str),
       plural: (str: string) => pluralize.plural(str),
