@@ -7,6 +7,8 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const components = ['SearchField', 'ListItem', 'Pagination'];
+
 class ComponentsGenerator {
   async compile(template: string, outputPath: string): Promise<void> {
     const templatePath = path.join(__dirname, template);
@@ -19,9 +21,9 @@ class ComponentsGenerator {
   }
 
   async generate(): Promise<void> {
-    await this.compile('Components/SearchField.ejs', 'SearchField.tsx');
-    await this.compile('Components/ListItem.ejs', 'ListItem.tsx');
-    await this.compile('Components/Pagination.ejs', 'Pagination.tsx');
+    for (const component of components) {
+      await this.compile(`${component}.ejs`, `${component}.tsx`);
+    }
   }
 }
 

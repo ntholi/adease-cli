@@ -33,7 +33,6 @@ export async function init(options: { yes?: boolean }) {
   writeConfig({ baseDir, adminDir });
   console.log(chalk.green('Configuration file created successfully!'));
 
-  // Generate component files
   const generator = new ComponentsGenerator();
   await generator.generate();
   console.log(chalk.green('Component files generated successfully!'));
