@@ -13,10 +13,7 @@ export function readConfig(): Config {
     const configFile = fs.readFileSync(configPath, 'utf8');
     return JSON.parse(configFile);
   } catch (error) {
-    return {
-      baseDir: 'src',
-      adminDir: 'admin',
-    };
+    throw new Error('adease.json not found, run `adease init` to create it');
   }
 }
 
