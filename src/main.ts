@@ -4,6 +4,7 @@ import { Field } from './types/Field';
 import Answers from './types/Answers';
 import { generateAll } from './commands/create';
 import inquirer from 'inquirer';
+import { init } from './commands/init';
 
 const program = new Command();
 
@@ -85,5 +86,13 @@ program
       await generateAll(tableName, fields, answers);
     }
   );
+
+program
+  .command('init')
+  .description('Initialize Adease configuration')
+  .option('-y, --yes', 'Use default values')
+  .action(async (options: { yes?: boolean }) => {
+    await init(options);
+  });
 
 program.parse(process.argv);

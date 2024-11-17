@@ -1,0 +1,22 @@
+'use client';
+
+import { NavLink, NavLinkProps } from '@mantine/core';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+
+export interface ListItemProps extends Omit<NavLinkProps, 'component'> {
+  id: string | number;
+  pathname?: string;
+}
+
+export function ListItem({ id, pathname, ...props }: ListItemProps) {
+  const searchParams = useSearchParams();
+  return (
+    <NavLink
+      href={`${pathname}/${id}?${searchParams}`}
+      active={pathname === `${pathname}/${id}`}
+      component={Link}
+      {...props}
+    />
+  );
+} 

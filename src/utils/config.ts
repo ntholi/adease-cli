@@ -20,6 +20,11 @@ export function readConfig(): Config {
   }
 }
 
+export function writeConfig(config: Config) {
+  const configPath = path.join(process.cwd(), 'adease.json');
+  fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
+}
+
 export function baseDir(path: string): string {
   const config = readConfig();
   return `${config.baseDir}/${path.startsWith('/') ? path.slice(1) : path}`;
