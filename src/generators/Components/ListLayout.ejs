@@ -1,0 +1,106 @@
+import {
+  Divider,
+  Flex,
+  Grid,
+  GridCol,
+  Group,
+  Paper,
+  ScrollArea,
+} from '@mantine/core';
+import {
+  createSearchParamsCache,
+  parseAsString,
+  parseAsInteger,
+  SearchParams,
+} from 'nuqs/server';
+import React from 'react';
+import { ListItem } from './ListItem';
+import { Pagination } from './Pagination';
+import { SearchField } from './SearchField';
+
+export type ListLayoutProps<T> = {
+  searchProperties?: (keyof T)[];
+  getItems: (
+    page: number,
+    search: string,
+    searchProperties: (keyof T)[]
+  ) => Promise<{ items: T[]; pages: number }>;
+  renderItem: (item: T) => React.ReactNode;
+  pathname: string;
+  actionIcons?: React.ReactNode[];
+  children: React.ReactNode;
+  searchParams?: Promise<SearchParams | null>;
+};
+
+const searchParamsCache = createSearchParamsCache({
+  search: parseAsString.withDefault(''),
+  page: parseAsInteger.withDefault(1),
+});
+
+export async function ListLayout<T>({
+  getItems,
+  renderItem,
+  actionIcons,
+  children,
+  searchProperties = [],
+  pathname,
+  searchParams,
+}: ListLayoutProps<T>) {
+  const params = searchParams
+    ? await searchParamsCache.parse(searchParams)
+    : { search: '', page: 1 };
+  const { search = '', page = 1 } = params;
+
+  const { items, pages } = await getItems(page, search, searchProperties || []);
+
+  const renderItemWithPathname = (item: T) => {
+    const itemElement = renderItem(item);
+    if (React.isValidElement(itemElement) && itemElement.type === ListItem) {
+      return React.cloneElement(
+        itemElement as React.ReactElement<
+          React.ComponentProps<typeof ListItem>
+        >,
+        { pathname }
+      );
+    }
+    return itemElement;
+  };
+
+  return (
+    <Grid columns={14} gutter={'xl'}>
+      <GridCol span={4} pr={7}>
+        <Paper withBorder h={'88vh'}>
+          <Flex direction='column' h='100%'>
+            <Flex p={'md'} justify='space-between' align={'center'} gap={'xs'}>
+              <Group style={{ width: '100%', flex: 1 }}>
+                <SearchField style={{ width: '100%' }} />
+              </Group>
+              {actionIcons?.map((component, index) => (
+                <React.Fragment key={index}>{component}</React.Fragment>
+              ))}
+            </Flex>
+            <Divider />
+            <ScrollArea type='always' style={{ flex: 1 }} p={'sm'}>
+              {items.map((item: T, index: number) => (
+                <React.Fragment key={index}>
+                  {renderItemWithPathname(item)}
+                </React.Fragment>
+              ))}
+            </ScrollArea>
+
+            <Divider />
+            <Pagination total={pages} />
+          </Flex>
+        </Paper>
+      </GridCol>
+
+      <GridCol span={10}>
+        <Paper withBorder>
+          <ScrollArea h='88vh' type='always'>
+            {children}
+          </ScrollArea>
+        </Paper>
+      </GridCol>
+    </Grid>
+  );
+}
