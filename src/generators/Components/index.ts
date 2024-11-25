@@ -38,6 +38,7 @@ class ComponentsGenerator {
     for (const component of components) {
       await this.compile(`Components/${component}.ejs`, `${component}.tsx`);
     }
+    await this.compile('Components/index.ejs', 'index.ts');
   }
 }
 
