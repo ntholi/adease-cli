@@ -13,6 +13,7 @@ const components = [
   'ListItem',
   'ListLayout',
   'Shell',
+  'NothingSelected',
 ];
 
 class ComponentsGenerator {
