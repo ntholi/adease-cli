@@ -7,7 +7,13 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const components = ['SearchField', 'Pagination', 'ListItem', 'ListLayout'];
+const components = [
+  'SearchField',
+  'Pagination',
+  'ListItem',
+  'ListLayout',
+  'Shell',
+];
 
 class ComponentsGenerator {
   async compile(template: string, outputPath: string): Promise<void> {
