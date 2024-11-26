@@ -26,7 +26,7 @@ export type ListLayoutProps<T> = {
     searchProperties: (keyof T)[]
   ) => Promise<{ items: T[]; pages: number }>;
   renderItem: (item: T) => React.ReactNode;
-  pathname: string;
+  path: string;
   actionIcons?: React.ReactNode[];
   children: React.ReactNode;
   searchParams?: Promise<SearchParams | null>;
@@ -43,7 +43,7 @@ export async function ListLayout<T>({
   actionIcons,
   children,
   searchProperties = [],
-  pathname,
+  path,
   searchParams,
 }: ListLayoutProps<T>) {
   const params = searchParams
@@ -53,14 +53,14 @@ export async function ListLayout<T>({
 
   const { items, pages } = await getItems(page, search, searchProperties || []);
 
-  const renderItemWithPathname = (item: T) => {
+  const renderListItem = (item: T) => {
     const itemElement = renderItem(item);
     if (React.isValidElement(itemElement) && itemElement.type === ListItem) {
       return React.cloneElement(
         itemElement as React.ReactElement<
           React.ComponentProps<typeof ListItem>
         >,
-        { pathname }
+        { path }
       );
     }
     return itemElement;
@@ -83,7 +83,7 @@ export async function ListLayout<T>({
             <ScrollArea type='always' style={{ flex: 1 }} p={'sm'}>
               {items.map((item: T, index: number) => (
                 <React.Fragment key={index}>
-                  {renderItemWithPathname(item)}
+                  {renderListItem(item)}
                 </React.Fragment>
               ))}
             </ScrollArea>

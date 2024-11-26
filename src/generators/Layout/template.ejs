@@ -5,7 +5,7 @@ import { getAll<%- TableName %>s } from './actions';
 export default function Layout({ children }: PropsWithChildren) {
   return (
     <ListLayout
-      pathname={'/<%- adminDir %>/<%- plural(tableName) %>'}
+      path={'/<%- adminDir %>/<%- plural(tableName) %>'}
       getItems={getAll<%- TableName %>s}
       actionIcons={[<NewLink key={'new-link'} href='/admin/<%- plural(tableName) %>/new' />]}
       renderItem={(it) => <ListItem id={it.id} label={it.id} />}

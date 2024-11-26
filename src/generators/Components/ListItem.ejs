@@ -6,15 +6,15 @@ import { useSearchParams } from 'next/navigation';
 
 export interface ListItemProps extends Omit<NavLinkProps, 'component'> {
   id: string | number;
-  pathname?: string;
+  path?: string;
 }
 
-export function ListItem({ id, pathname, ...props }: ListItemProps) {
+export function ListItem({ id, path, ...props }: ListItemProps) {
   const searchParams = useSearchParams();
   return (
     <NavLink
-      href={`${pathname}/${id}?${searchParams}`}
-      active={pathname === `${pathname}/${id}`}
+      href={`${path}/${id}?${searchParams}`}
+      active={path === `${path}/${id}`}
       component={Link}
       {...props}
     />
