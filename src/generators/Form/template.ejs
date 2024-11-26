@@ -6,19 +6,24 @@ import { createInsertSchema } from 'drizzle-zod';
 
 type <%- TableName %> = typeof <%- tableName %>.$inferInsert;
 
-type fields = {
+type Props = {
   onSubmit: (values: <%- TableName %>) => Promise<<%- TableName %>>;
   defaultValues?: <%- TableName %>;
+  onSuccess?: (value: Author) => void;
+  onError?: (
+    error: Error | React.SyntheticEvent<HTMLDivElement, Event>
+  ) => void;
 };
 
-export default function <%- TableName %>Form({ onSubmit, defaultValues }: fields) {
+export default function <%- TableName %>Form(props: Props) {
+  const { onSubmit, onSuccess, onError, defaultValues } = props;
   return (
     <Form 
       action={onSubmit} 
       schema={createInsertSchema(<%- tableName %>)} 
       defaultValues={defaultValues}
     ><% inputFields.forEach(function(field) { %>
-        <<%- field.type %> name="<%- field.name %>" label="<%- capitalize(asWord(field.name)) %>" /><% }); %>
+        <<%- field.type %> name='<%- field.name %>' label='<%- capitalize(asWord(field.name)) %>' /><% }); %>
     </Form>
   );
 }
