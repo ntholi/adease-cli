@@ -39,8 +39,8 @@ class RootIndexGenerator {
   }
 
   async generate(): Promise<void> {
-    await this.compile('RootIndex/index.ejs', 'index.ts');
-    await this.compile('RootIndex/layout.ejs', 'layout.ts');
+    await this.compile(`RootIndex/layout.ejs`, 'layout.tsx');
+    await this.compile('RootIndex/index.ejs', 'page.tsx');
   }
 }
 
