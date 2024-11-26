@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { ZodObject, ZodTypeAny } from 'zod';
 import { useForm, zodResolver } from '@mantine/form';
@@ -6,6 +6,7 @@ import { notifications } from '@mantine/notifications';
 import { Stack, StackProps } from '@mantine/core';
 import React, { useState } from 'react';
 import FormHeader from './FormHeader';
+import { useRouter } from 'next/navigation';
 
 type ZodSchema = ZodObject<Record<string, ZodTypeAny>>;
 
@@ -30,6 +31,7 @@ export function Form<T extends Record<string, unknown>>({
   ...props
 }: FormProps<T>) {
   const [pending, setPending] = useState(false);
+  const router = useRouter();
   const form = useForm<T>({
     validate: schema && zodResolver(schema),
     initialValues: defaultValues,
@@ -56,7 +58,13 @@ export function Form<T extends Record<string, unknown>>({
 
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
-      <FormHeader title={title} isLoading={pending} />
+      <FormHeader
+        title={title}
+        isLoading={pending}
+        onClose={() => {
+          router.back();
+        }}
+      />
       <Stack p='xl' {...props}>
         {React.Children.map(children, (child) => addFormProps(child, form))}
       </Stack>
