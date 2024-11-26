@@ -2,7 +2,7 @@
 
 import { NavLink, NavLinkProps } from '@mantine/core';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 export interface ListItemProps extends Omit<NavLinkProps, 'component'> {
   id: string | number;
@@ -11,12 +11,13 @@ export interface ListItemProps extends Omit<NavLinkProps, 'component'> {
 
 export function ListItem({ id, path, ...props }: ListItemProps) {
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   return (
     <NavLink
       href={`${path}/${id}?${searchParams}`}
-      active={path === `${path}/${id}`}
+      active={pathname.includes(`${path}/${id}`)}
       component={Link}
       {...props}
     />
   );
-} 
+}
