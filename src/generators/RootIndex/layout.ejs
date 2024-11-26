@@ -1,0 +1,15 @@
+'use client';
+
+import { Shell } from '@/components/adease';
+import React from 'react';
+
+export default function layout({ children }: { children: React.ReactNode }) {
+  return (
+    <Shell>
+      <Shell.Header>Logo</Shell.Header>
+      <Shell.Navigation>Navigation</Shell.Navigation>
+      <Shell.Body>{children}</Shell.Body>
+      <Shell.User>User</Shell.User>
+    </Shell>
+  );
+}

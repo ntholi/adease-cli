@@ -2,6 +2,7 @@ import inquirer from 'inquirer';
 import { writeConfig } from '../utils/config';
 import ComponentsGenerator from '../generators/Components';
 import chalk from 'chalk';
+import RootIndexGenerator from '../generators/RootIndex';
 
 export async function init(options: { yes?: boolean }) {
   let baseDir: string;
@@ -36,4 +37,6 @@ export async function init(options: { yes?: boolean }) {
   const generator = new ComponentsGenerator();
   await generator.generate();
   console.log(chalk.green('Component files generated successfully!'));
+
+  await new RootIndexGenerator().generate();
 }

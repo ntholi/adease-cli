@@ -4,15 +4,12 @@ import { BaseGenerator } from '../BaseGenerator';
 
 class ActionsGenerator extends BaseGenerator {
   constructor(tableName: string, fields: Field[], answers: Answers) {
-    super(tableName, fields, answers);
+    super(tableName, fields, answers, 'skip');
   }
 
   async generate(): Promise<void> {
-    const templateFile = this.answers.serviceFile
-      ? 'service.ejs'
-      : 'repository.ejs';
-
-    await this.compile(`Actions/${templateFile}`, 'actions.ts', {});
+    await this.compile(`RootIndex/layout.ejs`, 'layout.tsx', {});
+    await this.compile('RootIndex/index.ejs', 'index.tsx', {});
   }
 }
 
