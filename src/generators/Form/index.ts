@@ -1,6 +1,7 @@
 import Answers from '../../types/Answers';
 import { BaseGenerator } from '../BaseGenerator';
 import { Field } from '../../types/Field';
+import path from 'path';
 
 class Form extends BaseGenerator {
   constructor(tableName: string, fields: Field[], answers: Answers) {
@@ -24,9 +25,17 @@ class Form extends BaseGenerator {
       return importType;
     });
 
+    const pathname = path.join(
+      this.baseDir,
+      'app',
+      this.adminDir,
+      this.tableName
+    );
+
     await this.compile('Form/template.ejs', 'Form.tsx', {
       imports: [...new Set(imports)],
       inputFields: inputFields,
+      pathname,
     });
   }
 }

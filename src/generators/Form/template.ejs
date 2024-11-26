@@ -3,6 +3,7 @@ import { <%- tableName %> } from '@/db/schema';
 import { Form } from '@/components/adease';
 import { <%- imports.join(', ') %> } from '@mantine/core';
 import { createInsertSchema } from 'drizzle-zod';
+import { useRouter } from 'next/navigation';
 
 type <%- TableName %> = typeof <%- tableName %>.$inferInsert;
 
@@ -15,13 +16,17 @@ type Props = {
   ) => void;
 };
 
-export default function <%- TableName %>Form(props: Props) {
-  const { onSubmit, onSuccess, onError, defaultValues } = props;
+export default function <%- TableName %>Form({ onSubmit, defaultValues }: Props) {
+  const router = useRouter();
+
   return (
     <Form 
       action={onSubmit} 
       schema={createInsertSchema(<%- tableName %>)} 
       defaultValues={defaultValues}
+      onSuccess={({ id }) => {
+        router.push(`/admin/authors/${id}`);
+      }}
     ><% inputFields.forEach(function(field) { %>
         <<%- field.type %> name='<%- field.name %>' label='<%- capitalize(asWord(field.name)) %>' /><% }); %>
     </Form>
