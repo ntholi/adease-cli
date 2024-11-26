@@ -17,6 +17,7 @@ const components = [
   'FormHeader',
   'ListItem',
   'ListLayout',
+  'NewLink',
   'NothingSelected',
   'Pagination',
   'SearchField',
