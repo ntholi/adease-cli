@@ -1,7 +1,7 @@
 'use client';
 
 import { CloseButton, TextInput, TextInputProps } from '@mantine/core';
-import { Search } from 'lucide-react';
+import { IconSearch } from '@tabler/icons-react';
 import { useQueryState } from 'nuqs';
 
 export function SearchField(props: TextInputProps) {
@@ -14,7 +14,7 @@ export function SearchField(props: TextInputProps) {
       }}
     />
   ) : (
-    <Search size={20} />
+    <IconSearch size={20} />
   );
 
   return (
@@ -28,4 +28,4 @@ export function SearchField(props: TextInputProps) {
       {...props}
     />
   );
-} 
+}
