@@ -8,11 +8,13 @@ import { DeleteButton } from './DeleteButton';
 
 export interface DetailsViewHeaderProps {
   title: string;
+  queryKey: string[];
   handleDelete?: () => Promise<void>;
 }
 
 export function DetailsViewHeader({
   title,
+  queryKey,
   handleDelete,
 }: DetailsViewHeaderProps) {
   const pathname = usePathname();
@@ -24,7 +26,9 @@ export function DetailsViewHeader({
           {title}
         </Title>
         <Group>
-          {handleDelete && <DeleteButton handleDelete={handleDelete} />}
+          {handleDelete && (
+            <DeleteButton handleDelete={handleDelete} queryKey={queryKey} />
+          )}
           <ActionIcon
             component={Link}
             href={`${pathname}/edit`}

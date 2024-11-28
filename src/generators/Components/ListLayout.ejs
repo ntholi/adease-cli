@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Divider,
   Flex,
@@ -7,13 +9,9 @@ import {
   Paper,
   ScrollArea,
 } from '@mantine/core';
-import {
-  createSearchParamsCache,
-  parseAsString,
-  parseAsInteger,
-  SearchParams,
-} from 'nuqs/server';
+import { useSearchParams } from 'next/navigation';
 import React from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { ListItem } from './ListItem';
 import { Pagination } from './Pagination';
 import { SearchField } from './SearchField';
@@ -27,31 +25,31 @@ export type ListLayoutProps<T> = {
   ) => Promise<{ items: T[]; pages: number }>;
   renderItem: (item: T) => React.ReactNode;
   path: string;
+  queryKey: string[];
   actionIcons?: React.ReactNode[];
   children: React.ReactNode;
-  searchParams?: Promise<SearchParams | null>;
 };
 
-const searchParamsCache = createSearchParamsCache({
-  search: parseAsString.withDefault(''),
-  page: parseAsInteger.withDefault(1),
-});
-
-export async function ListLayout<T>({
+export function ListLayout<T>({
   getItems,
   renderItem,
   actionIcons,
   children,
+  queryKey,
   searchProperties = [],
   path,
-  searchParams,
 }: ListLayoutProps<T>) {
-  const params = searchParams
-    ? await searchParamsCache.parse(searchParams)
-    : { search: '', page: 1 };
-  const { search = '', page = 1 } = params;
+  const searchParams = useSearchParams();
+  const search = searchParams.get('search') || '';
+  const page = Number(searchParams.get('page')) || 1;
 
-  const { items, pages } = await getItems(page, search, searchProperties || []);
+  const { data = { items: [], pages: 0 } } = useQuery({
+    queryKey: [...queryKey, page, search],
+    queryFn: () => getItems(page, search, searchProperties),
+    staleTime: 0,
+  });
+
+  const { items, pages } = data;
 
   const renderListItem = (item: T) => {
     const itemElement = renderItem(item);

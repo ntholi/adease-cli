@@ -1,15 +1,16 @@
 'use client';
 import { ActionIcon, ActionIconProps, Text } from '@mantine/core';
 import { modals } from '@mantine/modals';
+import { notifications } from '@mantine/notifications';
 import { IconTrashFilled } from '@tabler/icons-react';
-import { useState } from 'react';
-
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export interface DeleteButtonProps extends ActionIconProps {
   handleDelete: () => Promise<void>;
   message?: string;
   onSuccess?: () => void;
   onError?: (error: Error) => void;
+  queryKey?: string[];
 }
 
 export function DeleteButton({
@@ -17,9 +18,34 @@ export function DeleteButton({
   message,
   onSuccess,
   onError,
+  queryKey,
   ...props
 }: DeleteButtonProps) {
-  const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: handleDelete,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey,
+        refetchType: 'all',
+      });
+      onSuccess?.();
+      notifications.show({
+        title: 'Success',
+        message: 'Item deleted successfully',
+        color: 'green',
+      });
+    },
+    onError: (error: Error) => {
+      notifications.show({
+        title: 'Error',
+        message: error.message || 'An error occurred while deleting',
+        color: 'red',
+      });
+      onError?.(error);
+    },
+  });
 
   const openModal = () =>
     modals.openConfirmModal({
@@ -32,26 +58,16 @@ export function DeleteButton({
       labels: { confirm: 'Delete', cancel: 'Cancel' },
       confirmProps: { color: 'red' },
       onCancel: () => console.log('Cancel'),
-      onConfirm: () => onDelete(),
+      onConfirm: () => mutation.mutate(),
     });
 
-  async function onDelete() {
-    setLoading(true);
-    try {
-      await handleDelete();
-      onSuccess?.();
-    } catch (error) {
-      if (error instanceof Error) {
-        onError?.(error);
-      } else {
-        onError?.(new Error('An unknown error occurred'));
-      }
-    } finally {
-      setLoading(false);
-    }
-  }
   return (
-    <ActionIcon color='red' loading={loading} onClick={openModal} {...props}>
+    <ActionIcon
+      color='red'
+      loading={mutation.isPending}
+      onClick={openModal}
+      {...props}
+    >
       <IconTrashFilled size={'1rem'} />
     </ActionIcon>
   );

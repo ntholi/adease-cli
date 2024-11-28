@@ -27,7 +27,10 @@ export default async function <%- TableName %>Details({ params }: Props) {
 
   return (
     <DetailsView>
-      <DetailsViewHeader title={'<%- singular(TableWord) %>'} handleDelete={handleDelete} />
+      <DetailsViewHeader 
+        title={'<%- singular(TableWord) %>'} 
+        queryKey={['<%- plural(tableName) %>']}
+        handleDelete={handleDelete} />
       <DetailsViewBody><% fields.forEach(function(prop) { %>
         <FieldView label='<%- capitalize(asWord(prop.name)) %>'>{<%- tableName %>.<%- prop.name %>}</FieldView><% }); %>
       </DetailsViewBody>

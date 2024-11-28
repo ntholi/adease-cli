@@ -1,3 +1,5 @@
+'use client';
+
 import { PropsWithChildren } from 'react';
 import { ListItem, ListLayout, NewLink } from '@/components/adease';
 import { getAll<%- TableName %>s } from './actions';
@@ -6,6 +8,7 @@ export default function Layout({ children }: PropsWithChildren) {
   return (
     <ListLayout
       path={'/<%- adminDir %>/<%- plural(tableName) %>'}
+      queryKey={['<%- plural(tableName) %>']}
       getItems={getAll<%- TableName %>s}
       actionIcons={[<NewLink key={'new-link'} href='/admin/<%- plural(tableName) %>/new' />]}
       renderItem={(it) => <ListItem id={it.id} label={it.id} />}

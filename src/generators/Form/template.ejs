@@ -18,17 +18,18 @@ type Props = {
 
 export default function <%- TableName %>Form({ onSubmit, defaultValues }: Props) {
   const router = useRouter();
-
+  
   return (
     <Form 
       action={onSubmit} 
+      queryKey={['<%- plural(tableName) %>']}
       schema={createInsertSchema(<%- tableName %>)} 
       defaultValues={defaultValues}
       onSuccess={({ id }) => {
         router.push(`/admin/authors/${id}`);
       }}
     ><% inputFields.forEach(function(field) { %>
-        <<%- field.type %> name='<%- field.name %>' label='<%- capitalize(asWord(field.name)) %>' /><% }); %>
+      <<%- field.type %> name='<%- field.name %>' label='<%- capitalize(asWord(field.name)) %>' /><% }); %>
     </Form>
   );
 }
