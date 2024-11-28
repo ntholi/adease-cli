@@ -10,12 +10,14 @@ export interface DetailsViewHeaderProps {
   title: string;
   queryKey: string[];
   handleDelete?: () => Promise<void>;
+  onDeleteSuccess?: () => Promise<void>;
 }
 
 export function DetailsViewHeader({
   title,
   queryKey,
   handleDelete,
+  onDeleteSuccess,
 }: DetailsViewHeaderProps) {
   const pathname = usePathname();
 
@@ -27,7 +29,11 @@ export function DetailsViewHeader({
         </Title>
         <Group>
           {handleDelete && (
-            <DeleteButton handleDelete={handleDelete} queryKey={queryKey} />
+            <DeleteButton
+              handleDelete={handleDelete}
+              onSuccess={onDeleteSuccess}
+              queryKey={queryKey}
+            />
           )}
           <ActionIcon
             component={Link}

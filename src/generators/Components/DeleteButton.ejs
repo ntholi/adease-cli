@@ -4,6 +4,7 @@ import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 import { IconTrashFilled } from '@tabler/icons-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 
 export interface DeleteButtonProps extends ActionIconProps {
   handleDelete: () => Promise<void>;
@@ -21,6 +22,7 @@ export function DeleteButton({
   queryKey,
   ...props
 }: DeleteButtonProps) {
+  const router = useRouter();
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
@@ -30,12 +32,16 @@ export function DeleteButton({
         queryKey,
         refetchType: 'all',
       });
-      onSuccess?.();
-      notifications.show({
-        title: 'Success',
-        message: 'Item deleted successfully',
-        color: 'green',
-      });
+      if (onSuccess) {
+        onSuccess();
+      } else {
+        notifications.show({
+          title: 'Success',
+          message: 'Item deleted successfully',
+          color: 'green',
+        });
+        router.back();
+      }
     },
     onError: (error: Error) => {
       notifications.show({
