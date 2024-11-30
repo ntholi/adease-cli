@@ -10,7 +10,7 @@ import { DatabaseType, readConfig } from '@/utils/config';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const CREATE_DESTINATION_DIR = 'Create';
+const DESTINATION_DIR = 'Create';
 
 export abstract class BaseGenerator {
   protected readonly baseDir: string;
@@ -50,7 +50,7 @@ export abstract class BaseGenerator {
     templateData?: Record<string, any>
   ): Promise<string> {
     const template = await fs.readFile(
-      path.join(__dirname, templatePath),
+      path.join(__dirname, `${DESTINATION_DIR}/${templatePath}`),
       'utf8'
     );
     const compiled = ejs.compile(template);
@@ -88,10 +88,7 @@ export abstract class BaseGenerator {
         } catch (error) {}
       }
 
-      await fs.writeFile(
-        `${CREATE_DESTINATION_DIR}/${outputFilePath}`,
-        content
-      );
+      await fs.writeFile(outputFilePath, content);
     }
 
     return content;
