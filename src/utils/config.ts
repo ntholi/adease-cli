@@ -1,9 +1,12 @@
 import fs from 'fs';
 import path from 'path';
 
+export type DatabaseType = 'drizzle' | 'prisma' | 'firebase';
+
 interface Config {
   baseDir: string;
   adminDir: string;
+  database: DatabaseType | null;
 }
 
 export function readConfig(): Config {
