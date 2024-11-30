@@ -3,6 +3,7 @@ import ejs from 'ejs';
 import fs from 'fs/promises';
 import { fileURLToPath } from 'url';
 import { readConfig } from '@/utils/config';
+import { INIT_DESTINATION_DIR } from '../Components';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -39,8 +40,14 @@ class RootIndexGenerator {
   }
 
   async generate(): Promise<void> {
-    await this.compile(`RootIndex/layout.ejs`, 'layout.tsx');
-    await this.compile('RootIndex/index.ejs', 'page.tsx');
+    await this.compile(
+      `${INIT_DESTINATION_DIR}/RootIndex/layout.ejs`,
+      'layout.tsx'
+    );
+    await this.compile(
+      `${INIT_DESTINATION_DIR}/RootIndex/index.ejs`,
+      'page.tsx'
+    );
   }
 }
 

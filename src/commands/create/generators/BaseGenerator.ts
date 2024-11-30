@@ -10,6 +10,8 @@ import { DatabaseType, readConfig } from '@/utils/config';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const CREATE_DESTINATION_DIR = 'Create';
+
 export abstract class BaseGenerator {
   protected readonly baseDir: string;
   protected readonly adminDir: string;
@@ -86,7 +88,10 @@ export abstract class BaseGenerator {
         } catch (error) {}
       }
 
-      await fs.writeFile(outputFilePath, content);
+      await fs.writeFile(
+        `${CREATE_DESTINATION_DIR}/${outputFilePath}`,
+        content
+      );
     }
 
     return content;

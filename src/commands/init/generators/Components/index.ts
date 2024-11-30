@@ -7,6 +7,8 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+export const INIT_DESTINATION_DIR = 'Init';
+
 const components = [
   'DeleteButton',
   'DetailsView',
@@ -37,9 +39,15 @@ class ComponentsGenerator {
 
   async generate(): Promise<void> {
     for (const component of components) {
-      await this.compile(`Components/${component}.ejs`, `${component}.tsx`);
+      await this.compile(
+        `${INIT_DESTINATION_DIR}/Components/${component}.ejs`,
+        `${component}.tsx`
+      );
     }
-    await this.compile('Components/index.ejs', 'index.ts');
+    await this.compile(
+      `${INIT_DESTINATION_DIR}/Components/index.ejs`,
+      'index.ts'
+    );
   }
 }
 

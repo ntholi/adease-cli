@@ -7,15 +7,21 @@ import path from 'path';
 
 function copyEjsPlugin() {
   console.log('Copying .ejs files...');
+  const dirs = ['Create', 'Init'];
   return {
     name: 'copy-ejs-templates',
     closeBundle: () => {
-      const templates = glob.sync('src/**/*.ejs');
-      templates.forEach((file) => {
-        const relativePath = path.relative('src', file);
-        const targetPath = path.join('dist', relativePath);
-        mkdirSync(path.dirname(targetPath), { recursive: true });
-        copyFileSync(file, targetPath);
+      dirs.map((it) => {
+        const templates = glob.sync(`src/commands/${it}/generators/**/*.ejs`);
+        templates.forEach((file) => {
+          const relativePath = path.relative(
+            `src/commands/${it}/generators/`,
+            file
+          );
+          const targetPath = path.join(`dist/${it}`, relativePath);
+          mkdirSync(path.dirname(targetPath), { recursive: true });
+          copyFileSync(file, targetPath);
+        });
       });
     },
   };
