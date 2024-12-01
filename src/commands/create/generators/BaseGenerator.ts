@@ -61,6 +61,7 @@ export abstract class BaseGenerator {
       fields: this.fields,
       TableWord: this.pascalCase(this.asWord(this.tableName)),
       adminDir: this.adminDir,
+      database: this.database,
       capitalize: this.capitalize,
       singular: (str: string) => pluralize.singular(str),
       plural: (str: string) => pluralize.plural(str),
