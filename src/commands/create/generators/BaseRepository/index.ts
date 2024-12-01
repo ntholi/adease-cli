@@ -9,6 +9,12 @@ class BaseRepositoryGenerator extends BaseGenerator {
   }
 
   async generate(): Promise<void> {
+    if (this.database === 'prisma') {
+      console.warn(
+        "Skipping BaseRepository for Prisma, I'm still yet to complete it's template"
+      );
+    }
+
     await this.compile(
       `BaseRepository/${this.database}.ejs`,
       'BaseRepository.ts'
