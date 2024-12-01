@@ -9,7 +9,7 @@ import { auth } from '@/auth';
 
 export default async function withAuth<T>(
   fn: () => Promise<T>,
-  roles: Role[] = []
+  roles: Role[] = [],
 ) {
   const session = await auth();
 
@@ -17,7 +17,7 @@ export default async function withAuth<T>(
     throw new Error('Unauthorized');
   }
 
-  if (!roles.includes(session?.user?.role)) {
+  if (!['admin', ...roles].includes(session?.user?.role)) {
     throw new Error('Unauthorized');
   }
 
