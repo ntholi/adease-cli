@@ -1,0 +1,92 @@
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+class BaseRepository<T extends string> {
+  constructor(private model: T) {}
+
+  private get repository() {
+    return prisma[this.model as keyof typeof prisma] as any;
+  }
+
+  async findFirst() {
+    return await this.repository.findFirst();
+  }
+
+  async findById(id: number | string) {
+    return await this.repository.findUnique({
+      where: { id },
+    });
+  }
+
+  async findAll(offset: number = 0, limit: number = 10) {
+    return await this.repository.findMany({
+      skip: offset,
+      take: limit,
+    });
+  }
+
+  async search(
+    page: number = 1,
+    search: string,
+    searchProperties: string[],
+    pageSize: number = 15
+  ) {
+    const offset = (page - 1) * pageSize;
+    const where = {
+      OR: searchProperties.map((property) => ({
+        [property]: { contains: search, mode: 'insensitive' },
+      })),
+    };
+
+    const [items, total] = await Promise.all([
+      this.repository.findMany({
+        where,
+        skip: offset,
+        take: pageSize,
+      }),
+      this.repository.count({ where }),
+    ]);
+
+    return {
+      items,
+      pages: Math.ceil(total / pageSize),
+    };
+  }
+
+  async exists(id: number | string) {
+    const count = await this.repository.count({
+      where: { id },
+    });
+    return count > 0;
+  }
+
+  async create(data: any) {
+    return await this.repository.create({
+      data,
+    });
+  }
+
+  async update(id: number | string, data: any) {
+    return await this.repository.update({
+      where: { id },
+      data,
+    });
+  }
+
+  async delete(id: number | string) {
+    await this.repository.delete({
+      where: { id },
+    });
+  }
+
+  async count() {
+    return await this.repository.count();
+  }
+
+  async deleteAll() {
+    await this.repository.deleteMany();
+  }
+}
+
+export default BaseRepository;

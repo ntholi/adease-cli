@@ -1,8 +1,6 @@
 model <%= TableName %> {
   id        Int      @id @default(autoincrement())
-<% fields.forEach(function(field) { %>
-  <%= field.name %>  <%= field.type %>
-<% }); %>
+<%- fields.map(field => `  ${field.name}  ${field.type}`).join('\n') %>
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 } 

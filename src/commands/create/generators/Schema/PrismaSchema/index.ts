@@ -36,7 +36,7 @@ class PrismaSchemaGenerator extends BaseGenerator {
 
     await this.compile(
       'Schema/PrismaSchema/template.ejs',
-      '../../prisma/schema.prisma',
+      '../../../../prisma/schema.prisma',
       { fields: mappedFields }
     );
   }
