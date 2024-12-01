@@ -1,9 +1,11 @@
 'use server';
 
 import { auth } from '@/auth';
-import { users } from '@/db/schema';
+<% if (database === 'drizzle') { %>import { users } from '@/db/schema';<% } %>
+<% if (database === 'prisma') { %>import { Prisma } from '@prisma/client';<% } %>
 
-type Role = (typeof users.$inferSelect)['role'];
+<% if (database === 'drizzle') { %>type Role = (typeof users.$inferSelect)['role'];<% } %>
+<% if (database === 'prisma') { %>type Role = Prisma.UserCreateInput['role'];<% } %>
 
 export default async function withAuth<T>(
   fn: () => Promise<T>,
@@ -15,7 +17,7 @@ export default async function withAuth<T>(
     throw new Error('Unauthorized');
   }
 
-  if (roles.length && !roles.includes(session.user.role)) {
+  if (roles.length && !roles.includes(session?.user?.role)) {
     throw new Error('Unauthorized');
   }
 
