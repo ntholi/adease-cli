@@ -1,8 +1,8 @@
-import { BaseGenerator } from '../../BaseGenerator';
-import { Field } from '../../../types/Field';
 import Answers from '../../../types/Answers';
+import { Field } from '../../../types/Field';
+import { BaseSchemaGenerator } from '../BaseSchemaGenerator';
 
-class PrismaSchemaGenerator extends BaseGenerator {
+class PrismaSchemaGenerator extends BaseSchemaGenerator {
   constructor(tableName: string, fields: Field[], answers: Answers) {
     super(tableName, fields, answers, 'append');
   }

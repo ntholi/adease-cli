@@ -25,7 +25,7 @@ export abstract class BaseGenerator {
       | 'override'
       | 'append'
       | 'skip' = 'override',
-    private readonly outputDir: string = ''
+    protected readonly outputDir: string = ''
   ) {
     const config = readConfig();
     this.baseDir = config.baseDir;
