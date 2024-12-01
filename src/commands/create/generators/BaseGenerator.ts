@@ -16,6 +16,7 @@ export abstract class BaseGenerator {
   protected readonly baseDir: string;
   protected readonly adminDir: string;
   protected readonly database: DatabaseType | null;
+  protected readonly outputDir: string;
 
   constructor(
     protected readonly tableName: string,
@@ -25,23 +26,23 @@ export abstract class BaseGenerator {
       | 'override'
       | 'append'
       | 'skip' = 'override',
-    protected readonly outputDir: string = ''
+    outputDir: string = ''
   ) {
     const config = readConfig();
     this.baseDir = config.baseDir;
     this.adminDir = config.adminDir;
     this.database = config.database;
-    if (!outputDir) {
-      this.outputDir = path.join(
-        process.cwd(),
-        config.baseDir,
-        'app',
-        config.adminDir,
-        tableName
-      );
-    } else {
-      this.outputDir = path.join(process.cwd(), outputDir);
-    }
+    this.outputDir = outputDir || this.getOutputDir();
+  }
+
+  private getOutputDir(): string {
+    return path.join(
+      process.cwd(),
+      this.baseDir,
+      'app',
+      this.adminDir,
+      this.tableName
+    );
   }
 
   protected async compile(

@@ -4,7 +4,7 @@ import { BaseSchemaGenerator } from '../BaseSchemaGenerator';
 
 class PrismaSchemaGenerator extends BaseSchemaGenerator {
   constructor(tableName: string, fields: Field[], answers: Answers) {
-    super(tableName, fields, answers, 'append');
+    super(tableName, fields, answers, 'append', 'prisma');
   }
 
   private mapFieldType(type: string): string {
@@ -34,11 +34,9 @@ class PrismaSchemaGenerator extends BaseSchemaGenerator {
       type: this.mapFieldType(field.type),
     }));
 
-    await this.compile(
-      'Schema/PrismaSchema/template.ejs',
-      '../../../../prisma/schema.prisma',
-      { fields: mappedFields }
-    );
+    await this.compile('Schema/PrismaSchema/template.ejs', 'schema.prisma', {
+      fields: mappedFields,
+    });
   }
 }
 
