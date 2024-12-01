@@ -1,5 +1,5 @@
 {
-  "name": "adease-cli",
+  "name": "adease",
   "private": false,
   "version": "0.0.0-alpha.1",
   "type": "module",
@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "bin": {
-    "adease-cli": "./dist/main.js"
+    "adease": "./dist/main.js"
   },
   "files": [
     "dist"
