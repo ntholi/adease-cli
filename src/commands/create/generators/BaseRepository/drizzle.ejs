@@ -38,10 +38,10 @@ class BaseRepository<
   async search(
     page: number = 1,
     search: string,
-    searchProperties: (keyof T)[],
     pageSize: number = 15
   ): Promise<{ items: ModelSelect<T>[]; pages: number }> {
     const offset = (page - 1) * pageSize;
+    const searchProperties = [];
     const data = await db
       .select()
       .from(this.table)

@@ -11,10 +11,9 @@ export async function get<%= TableName %>(id: number) {
 
 export async function getAll<%= TableName %>s(
   page: number = 1,
-  search = '',
-  searchProperties: (keyof typeof <%- tableName %>)[] = [],  
+  search = ''
 ) {
-  return <%= tableName %>Service.search(page, search, searchProperties);
+  return <%= tableName %>Service.search(page, search);
 }
 
 export async function create<%= TableName %>(<%= singular(tableName) %>: <%= TableName %>) {
@@ -27,4 +26,4 @@ export async function update<%= TableName %>(id: number, <%= singular(tableName)
 
 export async function delete<%= TableName %>(id: number) {
   return <%= tableName %>Service.delete(id);
-} 
+}
