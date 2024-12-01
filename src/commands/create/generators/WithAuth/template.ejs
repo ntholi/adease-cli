@@ -17,7 +17,7 @@ export default async function withAuth<T>(
     throw new Error('Unauthorized');
   }
 
-  if (roles.length && !roles.includes(session?.user?.role)) {
+  if (!roles.includes(session?.user?.role)) {
     throw new Error('Unauthorized');
   }
 
