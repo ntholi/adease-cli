@@ -13,6 +13,7 @@ class BaseRepositoryGenerator extends BaseGenerator {
       console.warn(
         "Skipping BaseRepository for Prisma, I'm still yet to complete it's template"
       );
+      return;
     }
 
     await this.compile(
