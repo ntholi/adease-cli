@@ -35,7 +35,7 @@ export abstract class BaseGenerator {
     this.outputDir = outputDir || this.getOutputDir();
   }
 
-  private getOutputDir(): string {
+  protected getOutputDir(): string {
     return path.join(
       process.cwd(),
       this.baseDir,

@@ -1,11 +1,11 @@
-import Answers from '../../types/Answers';
-import { BaseGenerator } from '../BaseGenerator';
-import { Field } from '../../types/Field';
 import { baseDir } from '@/utils/config';
+import Answers from '../../types/Answers';
+import { Field } from '../../types/Field';
+import { BaseGenerator } from '../BaseGenerator';
 
 class RouteHandlerGenerator extends BaseGenerator {
   constructor(tableName: string, fields: Field[], answers: Answers) {
-    super(tableName, fields, answers, 'skip', baseDir('/app/api/'));
+    super(tableName, fields, answers, 'skip');
   }
 
   async generate(): Promise<void> {
@@ -22,6 +22,10 @@ class RouteHandlerGenerator extends BaseGenerator {
       `RouteHandler/id-template.${templatePrefix}.ejs`,
       '[id]/route.ts'
     );
+  }
+
+  protected getOutputDir(): string {
+    return baseDir(`/app/api/${this.tableName}`);
   }
 }
 
