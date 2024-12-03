@@ -14,7 +14,7 @@ class BaseRepository<T extends string> {
   }
 
   async findById(id: number | string) {
-    return await this.repository.findUnique({
+    return await this.repository.findFirst({
       where: { id },
     });
   }
