@@ -33,7 +33,7 @@ class BaseRepository<T extends string> {
   ) {
     try {
       const offset = (page - 1) * pageSize;
-      const searchProperties = [];
+      const searchProperties: string[] = [];
       let where = {};
 
       if (search && search.trim() !== '') {

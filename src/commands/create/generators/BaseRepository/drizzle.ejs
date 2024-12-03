@@ -41,7 +41,7 @@ class BaseRepository<
     pageSize: number = 15
   ): Promise<{ items: ModelSelect<T>[]; pages: number }> {
     const offset = (page - 1) * pageSize;
-    const searchProperties = [];
+    const searchProperties: string[] = [];
     const data = await db
       .select()
       .from(this.table)
