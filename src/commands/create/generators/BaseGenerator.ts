@@ -22,10 +22,7 @@ export abstract class BaseGenerator {
     protected readonly tableName: string,
     protected readonly fields: Field[],
     protected readonly answers: Answers,
-    protected readonly overrideMode:
-      | 'override'
-      | 'append'
-      | 'skip' = 'override',
+    protected readonly overrideMode: 'override' | 'append' | 'skip' = 'skip',
     outputDir: string = ''
   ) {
     const config = readConfig();
