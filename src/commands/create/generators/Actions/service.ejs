@@ -1,9 +1,11 @@
 'use server';
 
-import { <%= tableName %> } from '@/db/schema';
+<% if (database === 'prisma') { %>import { Prisma } from '@prisma/client';<% } %>
+<% if (database === 'drizzle') { %>import { <%= tableName %> } from '@/db/schema';<% } %>
 import { <%= tableName %>Service } from '@/repositories/<%= tableName %>/service';
 
-type <%= TableName %> = typeof <%= tableName %>.$inferInsert;
+<% if (database === 'drizzle') { %>type <%- TableName %> = typeof <%- tableName %>.$inferInsert;<% } %>
+<% if (database === 'prisma') { %>type <%- TableName %> = Prisma.<%- TableName %>CreateInput;<% } %>
 
 export async function get<%= TableName %>(id: number) {
   return <%= tableName %>Service.get(id);
