@@ -8,7 +8,10 @@ class NewPage extends BaseGenerator {
   }
 
   async generate(): Promise<void> {
-    await this.compile('NewPage/template.ejs', '/new/page.tsx');
+    await this.compile(
+      `NewPage/${this.database}.template.ejs`,
+      '/new/page.tsx'
+    );
   }
 }
 

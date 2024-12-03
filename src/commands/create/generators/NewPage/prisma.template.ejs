@@ -1,0 +1,19 @@
+import { Box } from '@mantine/core';
+import Form from '../Form';
+import { create<%= TableName %> } from '../actions';
+import { Prisma } from '@prisma/client';
+
+type <%= TableName %> = Prisma.<%= TableName %>CreateInput;
+
+export default async function NewPage() {
+  const handleSubmit = async (values: <%= TableName %>): Promise<<%= TableName %>> => {
+    await create<%= TableName %>(values);
+    return values;
+  };
+
+  return (
+    <Box p={'lg'}>
+      <Form onSubmit={handleSubmit} />
+    </Box>
+  );
+}
