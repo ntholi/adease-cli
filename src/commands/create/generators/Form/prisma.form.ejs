@@ -1,16 +1,13 @@
-'use client';
-<% if (database === 'drizzle') { %>import { <%- tableName %> } from '@/db/schema';<% } %>
-<% if (database === 'prisma') { %>import { Prisma } from '@prisma/client';<% } %>
+import { Prisma } from '@prisma/client';
 import { Form } from '@/components/adease';
 import { <%- imports.join(', ') %> } from '@mantine/core';
-<% if (database === 'drizzle') { %>import { createInsertSchema } from 'drizzle-zod';<% } %>import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
-<% if (database === 'drizzle') { %>type <%- TableName %> = typeof <%- tableName %>.$inferInsert;<% } %>
-<% if (database === 'prisma') { %>type <%- TableName %> = Prisma.<%- TableName %>Select;<% } %>
+type <%- TableName %> = Prisma.<%- TableName %>CreateInput;
 
 type Props = {
   onSubmit: (values: <%- TableName %>) => Promise<<%- TableName %>>;
-  defaultValues?: <%- TableName %>;
+  defaultValues?: Prisma.<%- TableName %>GetPayload<{}>;
   onSuccess?: (value: <%- TableName %>) => void;
   onError?: (
     error: Error | React.SyntheticEvent<HTMLDivElement, Event>

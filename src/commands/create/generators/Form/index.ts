@@ -32,7 +32,7 @@ class Form extends BaseGenerator {
       this.tableName
     );
 
-    await this.compile('Form/template.ejs', 'Form.tsx', {
+    await this.compile(`Form/${this.database}.form.ejs`, 'Form.tsx', {
       imports: [...new Set(imports)],
       inputFields: inputFields,
       pathname,
