@@ -1,0 +1,13 @@
+import BaseRepository from '@/repositories/BaseRepository';
+import {<%= tableName %>} from '@/db/schema'
+
+export default class <%= TableName %>Repository extends BaseRepository<
+  typeof <%= tableName %>,
+  'id'
+> {
+  constructor() {
+    super(<%= tableName %>, 'id');
+  }
+}
+
+export const <%= tableName %>Repository = new <%= TableName %>Repository();
