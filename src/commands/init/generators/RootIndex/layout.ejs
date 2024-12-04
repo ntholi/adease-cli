@@ -1,11 +1,11 @@
-import AdminShell from './shell';
+import Dashboard from './dashboard';
 import Providers from './providers';
 import React from 'react';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <Providers>
-      <AdminShell>{children}</AdminShell>
+      <Dashboard>{children}</Dashboard>
     </Providers>
   );
 }
