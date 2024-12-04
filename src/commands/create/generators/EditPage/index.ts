@@ -8,7 +8,10 @@ class EditPage extends BaseGenerator {
   }
 
   async generate(): Promise<void> {
-    await this.compile('EditPage/template.ejs', '/[id]/edit/page.tsx');
+    await this.compile(
+      `EditPage/${this.database}.template.ejs`,
+      '/[id]/edit/page.tsx'
+    );
   }
 }
 
