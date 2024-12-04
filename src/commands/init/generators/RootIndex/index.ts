@@ -40,14 +40,14 @@ class RootIndexGenerator {
   }
 
   async generate(): Promise<void> {
-    await this.compile(
-      `${INIT_DESTINATION_DIR}/RootIndex/layout.ejs`,
-      'layout.tsx'
-    );
-    await this.compile(
-      `${INIT_DESTINATION_DIR}/RootIndex/index.ejs`,
-      'page.tsx'
-    );
+    const components = ['index', 'layout', 'shell', 'providers'];
+
+    for (let it of components) {
+      await this.compile(
+        `${INIT_DESTINATION_DIR}/RootIndex/${it}.ejs`,
+        `${it}.tsx`
+      );
+    }
   }
 }
 

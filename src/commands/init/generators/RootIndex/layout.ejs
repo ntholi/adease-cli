@@ -1,15 +1,11 @@
-'use client';
-
-import { Shell } from '@/components/adease';
+import AdminShell from './shell';
+import Providers from './providers';
 import React from 'react';
 
-export default function layout({ children }: { children: React.ReactNode }) {
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <Shell>
-      <Shell.Header>Logo</Shell.Header>
-      <Shell.Navigation>Navigation</Shell.Navigation>
-      <Shell.Body>{children}</Shell.Body>
-      <Shell.User>User</Shell.User>
-    </Shell>
+    <Providers>
+      <AdminShell>{children}</AdminShell>
+    </Providers>
   );
 }
