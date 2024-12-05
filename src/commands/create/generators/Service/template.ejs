@@ -20,10 +20,12 @@ class <%- TableName %>Service {
   async search(
     page: number = 1,
     search = '',
+    searchProperties: string[],
     pageSize: number = 15
   ) {
     return withAuth(
-      async () => this.repository.search(page, search, pageSize),
+      async () =>
+        this.repository.search(page, search, searchProperties, pageSize),
       []
     );
   }

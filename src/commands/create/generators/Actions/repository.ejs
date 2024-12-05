@@ -13,7 +13,7 @@ export async function get<%= TableName %>(id: number) {
 }
 
 export async function getAll<%= TableName %>s(page: number = 1, search = '') {
-  return <%= tableName %>Repository.search(page, search);
+  return <%= tableName %>Repository.search(page, search, []);
 }
 
 export async function create<%= TableName %>(<%= singular(tableName) %>: <%= TableName %>) {

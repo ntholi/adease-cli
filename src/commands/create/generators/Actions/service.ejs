@@ -11,11 +11,8 @@ export async function get<%= TableName %>(id: number) {
   return <%= tableName %>Service.get(id);
 }
 
-export async function getAll<%= TableName %>s(
-  page: number = 1,
-  search = ''
-) {
-  return <%= tableName %>Service.search(page, search);
+export async function getAll<%= TableName %>s(page: number = 1, search = '') {
+  return <%= tableName %>Service.search(page, search, []);
 }
 
 export async function create<%= TableName %>(<%= singular(tableName) %>: <%= TableName %>) {
