@@ -1,0 +1,46 @@
+import { <%= tableName %> } from '@/db/schema';
+import <%- TableName %>Repository from './repository';
+import withAuth from '@/utils/withAuth';
+
+type <%= TableName %> = typeof <%= tableName %>.$inferInsert;
+
+class <%- TableName %>Service {
+  constructor(private readonly repository: <%- TableName %>Repository = new <%- TableName %>Repository()) {}
+
+  async first() {
+    return withAuth(async () => this.repository.findFirst(), []);
+  }
+
+  async get(id: number) {
+    return withAuth(async () => this.repository.findById(id), []);
+  }
+
+  async search(
+    page: number = 1,
+    search = '',
+    searchProperties: (keyof <%= TableName %>)[]
+  ) {
+    return withAuth(
+      async () => this.repository.search(page, search, searchProperties),
+      []
+    );
+  }
+
+  async create(data: <%= TableName %>) {
+    return withAuth(async () => this.repository.create(data), []);
+  }
+
+  async update(id: number, data: <%= TableName %>) {
+    return withAuth(async () => this.repository.update(id, data), []);
+  }
+
+  async delete(id: number) {
+    return withAuth(async () => this.repository.delete(id), []);
+  }
+
+  async count() {
+    return withAuth(async () => this.repository.count(), []);
+  }
+}
+
+export const <%- tableName %>Service = new <%- TableName %>Service();

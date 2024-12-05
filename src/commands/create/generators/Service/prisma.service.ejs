@@ -1,10 +1,8 @@
-<% if (database === 'prisma') { %>import { Prisma } from '@prisma/client';<% } %>
-<% if (database === 'drizzle') { %>import { <%= tableName %> } from '@/db/schema';<% } %>
+import { Prisma } from '@prisma/client';
 import <%- TableName %>Repository from './repository';
 import withAuth from '@/utils/withAuth';
 
-<% if (database === 'drizzle') { %>type <%= TableName %> = typeof <%= tableName %>.$inferInsert;<% } %>
-<% if (database === 'prisma') { %>type <%= TableName %> = Prisma.<%- TableName %>CreateInput;<% } %>
+type <%= TableName %> = Prisma.<%- TableName %>CreateInput;
 
 class <%- TableName %>Service {
   constructor(private readonly repository: <%- TableName %>Repository = new <%- TableName %>Repository()) {}
@@ -20,12 +18,10 @@ class <%- TableName %>Service {
   async search(
     page: number = 1,
     search = '',
-    searchProperties: string[],
-    pageSize: number = 15
+    searchProperties: (keyof <%= TableName %>)[]
   ) {
     return withAuth(
-      async () =>
-        this.repository.search(page, search, searchProperties, pageSize),
+      async () => this.repository.search(page, search, searchProperties),
       []
     );
   }

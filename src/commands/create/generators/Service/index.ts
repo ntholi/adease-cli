@@ -11,7 +11,7 @@ class ServiceGenerator extends BaseGenerator {
   async generate(): Promise<void> {
     if (!this.answers.serviceFile) return;
 
-    await this.compile('Service/template.ejs', `${this.tableName}/service.ts`);
+    await this.compile(`Service/${this.database}.service.ejs`, `${this.tableName}/service.ts`);
   }
 }
 
