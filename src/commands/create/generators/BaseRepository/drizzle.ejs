@@ -38,7 +38,7 @@ class BaseRepository<
   async search(
     page: number = 1,
     search: string,
-    searchProperties: string[],
+    searchProperties: (keyof ModelSelect<T>)[],
     pageSize: number = 15
   ): Promise<{ items: ModelSelect<T>[]; pages: number }> {
     const offset = (page - 1) * pageSize;
