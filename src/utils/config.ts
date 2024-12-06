@@ -2,11 +2,13 @@ import fs from 'fs';
 import path from 'path';
 
 export type DatabaseType = 'drizzle' | 'prisma' | 'firebase';
+export type DrizzleEngine = 'postgresql' | 'sqlite';
 
 interface Config {
   baseDir: string;
   adminDir: string;
   database: DatabaseType | null;
+  databaseEngine?: DrizzleEngine;
 }
 
 export function readConfig(): Config {

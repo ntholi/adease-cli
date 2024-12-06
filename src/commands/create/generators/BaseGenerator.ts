@@ -5,7 +5,7 @@ import ejs from 'ejs';
 import { Field } from '../types/Field';
 import pluralize from 'pluralize';
 import { fileURLToPath } from 'url';
-import { DatabaseType, readConfig } from '@/utils/config';
+import { DatabaseType, DrizzleEngine, readConfig } from '@/utils/config';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -16,6 +16,7 @@ export abstract class BaseGenerator {
   protected readonly baseDir: string;
   protected readonly adminDir: string;
   protected readonly database: DatabaseType | null;
+  protected readonly databaseEngine?: DrizzleEngine;
   protected readonly outputDir: string;
 
   constructor(
@@ -29,6 +30,7 @@ export abstract class BaseGenerator {
     this.baseDir = config.baseDir;
     this.adminDir = config.adminDir;
     this.database = config.database;
+    this.databaseEngine = config.databaseEngine;
     this.outputDir = outputDir || this.getOutputDir();
   }
 

@@ -9,15 +9,15 @@ type Props = {
 
 export default async function <%- TableName %>Edit({ params }: Props) {
   const { id } = await params;
-  const <%- tableName %> = await get<%- TableName %>(Number(id));
-  if (!<%- tableName %>) {
+  const <%- singular(tableName) %> = await get<%- TableName %>(Number(id));
+  if (!<%- singular(tableName) %>) {
     return notFound();
   }
 
   return (
     <Box p={'lg'}>
       <Form
-        defaultValues={<%- tableName %>}
+        defaultValues={<%- singular(tableName) %>}
         onSubmit={async (value) => {
           'use server';
           return await update<%- TableName %>(Number(id), value);

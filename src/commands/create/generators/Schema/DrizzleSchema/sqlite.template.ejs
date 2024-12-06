@@ -1,0 +1,8 @@
+import { sqliteTable, integer, text, blob } from 'drizzle-orm/sqlite-core';
+
+export const <%= tableName %> = sqliteTable('<%= tableName %>', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+<%- fields.map(field => `  ${field.name}: ${field.type.toLowerCase()}('${field.name}'),`).join('\n') %>
+  createdAt: integer('created_at', { mode: 'timestamp' }).defaultNow(),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }),
+});

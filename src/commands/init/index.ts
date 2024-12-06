@@ -1,5 +1,5 @@
 import inquirer from 'inquirer';
-import { DatabaseType, writeConfig } from '../../utils/config';
+import { DatabaseType, DrizzleEngine, writeConfig } from '../../utils/config';
 import ComponentsGenerator from './generators/Components';
 import chalk from 'chalk';
 import RootIndexGenerator from './generators/RootIndex';
@@ -8,6 +8,7 @@ export async function init(options: { yes?: boolean }) {
   let baseDir: string;
   let adminDir: string;
   let database: DatabaseType | null = null;
+  let databaseEngine: DrizzleEngine | undefined;
 
   if (options.yes) {
     baseDir = 'src';
@@ -26,6 +27,27 @@ export async function init(options: { yes?: boolean }) {
         ],
         default: 'drizzle',
       },
+    ]);
+
+    database = answers.database;
+
+    if (database === 'drizzle') {
+      const engineAnswers = await inquirer.prompt([
+        {
+          type: 'list',
+          name: 'databaseEngine',
+          message: 'Which database engine would you like to use?',
+          choices: [
+            { name: 'PostgreSQL', value: 'postgresql' },
+            { name: 'SQLite', value: 'sqlite' },
+          ],
+          default: 'postgresql',
+        },
+      ]);
+      databaseEngine = engineAnswers.databaseEngine;
+    }
+
+    const dirAnswers = await inquirer.prompt([
       {
         type: 'input',
         name: 'baseDir',
@@ -40,12 +62,11 @@ export async function init(options: { yes?: boolean }) {
       },
     ]);
 
-    baseDir = answers.baseDir;
-    adminDir = answers.adminDir;
-    database = answers.database;
+    baseDir = dirAnswers.baseDir;
+    adminDir = dirAnswers.adminDir;
   }
 
-  writeConfig({ baseDir, adminDir, database });
+  writeConfig({ baseDir, adminDir, database, databaseEngine });
   console.log(chalk.green('Configuration file created successfully!'));
 
   const generator = new ComponentsGenerator();

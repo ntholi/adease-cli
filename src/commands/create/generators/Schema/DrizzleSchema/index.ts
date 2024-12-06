@@ -10,17 +10,33 @@ class DrizzleSchemaGenerator extends BaseSchemaGenerator {
   }
 
   private mapFieldType(type: string): string {
-    switch (type.toLowerCase()) {
-      case 'string':
-        return 'varchar';
-      case 'number':
-        return 'integer';
-      case 'boolean':
-        return 'boolean';
-      case 'date':
-        return 'timestamp';
-      default:
-        return 'text';
+    if (this.databaseEngine === 'sqlite') {
+      switch (type.toLowerCase()) {
+        case 'string':
+        case 'text':
+          return 'text';
+        case 'number':
+          return 'integer';
+        case 'boolean':
+          return 'integer';
+        case 'date':
+          return 'integer';
+        default:
+          return 'text';
+      }
+    } else {
+      switch (type.toLowerCase()) {
+        case 'string':
+          return 'varchar';
+        case 'number':
+          return 'integer';
+        case 'boolean':
+          return 'boolean';
+        case 'date':
+          return 'timestamp';
+        default:
+          return 'text';
+      }
     }
   }
 
@@ -32,7 +48,11 @@ class DrizzleSchemaGenerator extends BaseSchemaGenerator {
       type: this.mapFieldType(field.type),
     }));
 
-    await this.compile('Schema/DrizzleSchema/template.ejs', findSchemaPath(), {
+    const templateName = this.databaseEngine === 'sqlite' 
+      ? 'Schema/DrizzleSchema/sqlite.template.ejs'
+      : 'Schema/DrizzleSchema/postgresql.template.ejs';
+
+    await this.compile(templateName, findSchemaPath(), {
       fields: mappedFields,
     });
   }
