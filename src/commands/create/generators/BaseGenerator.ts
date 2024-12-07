@@ -1,11 +1,11 @@
-import path from 'path';
-import Answers from '../types/Answers';
-import fs from 'fs/promises';
+import { DatabaseType, DrizzleEngine, readConfig } from '@/utils/config';
 import ejs from 'ejs';
-import { Field } from '../types/Field';
+import fs from 'fs/promises';
+import path from 'path';
 import pluralize from 'pluralize';
 import { fileURLToPath } from 'url';
-import { DatabaseType, DrizzleEngine, readConfig } from '@/utils/config';
+import Answers from '../types/Answers';
+import { Field } from '../types/Field';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -44,18 +44,8 @@ export abstract class BaseGenerator {
     );
   }
 
-  protected async compile(
-    templatePath: string,
-    outputPath: string,
-    templateData?: Record<string, any>
-  ): Promise<string> {
-    const template = await fs.readFile(
-      path.join(__dirname, `${DESTINATION_DIR}/${templatePath}`),
-      'utf8'
-    );
-    const compiled = ejs.compile(template);
-
-    const data = {
+  protected getTemplateData(): Record<string, any> {
+    return {
       tableName: pluralize.plural(this.tableName),
       TableName: this.pascalCase(pluralize.singular(this.tableName)),
       fields: this.fields,
@@ -67,8 +57,22 @@ export abstract class BaseGenerator {
       plural: (str: string) => pluralize.plural(str),
       asWord: this.asWord,
     };
+  }
 
-    let content = compiled({ ...data, ...templateData });
+  protected async compile(
+    templatePath: string,
+    outputPath: string,
+    templateData?: Record<string, any>
+  ): Promise<string> {
+    const template = await fs.readFile(
+      path.join(__dirname, `${DESTINATION_DIR}/${templatePath}`),
+      'utf8'
+    );
+    const compiled = ejs.compile(template);
+
+    const data = { ...this.getTemplateData(), ...templateData };
+
+    let content = compiled(data);
 
     if (outputPath) {
       const outputFilePath = path.join(this.outputDir, outputPath);

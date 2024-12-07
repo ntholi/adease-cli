@@ -1,15 +1,14 @@
 import { baseDir } from '@/utils/config';
+import ejs from 'ejs';
+import fs from 'fs/promises';
 import { glob } from 'glob';
 import inquirer from 'inquirer';
 import path from 'path';
-import fs from 'fs/promises';
-import ejs from 'ejs';
-import pluralize from 'pluralize';
-import { DESTINATION_DIR } from '../../BaseGenerator';
+import { fileURLToPath } from 'url';
 import Answers from '../../../types/Answers';
 import { Field } from '../../../types/Field';
+import { DESTINATION_DIR } from '../../BaseGenerator';
 import { BaseSchemaGenerator } from '../BaseSchemaGenerator';
-import { fileURLToPath } from 'url';
 
 interface ImportStatement {
   source: string;
@@ -122,19 +121,7 @@ class DrizzleSchemaGenerator extends BaseSchemaGenerator {
     );
     const compiled = ejs.compile(template);
 
-    const data = {
-      tableName: pluralize.plural(this.tableName),
-      TableName: this.pascalCase(pluralize.singular(this.tableName)),
-      fields: this.fields,
-      TableWord: this.pascalCase(this.asWord(this.tableName)),
-      adminDir: this.adminDir,
-      database: this.database,
-      capitalize: this.capitalize,
-      singular: (str: string) => pluralize.singular(str),
-      plural: (str: string) => pluralize.plural(str),
-      asWord: this.asWord,
-      ...templateData
-    };
+    const data = { ...this.getTemplateData(), ...templateData };
 
     let content = compiled(data);
     let existingContent = '';
