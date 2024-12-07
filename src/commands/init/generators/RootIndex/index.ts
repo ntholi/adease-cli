@@ -40,7 +40,7 @@ class RootIndexGenerator {
   }
 
   async generate(): Promise<void> {
-    const components = ['index', 'layout', 'dashboard', 'providers'];
+    const components = ['page', 'layout', 'dashboard', 'providers'];
 
     for (let it of components) {
       await this.compile(
