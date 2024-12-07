@@ -1,6 +1,7 @@
-import { Prisma, PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 
-const prisma = new PrismaClient();
+type <%= TableName %> = Prisma.<%- TableName %>CreateInput;
 
 export default class <%= TableName %>Repository {
   async findFirst() {
@@ -23,11 +24,11 @@ export default class <%= TableName %>Repository {
   async search(
     page: number = 1,
     search: string,
+    searchProperties: (keyof <%= TableName %>)[] = [],
     pageSize: number = 15
   ) {
     try {
       const offset = (page - 1) * pageSize;
-      const searchProperties: string[] = [];
       let where = {};
 
       if (search && search.trim() !== '') {
