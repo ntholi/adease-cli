@@ -29,8 +29,8 @@ export abstract class BaseGenerator {
     const config = readConfig();
     this.baseDir = config.baseDir;
     this.adminDir = config.adminDir;
-    this.database = config.database;
-    this.databaseEngine = config.databaseEngine;
+    this.database = config.database?.type || null;
+    this.databaseEngine = config.database?.engine;
     this.outputDir = outputDir || this.getOutputDir();
   }
 

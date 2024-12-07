@@ -7,7 +7,7 @@ import RootIndexGenerator from './generators/RootIndex';
 export async function init(options: { yes?: boolean }) {
   let baseDir: string;
   let adminDir: string;
-  let database: DatabaseType | null = null;
+  let databaseType: DatabaseType | null = null;
   let databaseEngine: DrizzleEngine | undefined;
 
   if (options.yes) {
@@ -29,9 +29,9 @@ export async function init(options: { yes?: boolean }) {
       },
     ]);
 
-    database = answers.database;
+    databaseType = answers.database;
 
-    if (database === 'drizzle') {
+    if (databaseType === 'drizzle') {
       const engineAnswers = await inquirer.prompt([
         {
           type: 'list',
@@ -66,7 +66,11 @@ export async function init(options: { yes?: boolean }) {
     adminDir = dirAnswers.adminDir;
   }
 
-  writeConfig({ baseDir, adminDir, database, databaseEngine });
+  const database = databaseType
+    ? { type: databaseType, engine: databaseEngine }
+    : null;
+
+  writeConfig({ baseDir, adminDir, database });
   console.log(chalk.green('Configuration file created successfully!'));
 
   const generator = new ComponentsGenerator();

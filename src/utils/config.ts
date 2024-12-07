@@ -4,11 +4,15 @@ import path from 'path';
 export type DatabaseType = 'drizzle' | 'prisma' | 'firebase';
 export type DrizzleEngine = 'postgresql' | 'sqlite';
 
+interface Database {
+  type: DatabaseType;
+  engine?: DrizzleEngine;
+}
+
 interface Config {
   baseDir: string;
   adminDir: string;
-  database: DatabaseType | null;
-  databaseEngine?: DrizzleEngine;
+  database: Database | null;
 }
 
 export function readConfig(): Config {
