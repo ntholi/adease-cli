@@ -1,5 +1,7 @@
 import { baseDir } from '@/utils/config';
 import { glob } from 'glob';
+import inquirer from 'inquirer';
+import path from 'path';
 import Answers from '../../../types/Answers';
 import { Field } from '../../../types/Field';
 import { BaseSchemaGenerator } from '../BaseSchemaGenerator';
@@ -52,18 +54,33 @@ class DrizzleSchemaGenerator extends BaseSchemaGenerator {
       ? 'Schema/DrizzleSchema/sqlite.template.ejs'
       : 'Schema/DrizzleSchema/postgresql.template.ejs';
 
-    await this.compile(templateName, findSchemaPath(), {
+    const schemaPath = await findSchemaPath();
+    await this.compile(templateName, schemaPath, {
       fields: mappedFields,
     });
   }
 }
 
-function findSchemaPath(): string {
-  const schemaFolder = glob.sync(baseDir('db/schema'));
-  if (schemaFolder.length > 0) {
-    return `schema/index.ts`;
+async function findSchemaPath(): Promise<string> {
+  const schemaFolder = baseDir('db/schema');
+  const schemaFiles = glob.sync('**/*.ts', { cwd: schemaFolder });
+  
+  if (schemaFiles.length === 0) {
+    return 'schema.ts';
   }
-  return 'schema.ts';
+  
+  if (schemaFiles.length === 1) {
+    return path.join('schema', schemaFiles[0]);
+  }
+  
+  const { selectedFile } = await inquirer.prompt([{
+    type: 'list',
+    name: 'selectedFile',
+    message: 'Multiple schema files found. Which one would you like to use?',
+    choices: schemaFiles
+  }]);
+  
+  return path.join('schema', selectedFile);
 }
 
 export default DrizzleSchemaGenerator;
