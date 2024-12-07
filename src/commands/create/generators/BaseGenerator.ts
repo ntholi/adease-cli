@@ -10,7 +10,7 @@ import { DatabaseType, DrizzleEngine, readConfig } from '@/utils/config';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const DESTINATION_DIR = 'Create';
+export const DESTINATION_DIR = 'Create';
 
 export abstract class BaseGenerator {
   protected readonly baseDir: string;
