@@ -1,10 +1,10 @@
 import { sqliteTable, integer, text } from 'drizzle-orm/sqlite-core';
 
 export const <%= tableName %> = sqliteTable('<%= tableName %>', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-<%- fields.map(field => `  ${field.name}: ${field.type.toLowerCase()}('${field.name}'),`).join('\n') %>
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(
+  id: integer().primaryKey({ autoIncrement: true }),
+<%- fields.map(field => `  ${field.name}: ${field.type.toLowerCase()}(),`).join('\n') %>
+  createdAt: integer({ mode: 'timestamp' }).default(
     sql`(unixepoch())`
   ),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }),
+  updatedAt: integer({ mode: 'timestamp' }),
 });
