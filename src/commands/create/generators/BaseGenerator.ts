@@ -56,6 +56,7 @@ export abstract class BaseGenerator {
       singular: (str: string) => pluralize.singular(str),
       plural: (str: string) => pluralize.plural(str),
       asWord: this.asWord,
+      pkType: this.answers.pkType,
     };
   }
 

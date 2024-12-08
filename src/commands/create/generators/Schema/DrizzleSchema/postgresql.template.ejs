@@ -2,7 +2,7 @@ import { pgTable, serial, timestamp, varchar, integer, boolean, text } from 'dri
 <% if (database === 'prisma') { %>import { nanoid } from 'nanoid';<% } %>
 
 export const <%= tableName %> = pgTable('<%= tableName %>', {
-  <%- answers.pkType === 'number' ? 'id: serial().primaryKey()' : 'id: char({length:21}).$defaultFn(() => nanoid()).primaryKey()' %>,
+  <%- pkType === 'number' ? 'id: serial().primaryKey()' : 'id: char({length:21}).$defaultFn(() => nanoid()).primaryKey()' %>,
 <%- fields.map(field => `  ${field.name}: ${field.type.toLowerCase()}(),`).join('\n') %>
   createdAt: timestamp().defaultNow(),
   updatedAt: timestamp(),

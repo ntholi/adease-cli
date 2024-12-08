@@ -67,7 +67,7 @@ export async function createCommand(
   if (options.yes) {
     answers = {
       serviceFile: true,
-      apiRoutes: true,
+      apiRoutes: false,
       pkType: 'number'
     };
   } else {
@@ -90,7 +90,7 @@ export async function createCommand(
         type: 'confirm',
         name: 'apiRoutes',
         message: 'Generate API route handlers?',
-        default: true,
+        default: false,
       },
     ]);
   }

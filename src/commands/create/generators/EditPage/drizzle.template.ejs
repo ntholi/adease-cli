@@ -9,7 +9,7 @@ type Props = {
 
 export default async function <%- TableName %>Edit({ params }: Props) {
   const { id } = await params;
-  const <%- singular(tableName) %> = await get<%- TableName %>(Number(id));
+  const <%- singular(tableName) %> = await get<%- TableName %>(<%- pkType === 'number' ? 'Number(id)' : 'id' %>);
   if (!<%- singular(tableName) %>) {
     return notFound();
   }
@@ -20,7 +20,7 @@ export default async function <%- TableName %>Edit({ params }: Props) {
         defaultValues={<%- singular(tableName) %>}
         onSubmit={async (value) => {
           'use server';
-          return await update<%- TableName %>(Number(id), value);
+          return await update<%- TableName %>(<%- pkType === 'number' ? 'Number(id)' : 'id' %>, value);
         }}
       />
     </Box>

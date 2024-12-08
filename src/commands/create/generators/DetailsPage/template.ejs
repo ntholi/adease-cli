@@ -13,7 +13,7 @@ type Props = {
 
 export default async function <%- TableName %>Details({ params }: Props) {
   const { id } = await params;
-  const <%- tableName %> = await get<%- TableName %>(Number(id));
+  const <%- tableName %> = await get<%- TableName %>(<%- pkType === 'number' ? 'Number(id)' : 'id' %>);
   
   if (!<%- tableName %>) {
     return notFound();
@@ -26,7 +26,7 @@ export default async function <%- TableName %>Details({ params }: Props) {
         queryKey={['<%- plural(tableName) %>']}
         handleDelete={async () => {
           'use server';
-          await delete<%- TableName %>(Number(id));
+          await delete<%- TableName %>(<%- pkType === 'number' ? 'Number(id)' : 'id' %>);
         }}
       />
       <DetailsViewBody><% fields.forEach(function(prop) { %>

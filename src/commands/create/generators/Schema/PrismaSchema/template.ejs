@@ -1,5 +1,5 @@
 model <%= TableName %> {
-  <%- answers.pkType === 'number' ? 'id Int @id @default(autoincrement())' : 'id  String  @id @default(cuid())' %>
+  <%- pkType === 'number' ? 'id Int @id @default(autoincrement())' : 'id  String  @id @default(cuid())' %>
 <%- fields.map(field => `  ${field.name}  ${field.type}`).join('\n') %>
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

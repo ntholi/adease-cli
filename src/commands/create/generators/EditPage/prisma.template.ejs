@@ -12,14 +12,14 @@ type Props = {
 
 export default async function <%- TableName %>Edit({ params }: Props) {
   const { id } = await params;
-  const <%- tableName %> = await get<%- TableName %>(Number(id));
+  const <%- tableName %> = await get<%- TableName %>(<%- pkType === 'number' ? 'Number(id)' : 'id' %>);
   if (!<%- tableName %>) {
     return notFound();
   }
 
   const handleSubmit = async (values: <%= TableName %>): Promise<<%= TableName %>> => {
     'use server'
-    await update<%= TableName %>(id, values);
+    await update<%= TableName %>(<%- pkType === 'number' ? 'Number(id)' : 'id' %>, values);
     return values;
   };
 

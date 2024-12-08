@@ -8,7 +8,7 @@ import { <%= tableName %>Repository } from '@/repositories/<%= tableName %>/repo
 <% if (database === 'prisma') { %>type <%- TableName %> = Prisma.<%- TableName %>CreateInput;<% } %>
 
 
-export async function get<%= TableName %>(id: number) {
+export async function get<%= TableName %>(id: <%= pkType %>) {
   return <%= tableName %>Repository.findById(id);
 }
 
@@ -20,10 +20,10 @@ export async function create<%= TableName %>(<%= singular(tableName) %>: <%= Tab
   return <%= tableName %>Repository.create(<%= singular(tableName) %>);
 }
 
-export async function update<%= TableName %>(id: number, <%= singular(tableName) %>: <%= TableName %>) {
+export async function update<%= TableName %>(id: <%= pkType %>, <%= singular(tableName) %>: <%= TableName %>) {
   return <%= tableName %>Repository.update(id, <%= singular(tableName) %>);
 }
 
-export async function delete<%= TableName %>(id: number) {
+export async function delete<%= TableName %>(id: <%= pkType %>) {
   return <%= tableName %>Repository.delete(id);
-} 
+}
