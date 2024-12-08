@@ -16,13 +16,15 @@ type Props = {
   onError?: (
     error: Error | React.SyntheticEvent<HTMLDivElement, Event>
   ) => void;
+  title?: string;
 };
 
-export default function <%- TableName %>Form({ onSubmit, defaultValues }: Props) {
+export default function <%- TableName %>Form({ onSubmit, defaultValues, title }: Props) {
   const router = useRouter();
   
   return (
     <Form 
+      title={title}
       action={onSubmit} 
       queryKey={['<%- plural(tableName) %>']}
 <% if (database === 'drizzle') { %>      schema={createInsertSchema(<%- tableName %>)} <% } %>
