@@ -12,22 +12,22 @@ type Props = {
 
 export default async function <%- TableName %>Edit({ params }: Props) {
   const { id } = await params;
-  const <%- tableName %> = await get<%- TableName %>(<%- pkType === 'number' ? 'Number(id)' : 'id' %>);
-  if (!<%- tableName %>) {
+  const <%= tableName %> = await get<%= TableName %>(<%= pkType === 'number' ? 'Number(id)' : 'id' %>);
+  if (!<%= tableName %>) {
     return notFound();
   }
 
   const handleSubmit = async (values: <%= TableName %>): Promise<<%= TableName %>> => {
     'use server'
-    await update<%= TableName %>(<%- pkType === 'number' ? 'Number(id)' : 'id' %>, values);
+    await update<%= TableName %>(<%= pkType === 'number' ? 'Number(id)' : 'id' %>, values);
     return values;
   };
 
   return (
     <Box p={'lg'}>
       <Form
-        title={`Edit ${<%- TableName %>}`}
-        defaultValues={<%- tableName %>}
+        title={'Edit <%= TableName %>'}
+        defaultValues={<%= tableName %>}
         onSubmit={handleSubmit}
       />
     </Box>
