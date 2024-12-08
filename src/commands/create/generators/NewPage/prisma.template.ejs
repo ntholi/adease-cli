@@ -7,6 +7,7 @@ type <%= TableName %> = Prisma.<%= TableName %>CreateInput;
 
 export default async function NewPage() {
   const handleSubmit = async (values: <%= TableName %>): Promise<<%= TableName %>> => {
+    'use server';
     await create<%= TableName %>(values);
     return values;
   };
