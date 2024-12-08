@@ -9,7 +9,7 @@ type Props = {
 export async function GET(_: NextRequest, { params }: Props) {
   return routeException(async () => {
     const { id } = await params;
-    return <%= tableName %>Repository.findById(Number(id));
+    return <%= tableName %>Repository.findById(<%- answers.pkType === 'number' ? 'Number(id)' : 'id' %>);
   });
 }
 
@@ -17,13 +17,13 @@ export async function PUT(request: NextRequest, { params }: Props) {
   return routeException(async () => {
     const { id } = await params;
     const data = await request.json();
-    return <%= tableName %>Repository.update(Number(id), data);
+    return <%= tableName %>Repository.update(<%- answers.pkType === 'number' ? 'Number(id)' : 'id' %>, data);
   });
 }
 
 export async function DELETE(_: NextRequest, { params }: Props) {
   return routeException(async () => {
     const { id } = await params;
-    return <%= tableName %>Repository.delete(Number(id));
+    return <%= tableName %>Repository.delete(<%- answers.pkType === 'number' ? 'Number(id)' : 'id' %>);
   });
 } 

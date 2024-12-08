@@ -8,7 +8,7 @@ export default class <%= TableName %>Repository {
     return await prisma.<%= singular(tableName) %>.findFirst();
   }
 
-  async findById(id: number) {
+  async findById(id: <%- answers.pkType %>) {
     return await prisma.<%= singular(tableName) %>.findUnique({
       where: { id },
     });
@@ -63,7 +63,7 @@ export default class <%= TableName %>Repository {
     }
   }
 
-  async exists(id: number) {
+  async exists(id: <%- answers.pkType %>) {
     const count = await prisma.<%= singular(tableName) %>.count({
       where: { id },
     });
@@ -76,14 +76,14 @@ export default class <%= TableName %>Repository {
     });
   }
 
-  async update(id: number, data: Prisma.<%= TableName %>UpdateInput) {
+  async update(id: <%- answers.pkType %>, data: Prisma.<%= TableName %>UpdateInput) {
     return await prisma.<%= singular(tableName) %>.update({
       where: { id },
       data,
     });
   }
 
-  async delete(id: number) {
+  async delete(id: <%- answers.pkType %>) {
     await prisma.<%= singular(tableName) %>.delete({
       where: { id },
     });

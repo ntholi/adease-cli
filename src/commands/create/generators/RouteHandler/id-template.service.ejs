@@ -10,7 +10,7 @@ type Props = {
 export async function GET(_: NextRequest, { params }: Props) {
   return routeException(async () => {
     const { id } = await params;
-    return <%= tableName %>Service.get(Number(id));
+    return <%= tableName %>Service.get(<%- answers.pkType === 'number' ? 'Number(id)' : 'id' %>);
   });
 }
 
@@ -18,13 +18,13 @@ export async function PUT(request: NextRequest, { params }: Props) {
   return routeException(async () => {
     const { id } = await params;
     const data = await request.json();
-    return <%= tableName %>Service.update(Number(id), data);
+    return <%= tableName %>Service.update(<%- answers.pkType === 'number' ? 'Number(id)' : 'id' %>, data);
   });
 }
 
 export async function DELETE(_: NextRequest, { params }: Props) {
   return routeException(async () => {
     const { id } = await params;
-    return <%= tableName %>Service.delete(Number(id));
+    return <%= tableName %>Service.delete(<%- answers.pkType === 'number' ? 'Number(id)' : 'id' %>);
   });
 } 

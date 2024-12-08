@@ -40,6 +40,7 @@ export async function createCommand(
   options: { yes?: boolean }
 ) {
   console.log(chalk.green(`Creating table: ${tableName}`));
+  
   const fields = rawFields
     .filter((field) => field.includes(':'))
     .map((field) => {
@@ -67,10 +68,18 @@ export async function createCommand(
     answers = {
       serviceFile: true,
       apiRoutes: true,
+      pkType: 'number'
     };
   } else {
     console.log('--------------------------------');
     answers = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'pkType',
+        message: 'Select the primary key type:',
+        choices: ['number', 'string'],
+        default: 'number'
+      },
       {
         type: 'confirm',
         name: 'serviceFile',
