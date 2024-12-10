@@ -17,7 +17,7 @@ export default async function <%- TableName %>Edit({ params }: Props) {
   return (
     <Box p={'lg'}>
       <Form
-        title={'Edit <%= asWord(TableName) %>'}
+        title={'Edit <%= singular(TableWord) %>'}
         defaultValues={<%= singular(tableName) %>}
         onSubmit={async (value) => {
           'use server';
