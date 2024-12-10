@@ -12,7 +12,7 @@ class ActionsGenerator extends BaseGenerator {
       ? 'service.ejs'
       : 'repository.ejs';
 
-    await this.compile(`Actions/${templateFile}`, 'actions.ts', {});
+    await this.compile(`Actions/${templateFile}`, 'server/actions.ts', {});
   }
 }
 
