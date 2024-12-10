@@ -17,10 +17,11 @@ class BaseRepositoryGenerator extends BaseGenerator {
     }
 
     if (this.database === 'drizzle') {
-      const templateName = this.databaseEngine === 'sqlite'
-        ? 'BaseRepository/drizzle.sqlite.ejs'
-        : 'BaseRepository/drizzle.postgresql.ejs';
-      
+      const templateName =
+        this.databaseEngine === 'sqlite'
+          ? 'BaseRepository/drizzle.sqlite.ejs'
+          : 'BaseRepository/drizzle.postgresql.ejs';
+
       await this.compile(templateName, 'BaseRepository.ts');
       return;
     }

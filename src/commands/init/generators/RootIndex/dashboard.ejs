@@ -133,8 +133,8 @@ function ItemDisplay({ item }: { item: NavItem }){
       component={item.href ? Link : undefined}
       href={item.href || ''}
       active={item.href ? pathname.startsWith(item.href) : false}
-      leftSection={<Icon size="1.1rem" />}
-      rightSection={item.href ? <IconChevronRight size="0.8rem" stroke={1.5} /> : undefined}
+      leftSection={<Icon size='1.1rem' />}
+      rightSection={item.href ? <IconChevronRight size='0.8rem' stroke={1.5} /> : undefined}
       opened={!!item.children}
     >
       {item.children?.map((child, index) => (
