@@ -1,6 +1,6 @@
 import { Box } from '@mantine/core';
 import Form from '../Form';
-import { create<%= TableName %> } from '@admin/<%= tableName %>/server/actions';
+import { create<%= TableName %> } from '@admin/<%= kebabCase(tableName) %>/server/actions';
 
 export default async function NewPage() {
   return (

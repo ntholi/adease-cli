@@ -2,7 +2,7 @@ import { Box } from '@mantine/core';
 import { notFound } from 'next/navigation';
 import Form from '../../Form';
 import { Prisma } from '@prisma/client';
-import { get<%= TableName %>, update<%= TableName %> } from '@admin/<%= tableName %>/server/actions';
+import { get<%= TableName %>, update<%= TableName %> } from '@admin/<%= kebabCase(tableName) %>/server/actions';
 
 type <%= TableName %> = Prisma.<%= TableName %>CreateInput;
 

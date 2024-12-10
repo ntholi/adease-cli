@@ -2,7 +2,7 @@
 
 import { PropsWithChildren } from 'react';
 import { ListItem, ListLayout, NewLink } from '@/components/adease';
-import { getAll<%- plural(TableName) %> } from '@admin/<%= tableName %>/server/actions';
+import { getAll<%- plural(TableName) %> } from '@admin/<%= kebabCase(tableName) %>/server/actions';
 
 export default function Layout({ children }: PropsWithChildren) {
   return (
