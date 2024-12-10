@@ -13,9 +13,9 @@ type Props = {
 
 export default async function <%- TableName %>Details({ params }: Props) {
   const { id } = await params;
-  const <%- tableName %> = await get<%- TableName %>(<%- pkType === 'number' ? 'Number(id)' : 'id' %>);
+  const <%- singular(tableName) %> = await get<%- TableName %>(<%- pkType === 'number' ? 'Number(id)' : 'id' %>);
   
-  if (!<%- tableName %>) {
+  if (!<%- singular(tableName) %>) {
     return notFound();
   }
 
@@ -30,7 +30,7 @@ export default async function <%- TableName %>Details({ params }: Props) {
         }}
       />
       <DetailsViewBody><% fields.forEach(function(prop) { %>
-        <FieldView label='<%- capitalize(asWord(prop.name)) %>'>{<%- tableName %>.<%- prop.name %>}</FieldView><% }); %>
+        <FieldView label='<%- capitalize(asWord(prop.name)) %>'>{<%- singular(tableName) %>.<%- prop.name %>}</FieldView><% }); %>
       </DetailsViewBody>
     </DetailsView>
   );
