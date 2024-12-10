@@ -28,6 +28,7 @@ export abstract class BaseGenerator {
     protected readonly overrideMode: 'override' | 'append' | 'skip' = 'skip',
     outputDir: string = ''
   ) {
+    this.tableName = plural(camelCase(snakeCase(this.tableName)));
     const config = readConfig();
     this.baseDir = config.baseDir;
     this.adminDir = config.adminDir;
@@ -42,17 +43,16 @@ export abstract class BaseGenerator {
       this.baseDir,
       'app',
       this.adminDir,
-      this.tableName
+      kebabCase(this.tableName)
     );
   }
 
   protected getTemplateData(): Record<string, any> {
-    const table = snakeCase(this.tableName);
     return {
-      tableName: plural(camelCase(table)),
-      TableName: pascalCase(singular(table)),
+      tableName: this.tableName,
+      TableName: pascalCase(singular(this.tableName)),
       fields: this.fields,
-      TableWord: asWord(pascalCase(table)),
+      TableWord: asWord(pascalCase(this.tableName)),
       adminDir: this.adminDir,
       database: this.database,
       singular: (str: string) => singular(str),
