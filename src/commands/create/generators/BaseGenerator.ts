@@ -2,10 +2,12 @@ import { DatabaseType, DrizzleEngine, readConfig } from '@/utils/config';
 import ejs from 'ejs';
 import fs from 'fs/promises';
 import path from 'path';
-import pluralize from 'pluralize';
+import { plural, singular } from 'pluralize';
 import { fileURLToPath } from 'url';
 import Answers from '../types/Answers';
 import { Field } from '../types/Field';
+import { asWord, capitalize, kebabCase, snakeCase } from '@/utils';
+import { camelCase, pascalCase } from '@/utils';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -46,16 +48,19 @@ export abstract class BaseGenerator {
 
   protected getTemplateData(): Record<string, any> {
     return {
-      tableName: pluralize.plural(this.tableName),
-      TableName: this.pascalCase(pluralize.singular(this.tableName)),
+      tableName: plural(camelCase(this.tableName)),
+      TableName: pascalCase(singular(this.tableName)),
       fields: this.fields,
-      TableWord: this.pascalCase(this.asWord(this.tableName)),
+      TableWord: asWord(pascalCase(this.tableName)),
       adminDir: this.adminDir,
       database: this.database,
-      capitalize: this.capitalize,
-      singular: (str: string) => pluralize.singular(str),
-      plural: (str: string) => pluralize.plural(str),
-      asWord: this.asWord,
+      singular: (str: string) => singular(str),
+      plural: (str: string) => plural(str),
+      asWord: asWord,
+      kebabCase: kebabCase,
+      snakeCase: snakeCase,
+      camelCase: camelCase,
+      capitalize: capitalize,
       pkType: this.answers.pkType,
     };
   }
@@ -98,21 +103,6 @@ export abstract class BaseGenerator {
     }
 
     return content;
-  }
-
-  protected pascalCase(str: string): string {
-    return str
-      .split(/[-_\s]+/)
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join('');
-  }
-
-  protected asWord(str: string): string {
-    return str.replace(/([A-Z])/g, ' $1').trim();
-  }
-
-  protected capitalize(str: string): string {
-    return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
   abstract generate(): Promise<void>;

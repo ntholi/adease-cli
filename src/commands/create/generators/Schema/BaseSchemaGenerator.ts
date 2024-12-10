@@ -2,6 +2,7 @@ import fs from 'fs/promises';
 import { BaseGenerator } from '../BaseGenerator';
 import path from 'path';
 import pluralize from 'pluralize';
+import { pascalCase } from '@/utils';
 
 export abstract class BaseSchemaGenerator extends BaseGenerator {
   protected async compile(
@@ -17,7 +18,7 @@ export abstract class BaseSchemaGenerator extends BaseGenerator {
       );
     } catch (error) {}
 
-    const TableName = this.pascalCase(pluralize.singular(this.tableName));
+    const TableName = pascalCase(pluralize.singular(this.tableName));
     if (
       [this.tableName, TableName].some((it) => existingContent.includes(it))
     ) {
