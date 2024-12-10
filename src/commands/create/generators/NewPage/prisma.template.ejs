@@ -1,6 +1,6 @@
 import { Box } from '@mantine/core';
 import Form from '../Form';
-import { create<%= TableName %> } from '../server/actions';
+import { create<%= TableName %> } from '@admin/<%= tableName %>/server/actions';
 import { Prisma } from '@prisma/client';
 
 type <%= TableName %> = Prisma.<%= TableName %>CreateInput;

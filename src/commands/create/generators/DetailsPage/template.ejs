@@ -5,7 +5,7 @@ import {
   DetailsViewBody,
 } from '@/components/adease';
 import { notFound } from 'next/navigation';
-import { get<%- TableName %>, delete<%- TableName %> } from '../server/actions';
+import { get<%- TableName %>, delete<%- TableName %> } from '@admin/<%= tableName %>/server/actions';
 
 type Props = {
   params: Promise<{ id: string }>;
