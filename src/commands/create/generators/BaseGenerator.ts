@@ -47,11 +47,12 @@ export abstract class BaseGenerator {
   }
 
   protected getTemplateData(): Record<string, any> {
+    const table = snakeCase(this.tableName);
     return {
-      tableName: plural(camelCase(this.tableName)),
-      TableName: pascalCase(singular(this.tableName)),
+      tableName: plural(camelCase(table)),
+      TableName: pascalCase(singular(table)),
       fields: this.fields,
-      TableWord: asWord(pascalCase(this.tableName)),
+      TableWord: asWord(pascalCase(table)),
       adminDir: this.adminDir,
       database: this.database,
       singular: (str: string) => singular(str),
