@@ -1,17 +1,19 @@
 import Answers from '../../types/Answers';
-import { BaseGenerator } from '../BaseGenerator';
 import { Field } from '../../types/Field';
-import { baseDir } from '@/utils/config';
+import { BaseGenerator } from '../BaseGenerator';
 
 class ServiceGenerator extends BaseGenerator {
   constructor(tableName: string, fields: Field[], answers: Answers) {
-    super(tableName, fields, answers, 'skip', baseDir('repositories'));
+    super(tableName, fields, answers);
   }
 
   async generate(): Promise<void> {
     if (!this.answers.serviceFile) return;
 
-    await this.compile(`Service/${this.database}.service.ejs`, `${this.tableName}/service.ts`);
+    await this.compile(
+      `Service/${this.database}.service.ejs`,
+      `server/service.ts`
+    );
   }
 }
 

@@ -1,17 +1,16 @@
 import Answers from '../../types/Answers';
-import { BaseGenerator } from '../BaseGenerator';
 import { Field } from '../../types/Field';
-import { baseDir } from '@/utils/config';
+import { BaseGenerator } from '../BaseGenerator';
 
 class RepositoryGenerator extends BaseGenerator {
   constructor(tableName: string, fields: Field[], answers: Answers) {
-    super(tableName, fields, answers, 'skip', baseDir('repositories'));
+    super(tableName, fields, answers, 'skip');
   }
 
   async generate(): Promise<void> {
     await this.compile(
       `Repository/${this.database}.template.ejs`,
-      `${this.tableName}/repository.ts`
+      `server/repository.ts`
     );
   }
 }
