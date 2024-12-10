@@ -28,7 +28,7 @@ export default function <%- TableName %>Form({ onSubmit, defaultValues, title }:
 <% if (database === 'drizzle') { %>      schema={createInsertSchema(<%- tableName %>)} <% } %>
       defaultValues={defaultValues}
       onSuccess={({ id }) => {
-        router.push(`/admin/<%- plural(tableName) %>/${id}`);
+        router.push(`/admin/<%- kebabCase(plural(tableName)) %>/${id}`);
       }}
     >
       {(form) => (
