@@ -16,6 +16,7 @@ export type FormProps<T extends Record<string, unknown>, V> = Omit<
   'children'
 > & {
   children: (form: ReturnType<typeof useForm<T>>) => JSX.Element;
+  beforeSubmit?: (form: ReturnType<typeof useForm<T>>) => void;
   action: (values: T) => Promise<T>;
   schema?: ZodSchema;
   defaultValues?: V;
@@ -27,6 +28,7 @@ export type FormProps<T extends Record<string, unknown>, V> = Omit<
 
 export function Form<T extends Record<string, unknown>, V>({
   schema,
+  beforeSubmit,
   defaultValues,
   action,
   title,
@@ -74,7 +76,12 @@ export function Form<T extends Record<string, unknown>, V>({
   }
 
   return (
-    <form onSubmit={form.onSubmit(handleSubmit)}>
+    <form
+      onSubmit={(e) => {
+        beforeSubmit?.(form);
+        form.onSubmit(handleSubmit)(e);
+      }}
+    >
       <FormHeader
         title={title}
         isLoading={mutation.isPending}
