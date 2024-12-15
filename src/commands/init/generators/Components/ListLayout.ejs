@@ -37,7 +37,7 @@ export function ListLayout<T>({
   path,
 }: ListLayoutProps<T>) {
   const searchParams = useSearchParams();
-  const search = searchParams.get('search') || '';
+  const search = searchParams.get('q')  || '';
   const page = Number(searchParams.get('page')) || 1;
 
   const { data = { items: [], pages: 0 } } = useQuery({

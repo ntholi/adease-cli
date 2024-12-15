@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
   return routeException(async () => {
     const searchParams = request.nextUrl.searchParams;
     const page = parseInt(searchParams.get('page') || '1');
-    const search = searchParams.get('search') || '';
+    const search = searchParams.get('q')  || '';
     
     return <%= tableName %>Service.filter(page, search, []);
   });
