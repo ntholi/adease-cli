@@ -35,7 +35,7 @@ class BaseRepository<
     return await db.select().from(this.table).limit(limit).offset(offset);
   }
 
-  async search(
+  async filter(
     page: number = 1,
     search: string,
     searchProperties: (keyof ModelSelect<T>)[],

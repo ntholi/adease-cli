@@ -21,7 +21,7 @@ export default class <%= TableName %>Repository {
     });
   }
 
-  async search(
+  async filter(
     page: number = 1,
     search: string,
     searchProperties: (keyof <%= TableName %>)[] = [],
