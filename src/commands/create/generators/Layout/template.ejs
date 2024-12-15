@@ -2,14 +2,14 @@
 
 import { PropsWithChildren } from 'react';
 import { ListItem, ListLayout, NewLink } from '@/components/adease';
-import { getAll<%- plural(TableName) %> } from '@admin/<%= kebabCase(tableName) %>/server/actions';
+import { findAll<%- plural(TableName) %> } from '@admin/<%= kebabCase(tableName) %>/server/actions';
 
 export default function Layout({ children }: PropsWithChildren) {
   return (
     <ListLayout
       path={'/<%- adminDir %>/<%- kebabCase(plural(tableName)) %>'}
       queryKey={['<%- plural(tableName) %>']}
-      getItems={getAll<%- plural(TableName) %>}
+      getItems={findAll<%- plural(TableName) %>}
       actionIcons={[<NewLink key={'new-link'} href='/admin/<%- kebabCase(plural(tableName)) %>/new' />]}
       renderItem={(it) => <ListItem id={it.id} label={it.id} />}
     >
