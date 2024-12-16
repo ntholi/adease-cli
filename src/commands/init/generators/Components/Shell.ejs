@@ -1,4 +1,5 @@
 'use client';
+
 import {
   AppShell,
   ActionIcon,
@@ -23,7 +24,7 @@ type ShellComposition = {
 const Shell: React.FC<PropsWithChildren> & ShellComposition = ({
   children,
 }) => {
-  const [opened, { toggle }] = useDisclosure();
+  const [opened, { toggle, close }] = useDisclosure();
   const colorScheme = useComputedColorScheme('dark');
   const { setColorScheme } = useMantineColorScheme();
 
@@ -72,7 +73,7 @@ const Shell: React.FC<PropsWithChildren> & ShellComposition = ({
         </Group>
       </AppShell.Header>
       <AppShell.Navbar p='xs'>
-        <AppShell.Section grow component={ScrollArea}>
+        <AppShell.Section grow component={ScrollArea} onClick={close}>
           {navigation}
         </AppShell.Section>
         <AppShell.Section>
