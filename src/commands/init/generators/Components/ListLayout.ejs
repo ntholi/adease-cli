@@ -1,5 +1,6 @@
 'use client';
 
+import { useViewSelect } from '@/hooks/useViewSelect';
 import {
   Divider,
   Flex,
@@ -10,15 +11,13 @@ import {
   ScrollArea,
   Stack,
 } from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
 import { ListItem } from './ListItem';
 import { Pagination } from './Pagination';
 import { SearchField } from './SearchField';
-import { useMediaQuery } from '@mantine/hooks';
-import { useQueryState } from 'nuqs';
-import { useViewSelect } from '@/hooks/useViewSelect';
 
 export type ListLayoutProps<T> = {
   getItems: (
@@ -90,7 +89,7 @@ export function ListLayout<T>({
   return (
     <Grid columns={14} gutter={'xl'}>
       <GridCol span={isMobile ? 14 : 4} pr={isMobile ? 0 : 7}>
-        <Paper withBorder h={'88vh'}>
+        <Paper withBorder h={'88vh'} mr={isMobile ? 'md' : 0}>
           <Flex direction='column' h='100%'>
             <Stack p={'md'}>
               <Flex justify='space-between' align={'center'} gap={'xs'}>
