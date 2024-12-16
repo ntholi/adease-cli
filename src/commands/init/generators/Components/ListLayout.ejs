@@ -8,18 +8,21 @@ import {
   Group,
   Paper,
   ScrollArea,
+  Stack,
 } from '@mantine/core';
-import { useSearchParams } from 'next/navigation';
-import React from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React from 'react';
 import { ListItem } from './ListItem';
 import { Pagination } from './Pagination';
 import { SearchField } from './SearchField';
+import { useMediaQuery } from '@mantine/hooks';
+import { useQueryState } from 'nuqs';
 
 export type ListLayoutProps<T> = {
   getItems: (
     page: number,
-    search: string
+    search: string,
   ) => Promise<{ items: T[]; pages: number }>;
   renderItem: (item: T) => React.ReactNode;
   path: string;
@@ -37,8 +40,15 @@ export function ListLayout<T>({
   path,
 }: ListLayoutProps<T>) {
   const searchParams = useSearchParams();
-  const search = searchParams.get('q')  || '';
+  const router = useRouter();
+  const search = searchParams.get('q') || '';
   const page = Number(searchParams.get('page')) || 1;
+  const isMobile = useMediaQuery('(max-width: 768px)');
+  const [view, setView] = useQueryState('view', {
+    defaultValue: 'nav' as 'nav' | 'details',
+    parse: (value): 'nav' | 'details' =>
+      value === 'details' ? 'details' : 'nav',
+  });
 
   const { data = { items: [], pages: 0 } } = useQuery({
     queryKey: [...queryKey, page, search],
@@ -55,25 +65,46 @@ export function ListLayout<T>({
         itemElement as React.ReactElement<
           React.ComponentProps<typeof ListItem>
         >,
-        { path }
+        {
+          path,
+          onClick: () => {
+            if (isMobile) {
+              setView('details');
+            }
+            const itemId = (itemElement.props as any).id;
+            router.push(`${path}/${itemId}?${searchParams}`);
+          },
+        },
       );
     }
     return itemElement;
   };
 
+  if (isMobile && view === 'details') {
+    return (
+      <Paper withBorder>
+        <ScrollArea h='88vh' type='always'>
+          {children}
+        </ScrollArea>
+      </Paper>
+    );
+  }
+
   return (
     <Grid columns={14} gutter={'xl'}>
-      <GridCol span={4} pr={7}>
+      <GridCol span={isMobile ? 14 : 4} pr={isMobile ? 0 : 7}>
         <Paper withBorder h={'88vh'}>
           <Flex direction='column' h='100%'>
-            <Flex p={'md'} justify='space-between' align={'center'} gap={'xs'}>
-              <Group style={{ width: '100%', flex: 1 }}>
-                <SearchField style={{ width: '100%' }} />
-              </Group>
-              {actionIcons?.map((component, index) => (
-                <React.Fragment key={index}>{component}</React.Fragment>
-              ))}
-            </Flex>
+            <Stack p={'md'}>
+              <Flex justify='space-between' align={'center'} gap={'xs'}>
+                <Group style={{ width: '100%', flex: 1 }}>
+                  <SearchField style={{ width: '100%' }} />
+                </Group>
+                {actionIcons?.map((component, index) => (
+                  <React.Fragment key={index}>{component}</React.Fragment>
+                ))}
+              </Flex>
+            </Stack>
             <Divider />
             <ScrollArea type='always' style={{ flex: 1 }} p={'sm'}>
               {items.map((item: T, index: number) => (
@@ -89,13 +120,15 @@ export function ListLayout<T>({
         </Paper>
       </GridCol>
 
-      <GridCol span={10}>
-        <Paper withBorder>
-          <ScrollArea h='88vh' type='always'>
-            {children}
-          </ScrollArea>
-        </Paper>
-      </GridCol>
+      {!isMobile && (
+        <GridCol span={10}>
+          <Paper withBorder>
+            <ScrollArea h='88vh' type='always'>
+              {children}
+            </ScrollArea>
+          </Paper>
+        </GridCol>
+      )}
     </Grid>
   );
 }

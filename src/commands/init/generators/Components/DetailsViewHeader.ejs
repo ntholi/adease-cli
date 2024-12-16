@@ -1,9 +1,10 @@
 'use client';
 
 import { ActionIcon, Divider, Flex, Group, Title } from '@mantine/core';
-import { IconEdit } from '@tabler/icons-react';
+import { useMediaQuery } from '@mantine/hooks';
+import { IconArrowNarrowLeft, IconEdit } from '@tabler/icons-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { DeleteButton } from './DeleteButton';
 
 export interface DetailsViewHeaderProps {
@@ -20,13 +21,26 @@ export function DetailsViewHeader({
   onDeleteSuccess,
 }: DetailsViewHeaderProps) {
   const pathname = usePathname();
+  const isMobile = useMediaQuery('(max-width: 768px)');
+  const router = useRouter();
 
   return (
     <>
       <Flex justify={'space-between'} align={'center'}>
-        <Title order={3} fw={100}>
-          {title}
-        </Title>
+        {isMobile ? (
+          <Group>
+            <ActionIcon variant='default' onClick={() => router.back()}>
+              <IconArrowNarrowLeft size={'1rem'} />
+            </ActionIcon>
+            <Title order={3} fw={100} size={'1.1rem'}>
+              {title}
+            </Title>
+          </Group>
+        ) : (
+          <Title order={3} fw={100}>
+            {title}
+          </Title>
+        )}
         <Group>
           {handleDelete && (
             <DeleteButton
