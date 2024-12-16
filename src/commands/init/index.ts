@@ -3,6 +3,7 @@ import { DatabaseType, DrizzleEngine, writeConfig } from '../../utils/config';
 import ComponentsGenerator from './generators/Components';
 import chalk from 'chalk';
 import RootIndexGenerator from './generators/RootIndex';
+import HooksGenerator from './generators/Hooks';
 
 export async function init(options: { yes?: boolean }) {
   let baseDir: string;
@@ -73,8 +74,8 @@ export async function init(options: { yes?: boolean }) {
   writeConfig({ baseDir, adminDir, database });
   console.log(chalk.green('Configuration file created successfully!'));
 
-  const generator = new ComponentsGenerator();
-  await generator.generate();
+  await new ComponentsGenerator().generate();
+  await new HooksGenerator().generate();
   console.log(chalk.green('Component files generated successfully!'));
 
   await new RootIndexGenerator().generate();

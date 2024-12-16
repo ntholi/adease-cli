@@ -18,6 +18,7 @@ import { Pagination } from './Pagination';
 import { SearchField } from './SearchField';
 import { useMediaQuery } from '@mantine/hooks';
 import { useQueryState } from 'nuqs';
+import { useViewSelect } from '@/hooks/useViewSelect';
 
 export type ListLayoutProps<T> = {
   getItems: (
@@ -44,11 +45,7 @@ export function ListLayout<T>({
   const search = searchParams.get('q') || '';
   const page = Number(searchParams.get('page')) || 1;
   const isMobile = useMediaQuery('(max-width: 768px)');
-  const [view, setView] = useQueryState('view', {
-    defaultValue: 'nav' as 'nav' | 'details',
-    parse: (value): 'nav' | 'details' =>
-      value === 'details' ? 'details' : 'nav',
-  });
+  const [view, setView] = useViewSelect();
 
   const { data = { items: [], pages: 0 } } = useQuery({
     queryKey: [...queryKey, page, search],
@@ -72,7 +69,7 @@ export function ListLayout<T>({
               setView('details');
             }
             const itemId = (itemElement.props as any).id;
-            router.push(`${path}/${itemId}?${searchParams}`);
+            router.push(`${path}/${itemId}`);
           },
         },
       );
