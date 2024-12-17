@@ -14,9 +14,8 @@ export default class <%= TableName %>Repository {
     });
   }
 
-  async findAll(offset: number = 0, limit: number = 10) {
+  async findAll(limit: number = 10) {
     return await prisma.<%= singular(tableName) %>.findMany({
-      skip: offset,
       take: limit,
     });
   }

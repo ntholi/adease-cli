@@ -28,11 +28,8 @@ class BaseRepository<
     return result;
   }
 
-  async findAll(
-    offset: number = 0,
-    limit: number = 10
-  ): Promise<ModelSelect<T>[]> {
-    return await db.select().from(this.table).limit(limit).offset(offset);
+  async findAll(limit: number = 10): Promise<ModelSelect<T>[]> {
+    return await db.select().from(this.table).limit(limit);
   }
 
   async filter(
