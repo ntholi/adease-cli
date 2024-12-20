@@ -1,3 +1,4 @@
+import { baseDir } from '@/utils/config';
 import Answers from '../../types/Answers';
 import { Field } from '../../types/Field';
 import { BaseGenerator } from '../BaseGenerator';
@@ -14,9 +15,13 @@ class ActionsGenerator extends BaseGenerator {
 
     await this.compile(
       `Actions/${templateFile}`,
-      `server/${this.tableName}/actions.ts`,
+      `${this.tableName}/actions.ts`,
       {}
     );
+  }
+
+  protected getOutputDir(): string {
+    return baseDir('server');
   }
 }
 

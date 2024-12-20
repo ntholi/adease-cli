@@ -1,3 +1,4 @@
+import { baseDir } from '@/utils/config';
 import Answers from '../../types/Answers';
 import { Field } from '../../types/Field';
 import { BaseGenerator } from '../BaseGenerator';
@@ -12,8 +13,12 @@ class ServiceGenerator extends BaseGenerator {
 
     await this.compile(
       `Service/${this.database}.service.ejs`,
-      `server/service.ts`
+      `${this.tableName}/service.ts`
     );
+  }
+
+  protected getOutputDir(): string {
+    return baseDir('server');
   }
 }
 

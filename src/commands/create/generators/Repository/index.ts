@@ -1,3 +1,4 @@
+import { baseDir } from '@/utils/config';
 import Answers from '../../types/Answers';
 import { Field } from '../../types/Field';
 import { BaseGenerator } from '../BaseGenerator';
@@ -10,8 +11,12 @@ class RepositoryGenerator extends BaseGenerator {
   async generate(): Promise<void> {
     await this.compile(
       `Repository/${this.database}.template.ejs`,
-      `server/${this.tableName}/repository.ts`
+      `${this.tableName}/repository.ts`
     );
+  }
+
+  protected getOutputDir(): string {
+    return baseDir('server');
   }
 }
 
