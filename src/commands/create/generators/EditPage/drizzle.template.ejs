@@ -1,7 +1,7 @@
 import { Box } from '@mantine/core';
 import { notFound } from 'next/navigation';
 import Form from '../../Form';
-import { get<%- TableName %>, update<%- TableName %> } from '@admin/<%= kebabCase(tableName) %>/server/actions';
+import { get<%- TableName %>, update<%- TableName %> } from '@/server/<%= kebabCase(tableName) %>/actions';
 
 type Props = {
   params: Promise<{ id: string }>;
