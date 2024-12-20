@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client';
 import <%- TableName %>Repository from './repository';
-import withAuth from '@/utils/withAuth';
+import withAuth from '@/server/base/withAuth';
 
 type <%= TableName %> = Prisma.<%- TableName %>CreateInput;
 

@@ -1,6 +1,6 @@
 import { <%= tableName %> } from '@/db/schema';
 import <%- TableName %>Repository from './repository';
-import withAuth from '@/utils/withAuth';
+import withAuth from '@/server/base/withAuth';
 
 type <%= TableName %> = typeof <%= tableName %>.$inferInsert;
 

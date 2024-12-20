@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { routeException } from '@/utils/exceptions';
-import { <%= tableName %>Service } from '@admin/<%= kebabCase(tableName) %>/server/service';
+import { <%= tableName %>Service } from '@/server/<%= kebabCase(tableName) %>/service';
 
 
 type Props = {

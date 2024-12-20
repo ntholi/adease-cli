@@ -10,7 +10,7 @@ class RepositoryGenerator extends BaseGenerator {
   async generate(): Promise<void> {
     await this.compile(
       `Repository/${this.database}.template.ejs`,
-      `server/repository.ts`
+      `server/${this.tableName}/repository.ts`
     );
   }
 }

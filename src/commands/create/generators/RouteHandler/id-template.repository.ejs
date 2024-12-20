@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { routeException } from '@/utils/exceptions';
-import { <%= tableName %>Repository } from '@/repositories/<%= tableName %>/repository';
+import { <%= tableName %>Repository } from '@/server/<%= tableName %>/repository';
 
 type Props = {
   params: Promise<{ id: string }>;

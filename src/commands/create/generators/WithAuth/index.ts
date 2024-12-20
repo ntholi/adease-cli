@@ -13,7 +13,7 @@ class WithAuth extends BaseGenerator {
   }
 
   protected getOutputDir(): string {
-    return baseDir('utils');
+    return baseDir('server/base');
   }
 }
 
