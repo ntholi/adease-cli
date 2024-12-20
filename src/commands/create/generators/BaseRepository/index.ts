@@ -5,7 +5,7 @@ import { Field } from '../../types/Field';
 
 class BaseRepositoryGenerator extends BaseGenerator {
   constructor(tableName: string, fields: Field[], answers: Answers) {
-    super(tableName, fields, answers, 'skip', baseDir('repositories'));
+    super(tableName, fields, answers, 'skip');
   }
 
   async generate(): Promise<void> {
@@ -30,6 +30,10 @@ class BaseRepositoryGenerator extends BaseGenerator {
       `BaseRepository/${this.database}.ejs`,
       'BaseRepository.ts'
     );
+  }
+
+  protected getOutputDir(): string {
+    return baseDir('server/base');
   }
 }
 

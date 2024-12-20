@@ -21,32 +21,41 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 function parseImports(content: string, source: string): ImportStatement | null {
-  const regex = new RegExp(`import\\s*{([^}]+)}\\s*from\\s*['"]${source}['"]`, 'g');
+  const regex = new RegExp(
+    `import\\s*{([^}]+)}\\s*from\\s*['"]${source}['"]`,
+    'g'
+  );
   const match = regex.exec(content);
-  
+
   if (!match) return null;
-  
+
   const importItems = match[1]
     .split(',')
-    .map(item => item.trim())
-    .filter(item => item.length > 0);
-  
+    .map((item) => item.trim())
+    .filter((item) => item.length > 0);
+
   return {
     source,
     items: new Set(importItems),
     originalText: match[0],
-    multiline: match[1].includes('\n')
+    multiline: match[1].includes('\n'),
   };
 }
 
-function mergeImports(existingImport: ImportStatement | null, templateImport: ImportStatement): string {
+function mergeImports(
+  existingImport: ImportStatement | null,
+  templateImport: ImportStatement
+): string {
   if (!existingImport) {
     return templateImport.originalText;
   }
 
-  const mergedItems = new Set([...existingImport.items, ...templateImport.items]);
+  const mergedItems = new Set([
+    ...existingImport.items,
+    ...templateImport.items,
+  ]);
   const itemsArray = Array.from(mergedItems);
-  
+
   if (existingImport.multiline) {
     const itemsStr = itemsArray.join(',\n  ');
     return `import {\n  ${itemsStr}\n} from '${existingImport.source}';`;
@@ -58,7 +67,7 @@ function mergeImports(existingImport: ImportStatement | null, templateImport: Im
 
 class DrizzleSchemaGenerator extends BaseSchemaGenerator {
   constructor(tableName: string, fields: Field[], answers: Answers) {
-    super(tableName, fields, answers, 'append', baseDir('db'));
+    super(tableName, fields, answers, 'append');
   }
 
   private mapFieldType(type: string): string {
@@ -100,9 +109,10 @@ class DrizzleSchemaGenerator extends BaseSchemaGenerator {
       type: this.mapFieldType(field.type),
     }));
 
-    const templateName = this.databaseEngine === 'sqlite' 
-      ? 'Schema/DrizzleSchema/sqlite.template.ejs'
-      : 'Schema/DrizzleSchema/postgresql.template.ejs';
+    const templateName =
+      this.databaseEngine === 'sqlite'
+        ? 'Schema/DrizzleSchema/sqlite.template.ejs'
+        : 'Schema/DrizzleSchema/postgresql.template.ejs';
 
     const schemaPath = await findSchemaPath();
     await this.compile(templateName, schemaPath, {
@@ -138,10 +148,13 @@ class DrizzleSchemaGenerator extends BaseSchemaGenerator {
       if (templateImport) {
         const existingImport = parseImports(existingContent, source);
         const mergedImport = mergeImports(existingImport, templateImport);
-        
+
         if (existingImport) {
           content = content.replace(templateImport.originalText, '');
-          existingContent = existingContent.replace(existingImport.originalText, mergedImport);
+          existingContent = existingContent.replace(
+            existingImport.originalText,
+            mergedImport
+          );
         }
       }
     }
@@ -158,27 +171,33 @@ class DrizzleSchemaGenerator extends BaseSchemaGenerator {
 
     return content;
   }
+
+  protected getOutputDir(): string {
+    return baseDir('db');
+  }
 }
 
 async function findSchemaPath(): Promise<string> {
   const schemaFolder = baseDir('db/schema');
   const schemaFiles = glob.sync('**/*.ts', { cwd: schemaFolder });
-  
+
   if (schemaFiles.length === 0) {
     return 'schema.ts';
   }
-  
+
   if (schemaFiles.length === 1) {
     return path.join('schema', schemaFiles[0]);
   }
-  
-  const { selectedFile } = await inquirer.prompt([{
-    type: 'list',
-    name: 'selectedFile',
-    message: 'Multiple schema files found. Which one would you like to use?',
-    choices: schemaFiles
-  }]);
-  
+
+  const { selectedFile } = await inquirer.prompt([
+    {
+      type: 'list',
+      name: 'selectedFile',
+      message: 'Multiple schema files found. Which one would you like to use?',
+      choices: schemaFiles,
+    },
+  ]);
+
   return path.join('schema', selectedFile);
 }
 

@@ -25,8 +25,7 @@ export abstract class BaseGenerator {
     protected readonly tableName: string,
     protected readonly fields: Field[],
     protected readonly answers: Answers,
-    protected readonly overrideMode: 'override' | 'append' | 'skip' = 'skip',
-    outputDir: string = ''
+    protected readonly overrideMode: 'override' | 'append' | 'skip' = 'skip'
   ) {
     this.tableName = plural(snakeCase(this.tableName));
     const config = readConfig();
@@ -34,7 +33,7 @@ export abstract class BaseGenerator {
     this.adminDir = config.adminDir;
     this.database = config.database?.type || null;
     this.databaseEngine = config.database?.engine;
-    this.outputDir = outputDir || this.getOutputDir();
+    this.outputDir = this.getOutputDir();
   }
 
   protected getOutputDir(): string {
