@@ -5,6 +5,11 @@ import { SQLiteTable, SQLiteColumn } from 'drizzle-orm/sqlite-core';
 type ModelInsert<T extends SQLiteTable> = T['$inferInsert'];
 type ModelSelect<T extends SQLiteTable> = T['$inferSelect'];
 
+interface OrderBy<T extends SQLiteTable> {
+  field: keyof ModelSelect<T>;
+  direction?: 'asc' | 'desc';
+}
+
 class BaseRepository<
   T extends SQLiteTable,
   PK extends keyof T & keyof ModelSelect<T>
@@ -36,19 +41,30 @@ class BaseRepository<
     page: number = 1,
     search: string,
     searchProperties: (keyof ModelSelect<T>)[],
-    pageSize: number = 15
+    orderBy: OrderBy<T>[] = [],
+    pageSize: number = 15,
   ): Promise<{ items: ModelSelect<T>[]; pages: number }> {
     const offset = (page - 1) * pageSize;
+
+    const orderByExpressions = orderBy.map((order) => {
+      const column = this.table[order.field] as SQLiteColumn;
+      return sql`${column} ${order.direction === 'desc' ? sql`DESC` : sql`ASC`}`;
+    });
+
     const data = await db
       .select()
       .from(this.table)
       .where(
         or(
           ...searchProperties.map((property) =>
-            like(this.table[property as keyof T] as SQLiteColumn, `%${search}%`)
-          )
-        )
+            like(
+              this.table[property as keyof T] as SQLiteColumn,
+              `%${search}%`,
+            ),
+          ),
+        ),
       )
+      .orderBy(...orderByExpressions)
       .limit(pageSize)
       .offset(offset);
 
