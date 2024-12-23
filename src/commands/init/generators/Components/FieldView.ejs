@@ -7,16 +7,19 @@ export interface FieldViewProps extends BoxProps {
 }
 
 export function FieldView({ label, children, ...props }: FieldViewProps) {
+  const isText = typeof children === 'string' || typeof children === 'number';
   return (
     <Box {...props}>
       {children ? (
         <>
           {React.isValidElement(children) ? (
             children
-          ) : (
+          ) : isText ? (
             <Text size='sm' fw={500}>
               {children}
             </Text>
+          ) : (
+            children
           )}
         </>
       ) : (
