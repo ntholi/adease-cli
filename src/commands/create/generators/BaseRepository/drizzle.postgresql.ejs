@@ -10,6 +10,14 @@ interface OrderBy<T extends SQLiteTable> {
   direction?: 'asc' | 'desc';
 }
 
+export interface FindAllParams<T extends SQLiteTable> {
+  page?: number;
+  search?: string;
+  searchProperties?: (keyof ModelSelect<T>)[];
+  orderBy?: OrderBy<T>[];
+  pageSize?: number;
+}
+
 class BaseRepository<
   T extends PgTable,
   PK extends keyof T & keyof ModelSelect<T>
@@ -33,23 +41,34 @@ class BaseRepository<
     return result;
   }
 
-  async findAll(limit: number = 10): Promise<ModelSelect<T>[]> {
-    return await db.select().from(this.table).limit(limit);
+  async getAll(limit?: number): Promise<ModelSelect<T>[]> {
+    if (limit) {
+      return await db.select().from(this.table).limit(limit);
+    }
+    return await db.select().from(this.table);
   }
 
-  async filter(
-    page: number = 1,
-    search: string,
-    searchProperties: (keyof ModelSelect<T>)[],
-    orderBy: OrderBy<T>[] = [],
-    pageSize: number = 15,
+  async findAll(
+    params: FindAllParams<T>,
   ): Promise<{ items: ModelSelect<T>[]; pages: number }> {
+    const {
+      page = 1,
+      search,
+      searchProperties = [],
+      orderBy = [],
+      pageSize = 15,
+    } = params;
+
     const offset = (page - 1) * pageSize;
 
-    const orderByExpressions = orderBy.map((order) => {
+    let orderByExpressions = orderBy.map((order) => {
       const column = this.table[order.field] as SQLiteColumn;
       return sql`${column} ${order.direction === 'desc' ? sql`DESC` : sql`ASC`}`;
     });
+
+    if (orderByExpressions.length === 0 && 'createdAt' in this.table) {
+      orderByExpressions = [sql`${this.table.createdAt} DESC`];
+    }
 
     const data = await db
       .select()
