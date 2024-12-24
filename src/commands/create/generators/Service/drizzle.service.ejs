@@ -15,13 +15,13 @@ class <%- TableName %>Service {
     return withAuth(async () => this.repository.findById(id), []);
   }
 
-  async filter(
+  async findAll(
     page: number = 1,
     search = '',
     searchProperties: (keyof <%= TableName %>)[] = []
   ) {
     return withAuth(
-      async () => this.repository.filter(page, search, searchProperties),
+      async () => this.repository.findAll(page, search, searchProperties),
       []
     );
   }

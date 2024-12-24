@@ -20,7 +20,7 @@ export default class <%= TableName %>Repository {
     });
   }
 
-  async filter(
+  async findAll(
     page: number = 1,
     search: string,
     searchProperties: (keyof <%= TableName %>)[] = [],

@@ -12,7 +12,7 @@ export async function get<%= TableName %>(id: <%= pkType %>) {
 }
 
 export async function findAll<%= plural(TableName) %>(page: number = 1, search = '') {
-  return <%= tableName %>Service.filter(page, search, []);
+  return <%= tableName %>service.findAll(page, search, []);
 }
 
 export async function create<%= TableName %>(<%= singular(tableName) %>: <%= TableName %>) {
