@@ -19,11 +19,14 @@ class BaseRepository<T extends string> {
     });
   }
 
-  async findAll(offset: number = 0, limit: number = 10) {
-    return await this.repository.findMany({
-      skip: offset,
-      take: limit,
-    });
+  async getAll(limit?: number) {
+    if(limit){
+      return await this.repository.findMany({
+        take: limit
+      });
+    } else {
+      return await this.repository.findMany();
+    }
   }
 
   async findAll(

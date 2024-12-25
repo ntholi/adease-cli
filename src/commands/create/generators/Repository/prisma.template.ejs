@@ -14,10 +14,14 @@ export default class <%= TableName %>Repository {
     });
   }
 
-  async findAll(limit: number = 10) {
-    return await prisma.<%= singular(tableName) %>.findMany({
-      take: limit,
-    });
+  async getAll(limit?: number) {
+    if(limit){
+      return await prisma.<%= singular(tableName) %>.findMany({
+        take: limit,
+      });
+    } else {
+      return await prisma.<%= singular(tableName) %>.findMany();
+    }
   }
 
   async findAll(
