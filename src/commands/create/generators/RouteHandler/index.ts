@@ -2,6 +2,7 @@ import { baseDir } from '@/utils/config';
 import Answers from '../../types/Answers';
 import { Field } from '../../types/Field';
 import { BaseGenerator } from '../BaseGenerator';
+import { kebabCase } from '@/utils';
 
 class RouteHandlerGenerator extends BaseGenerator {
   constructor(tableName: string, fields: Field[], answers: Answers) {
@@ -25,7 +26,7 @@ class RouteHandlerGenerator extends BaseGenerator {
   }
 
   protected getOutputDir(): string {
-    return baseDir(`/app/api/${this.tableName}`);
+    return baseDir(`/app/api/${kebabCase(this.tableName)}`);
   }
 }
 
