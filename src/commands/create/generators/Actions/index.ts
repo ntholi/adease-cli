@@ -2,6 +2,7 @@ import { baseDir } from '@/utils/config';
 import Answers from '../../types/Answers';
 import { Field } from '../../types/Field';
 import { BaseGenerator } from '../BaseGenerator';
+import { kebabCase } from '@/utils';
 
 class ActionsGenerator extends BaseGenerator {
   constructor(tableName: string, fields: Field[], answers: Answers) {
@@ -15,7 +16,7 @@ class ActionsGenerator extends BaseGenerator {
 
     await this.compile(
       `Actions/${templateFile}`,
-      `${this.tableName}/actions.ts`,
+      `${kebabCase(this.tableName)}/actions.ts`,
       {}
     );
   }

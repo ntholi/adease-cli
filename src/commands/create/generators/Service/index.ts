@@ -2,6 +2,7 @@ import { baseDir } from '@/utils/config';
 import Answers from '../../types/Answers';
 import { Field } from '../../types/Field';
 import { BaseGenerator } from '../BaseGenerator';
+import { kebabCase } from '@/utils';
 
 class ServiceGenerator extends BaseGenerator {
   constructor(tableName: string, fields: Field[], answers: Answers) {
@@ -13,7 +14,7 @@ class ServiceGenerator extends BaseGenerator {
 
     await this.compile(
       `Service/${this.database}.service.ejs`,
-      `${this.tableName}/service.ts`
+      `${kebabCase(this.tableName)}/service.ts`
     );
   }
 

@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { routeException } from '@/utils/exceptions';
-import { <%= tableName %>Service } from '@server/<%= kebabCase(tableName) %>/service';
+import { <%= tableName %>Service } from '@/server/<%= kebabCase(tableName) %>/service';
 
 export async function GET(request: NextRequest) {
   return routeException(async () => {
