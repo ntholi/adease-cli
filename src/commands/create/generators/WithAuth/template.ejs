@@ -1,11 +1,9 @@
 'use server';
 
 import { auth } from '@/auth';
-<% if (database === 'drizzle') { %>import { users } from '@/db/schema';<% } %>
-<% if (database === 'prisma') { %>import { Prisma } from '@prisma/client';<% } %>
+import { users } from '@/db/schema/auth';
 
-<% if (database === 'drizzle') { %>type Role = (typeof users.$inferSelect)['role'];<% } %>
-<% if (database === 'prisma') { %>type Role = Prisma.UserCreateInput['role'];<% } %>
+type Role = (typeof users.$inferSelect)['role'] | 'all';
 
 export default async function withAuth<T>(
   fn: () => Promise<T>,
@@ -13,7 +11,6 @@ export default async function withAuth<T>(
 ) {
   const stack = new Error().stack;
   const callerLine = stack?.split('\n')[2] || '';
-  const fileMatch = callerLine.match(/\((.*?):\d+:\d+\)/);
   const methodMatch = callerLine.match(/at\s+(.*?)\s+\(/);
 
   const method = methodMatch ? methodMatch[1] : 'unknown method';
