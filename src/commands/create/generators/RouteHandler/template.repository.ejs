@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get('page') || '1');
     const search = searchParams.get('q')  || '';
     
-    return <%= tableName %>repository.findAll({ page, search });
+    return <%= tableName %>Repository.findAll({ page, search });
   });
 }
 
