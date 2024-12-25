@@ -3,6 +3,14 @@ import { Prisma } from '@prisma/client';
 
 type <%= TableName %> = Prisma.<%- TableName %>CreateInput;
 
+export interface FindAllParams<T extends SQLiteTable> {
+  page?: number;
+  search?: string;
+  searchProperties?: (keyof ModelSelect<T>)[];
+  orderBy?: OrderBy<T>[];
+  pageSize?: number;
+}
+
 export default class <%= TableName %>Repository {
   async findFirst() {
     return await prisma.<%= singular(tableName) %>.findFirst();
@@ -24,12 +32,14 @@ export default class <%= TableName %>Repository {
     }
   }
 
-  async findAll(
-    page: number = 1,
-    search: string,
-    searchProperties: (keyof <%= TableName %>)[] = [],
-    pageSize: number = 15
-  ) {
+  async findAll(params: FindAllParams<T>) {
+    const {
+      page = 1,
+      search,
+      searchProperties = [],
+      pageSize = 15,
+    } = params;
+
     try {
       const offset = (page - 1) * pageSize;
       let where = {};

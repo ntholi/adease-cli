@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import <%- TableName %>Repository from './repository';
+import <%- TableName %>Repository, {FindAllParams} from './repository';
 import withAuth from '@/server/base/withAuth';
 
 type <%= TableName %> = Prisma.<%- TableName %>CreateInput;
@@ -15,11 +15,7 @@ class <%- TableName %>Service {
     return withAuth(async () => this.repository.findById(id), []);
   }
 
-  async findAll(
-    page: number = 1,
-    search = '',
-    searchProperties: (keyof <%= TableName %>)[] = []
-  ) {
+  async findAll(params: FindAllParams<typeof <%= tableName %>>) {
     return withAuth(
       async () => this.repository.findAll(page, search, searchProperties),
       []
