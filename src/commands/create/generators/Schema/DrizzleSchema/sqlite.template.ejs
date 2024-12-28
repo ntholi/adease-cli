@@ -1,6 +1,6 @@
 import { sqliteTable, integer, text } from 'drizzle-orm/sqlite-core';
 
-export const <%= tableName %> = sqliteTable('<%= tableName %>', {
+export const <%= tableName %> = sqliteTable('<%= kebabCase(tableName) %>', {
   <%- pkType === 'number' ? 'id: integer().primaryKey({ autoIncrement: true })' : 'id: text({length:21}).$defaultFn(() => nanoid()).primaryKey()' %>,
 <%- fields.map(field => `  ${field.name}: ${field.type.toLowerCase()}(),`).join('\n') %>
   createdAt: integer({ mode: 'timestamp' }).default(
