@@ -1,21 +1,12 @@
-import path from 'path';
-import ejs from 'ejs';
-import fs from 'fs';
-import { promises as fsPromises } from 'fs';
-import { fileURLToPath } from 'url';
 import { readConfig } from '@/utils/config';
+import ejs from 'ejs';
+import { promises as fsPromises } from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { INIT_DESTINATION_DIR } from '../..';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-interface TSConfig {
-  compilerOptions?: {
-    paths?: {
-      [key: string]: string[];
-    };
-  };
-}
 
 export class RootIndexGenerator {
   private readonly outputDir: string;
@@ -57,27 +48,6 @@ export class RootIndexGenerator {
         `${it}.tsx`
       );
     }
-
-    const tsconfigPath = path.join(process.cwd(), 'tsconfig.json');
-    let tsconfig: TSConfig = {};
-    if (fs.existsSync(tsconfigPath)) {
-      const tsconfigContent = await fsPromises.readFile(tsconfigPath, 'utf8');
-      tsconfig = JSON.parse(tsconfigContent) as TSConfig;
-    }
-    if (!tsconfig.compilerOptions) {
-      tsconfig.compilerOptions = {};
-    }
-    if (!tsconfig.compilerOptions.paths) {
-      tsconfig.compilerOptions.paths = {};
-    }
-
-    const config = readConfig();
-
-    tsconfig.compilerOptions.paths['@admin/*'] = [
-      `./${config.baseDir}/app/${config.adminDir}/*`,
-    ];
-
-    await fsPromises.writeFile(tsconfigPath, JSON.stringify(tsconfig, null, 2));
   }
 }
 
