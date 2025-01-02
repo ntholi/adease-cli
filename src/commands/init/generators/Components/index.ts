@@ -3,11 +3,10 @@ import fs from 'fs/promises';
 import path from 'path';
 import { baseDir } from '@/utils/config';
 import { fileURLToPath } from 'url';
+import { INIT_DESTINATION_DIR } from '../..';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-export const INIT_DESTINATION_DIR = 'Init';
 
 const components = [
   'DeleteButton',

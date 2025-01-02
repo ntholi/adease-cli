@@ -5,6 +5,8 @@ import chalk from 'chalk';
 import RootIndexGenerator from './generators/RootIndex';
 import HooksGenerator from './generators/Hooks';
 
+export const INIT_DESTINATION_DIR = 'Init';
+
 export async function init(options: { yes?: boolean }) {
   let baseDir: string;
   let adminDir: string;

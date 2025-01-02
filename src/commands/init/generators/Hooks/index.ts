@@ -3,13 +3,12 @@ import fs from 'fs/promises';
 import path from 'path';
 import { baseDir } from '@/utils/config';
 import { fileURLToPath } from 'url';
+import { INIT_DESTINATION_DIR } from '../..';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-export const INIT_DESTINATION_DIR = 'Init';
-
-const hooks = ['useViewSelector'];
+const hooks = ['useViewSelect'];
 
 class HooksGenerator {
   async compile(template: string, outputPath: string): Promise<void> {
@@ -25,7 +24,7 @@ class HooksGenerator {
   async generate(): Promise<void> {
     for (const component of hooks) {
       await this.compile(
-        `${INIT_DESTINATION_DIR}/${component}.ejs`,
+        `${INIT_DESTINATION_DIR}/Hooks/${component}.ejs`,
         `${component}.tsx`
       );
     }

@@ -4,7 +4,7 @@ import fs from 'fs';
 import { promises as fsPromises } from 'fs';
 import { fileURLToPath } from 'url';
 import { readConfig } from '@/utils/config';
-import { INIT_DESTINATION_DIR } from '../Components';
+import { INIT_DESTINATION_DIR } from '../..';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
