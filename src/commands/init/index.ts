@@ -41,10 +41,10 @@ export async function init(options: { yes?: boolean }) {
           name: 'databaseEngine',
           message: 'Which database engine would you like to use?',
           choices: [
-            { name: 'PostgreSQL', value: 'postgresql' },
             { name: 'SQLite', value: 'sqlite' },
+            { name: 'PostgreSQL', value: 'postgresql' },
           ],
-          default: 'postgresql',
+          default: 'sqlite',
         },
       ]);
       databaseEngine = engineAnswers.databaseEngine;
