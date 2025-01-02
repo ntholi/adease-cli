@@ -67,7 +67,7 @@ export function ListLayout<T>({
             if (isMobile) {
               setView('details');
             }
-            const itemId = (itemElement.props as any).id;
+            const itemId = (itemElement.props as { id: string }).id;
             router.push(`${path}/${itemId}`);
           },
         },
