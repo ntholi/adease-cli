@@ -9,7 +9,7 @@ class ExceptionsGenerator extends BaseGenerator {
   }
 
   async generate(): Promise<void> {
-    await this.compile('Exceptions/template.ejs', 'exceptions.ts');
+    await this.compile('RouteUtils/template.ejs', 'routeHandler.ts');
   }
 
   protected getOutputDir(): string {

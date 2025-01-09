@@ -16,7 +16,7 @@ class AppError extends Error {
   }
 }
 
-export async function routeException<T>(handler: () => Promise<T>) {
+export async function routeHandler<T>(handler: () => Promise<T>) {
   try {
     const result = await handler();
     return NextResponse.json(result);

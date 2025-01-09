@@ -12,7 +12,7 @@ import Service from './generators/Service';
 import BaseRepository from './generators/BaseRepository';
 import Repository from './generators/Repository';
 import RouteHandlerGenerator from './generators/RouteHandler';
-import Exceptions from './generators/Exceptions';
+import Exceptions from './generators/RouteUtils';
 import WithAuth from './generators/WithAuth';
 
 const generators = [
@@ -40,7 +40,7 @@ export async function createCommand(
   options: { yes?: boolean }
 ) {
   console.log(chalk.green(`Creating table: ${tableName}`));
-  
+
   const fields = rawFields
     .filter((field) => field.includes(':'))
     .map((field) => {
@@ -68,7 +68,7 @@ export async function createCommand(
     answers = {
       serviceFile: true,
       apiRoutes: false,
-      pkType: 'number'
+      pkType: 'number',
     };
   } else {
     console.log('--------------------------------');
@@ -78,7 +78,7 @@ export async function createCommand(
         name: 'pkType',
         message: 'Select the primary key type:',
         choices: ['number', 'string'],
-        default: 'number'
+        default: 'number',
       },
       {
         type: 'confirm',

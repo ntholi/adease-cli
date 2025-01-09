@@ -1,9 +1,9 @@
 import { NextRequest } from 'next/server';
-import { routeException } from '@/utils/exceptions';
+import { routeHandler } from '@/utils/exceptions';
 import { <%= tableName %>Repository } from '@/server/<%= tableName %>/repository';
 
 export async function GET(request: NextRequest) {
-  return routeException(async () => {
+  return routeHandler(async () => {
     const searchParams = await request.nextUrl.searchParams;
     const page = parseInt(searchParams.get('page') || '1');
     const search = searchParams.get('q')  || '';
@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  return routeException(async () => {
+  return routeHandler(async () => {
     const data = await request.json();
     return <%= tableName %>Repository.create(data);
   });

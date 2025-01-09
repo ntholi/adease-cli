@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { routeException } from '@/utils/exceptions';
+import { routeHandler } from '@/utils/exceptions';
 import { <%= tableName %>Service } from '@/server/<%= kebabCase(tableName) %>/service';
 
 
@@ -8,14 +8,14 @@ type Props = {
 };
 
 export async function GET(_: NextRequest, { params }: Props) {
-  return routeException(async () => {
+  return routeHandler(async () => {
     const { id } = await params;
     return <%= tableName %>Service.get(<%- pkType === 'number' ? 'Number(id)' : 'id' %>);
   });
 }
 
 export async function PUT(request: NextRequest, { params }: Props) {
-  return routeException(async () => {
+  return routeHandler(async () => {
     const { id } = await params;
     const data = await request.json();
     return <%= tableName %>Service.update(<%- pkType === 'number' ? 'Number(id)' : 'id' %>, data);
@@ -23,7 +23,7 @@ export async function PUT(request: NextRequest, { params }: Props) {
 }
 
 export async function DELETE(_: NextRequest, { params }: Props) {
-  return routeException(async () => {
+  return routeHandler(async () => {
     const { id } = await params;
     return <%= tableName %>Service.delete(<%- pkType === 'number' ? 'Number(id)' : 'id' %>);
   });
