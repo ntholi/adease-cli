@@ -6,7 +6,7 @@ import { FindAllParams } from '../base/BaseRepository';
 type <%= TableName %> = typeof <%= tableName %>.$inferInsert;
 
 class <%- TableName %>Service {
-  constructor(private readonly repository: <%- TableName %>Repository = new <%- TableName %>Repository()) {}
+  constructor(private readonly repository = new <%- TableName %>Repository()) {}
 
   async first() {
     return withAuth(async () => this.repository.findFirst(), []);
