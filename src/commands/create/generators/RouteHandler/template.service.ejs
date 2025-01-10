@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { routeHandler } from '@/utils/exceptions';
-import { <%= tableName %>Service } from '@/server/<%= kebabCase(tableName) %>/service';
+import { <%= tableName %>Service as service } from '@/server/<%= kebabCase(tableName) %>/service';
 
 export async function GET(request: NextRequest) {
   return routeHandler(async () => {
@@ -8,13 +8,13 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get('page') || '1');
     const search = searchParams.get('q')  || '';
     
-    return <%= tableName %>Service.findAll({ page, search });
+    return service.findAll({ page, search });
   });
 }
 
 export async function POST(request: NextRequest) {
   return routeHandler(async () => {
     const data = await request.json();
-    return <%= tableName %>Service.create(data);
+    return service.create(data);
   });
 } 

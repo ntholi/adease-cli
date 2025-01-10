@@ -2,28 +2,28 @@
 
 <% if (database === 'prisma') { %>import { Prisma } from '@prisma/client';<% } %>
 <% if (database === 'drizzle') { %>import { <%= tableName %> } from '@/db/schema';<% } %>
-import { <%= tableName %>Repository } from './repository';
+import { <%= tableName %>Repository as repository } from './repository';
 
 <% if (database === 'drizzle') { %>type <%- TableName %> = typeof <%- tableName %>.$inferInsert;<% } %>
 <% if (database === 'prisma') { %>type <%- TableName %> = Prisma.<%- TableName %>CreateInput;<% } %>
 
 
 export async function get<%= TableName %>(id: <%= pkType %>) {
-  return <%= tableName %>Repository.findById(id);
+  return repository.findById(id);
 }
 
 export async function findAll<%= plural(TableName) %>(page: number = 1, search = '') {
-  return <%= tableName %>Repository.findAll({ page, search });
+  return repository.findAll({ page, search });
 }
 
 export async function create<%= TableName %>(<%= singular(tableName) %>: <%= TableName %>) {
-  return <%= tableName %>Repository.create(<%= singular(tableName) %>);
+  return repository.create(<%= singular(tableName) %>);
 }
 
 export async function update<%= TableName %>(id: <%= pkType %>, <%= singular(tableName) %>: <%= TableName %>) {
-  return <%= tableName %>Repository.update(id, <%= singular(tableName) %>);
+  return repository.update(id, <%= singular(tableName) %>);
 }
 
 export async function delete<%= TableName %>(id: <%= pkType %>) {
-  return <%= tableName %>Repository.delete(id);
+  return repository.delete(id);
 }

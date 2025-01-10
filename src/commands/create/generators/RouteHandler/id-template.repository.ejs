@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { routeHandler } from '@/utils/exceptions';
-import { <%= tableName %>Repository } from '@/server/<%= tableName %>/repository';
+import { <%= tableName %>Repository as repository } from '@/server/<%= tableName %>/repository';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -9,7 +9,7 @@ type Props = {
 export async function GET(_: NextRequest, { params }: Props) {
   return routeHandler(async () => {
     const { id } = await params;
-    return <%= tableName %>Repository.findById(<%- pkType === 'number' ? 'Number(id)' : 'id' %>);
+    return repository.findById(<%- pkType === 'number' ? 'Number(id)' : 'id' %>);
   });
 }
 
@@ -17,13 +17,13 @@ export async function PUT(request: NextRequest, { params }: Props) {
   return routeHandler(async () => {
     const { id } = await params;
     const data = await request.json();
-    return <%= tableName %>Repository.update(<%- pkType === 'number' ? 'Number(id)' : 'id' %>, data);
+    return repository.update(<%- pkType === 'number' ? 'Number(id)' : 'id' %>, data);
   });
 }
 
 export async function DELETE(_: NextRequest, { params }: Props) {
   return routeHandler(async () => {
     const { id } = await params;
-    return <%= tableName %>Repository.delete(<%- pkType === 'number' ? 'Number(id)' : 'id' %>);
+    return repository.delete(<%- pkType === 'number' ? 'Number(id)' : 'id' %>);
   });
 } 
