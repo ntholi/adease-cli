@@ -96,8 +96,8 @@ class BaseRepository<
     };
   }
 
-  protected async paginatedResults(
-    data: ModelSelect<T>[],
+  protected async paginatedResults<E extends ModelSelect<T>>(
+    data: E[],
     whereCondition: SQL | undefined,
     pageSize: number
   ) {
