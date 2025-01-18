@@ -1,67 +1,55 @@
-# adease
+# Adease CLI
 
-A CLI tool for generating Next.js admin panels with TypeScript support.
+A CLI tool for generating database schemas and CRUD operations for Next.js applications.
 
 ## Installation
 
-```sh
-npm install adease
+```bash
+pnpm add adease
 ```
 
 ## Features
 
-- Generates complete admin panel CRUD ui
-- Supports multiple databases:
-  - Prisma
+- Database schema generation with support for:
   - Drizzle (PostgreSQL and SQLite)
+  - Prisma
   - Firebase
-- TypeScript support
-- Built-in authentication
-- Mantine UI components
-- Server actions for data handling
+- Type-safe schema definitions
+- Repository pattern implementation
 - Automatic form generation
-- List/detail view layouts
+- Server-side actions
 
 ## Usage
 
 ### Initialize Project
 
-First, initialize the admin panel in your Next.js project:
-
-```sh
+```bash
 adease init
 ```
 
-This will:
+This will prompt you for:
+- Database selection (Drizzle, Prisma, or Firebase)
+- Base directory configuration
+- Admin routes setup
 
-- Set up required base components
-- Configure admin routes
-- Create authentication setup
-- Install UI components
+### Generate Schema and CRUD Operations
 
-### Generate CRUD Interface
-
-Generate a complete CRUD interface for a model:
-
-```sh
-adease create
+```bash
+adease create <tableName> [fields...]
 ```
 
-This will prompt you for:
+Example:
+```bash
+adease create users name:string email:string role:string
+```
 
-- Model name
-- Fields and their types
-- Database selection
-- Primary key type
-
-## Project Structure
-
-The tool generates:
-
-- `/app/admin/[model]` - Routes and pages
-- `/components/adease` - Reusable UI components
-- `/server/[model]` - Server actions and repository
-- `/db/schema` - Database schema definitions
+Supported field types:
+- string
+- number
+- boolean
+- date
+- float
+- bigint (Prisma only)
 
 ## Configuration
 
@@ -78,14 +66,14 @@ Configuration is stored in `adease.json`:
 }
 ```
 
-## Stack
+## Project Structure
 
-- Next.js
-- TypeScript
-- Mantine UI
-- React Query
-- Next-Auth
-- Database of choice (Prisma/Drizzle/Firebase)
+The tool generates:
+
+- Database schema definitions
+- Repository layer for data access
+- Form components for data input
+- Server actions for data operations
 
 ## License
 
