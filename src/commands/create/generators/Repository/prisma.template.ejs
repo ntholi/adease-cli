@@ -55,7 +55,7 @@ export default class <%= TableName %>Repository {
         };
       }
 
-      const [items, total] = await Promise.all([
+      const [data, total] = await Promise.all([
         prisma.<%= singular(tableName) %>.findMany({
           where,
           skip: offset,
@@ -65,7 +65,7 @@ export default class <%= TableName %>Repository {
       ]);
 
       return {
-        items,
+        data,
         total,
         pages: Math.ceil(total / pageSize),
         currentPage: page,

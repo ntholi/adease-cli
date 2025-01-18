@@ -50,7 +50,7 @@ class BaseRepository<T extends string> {
         };
       }
 
-      const [items, total] = await Promise.all([
+      const [data, total] = await Promise.all([
         this.repository.findMany({
           where,
           skip: offset,
@@ -60,7 +60,7 @@ class BaseRepository<T extends string> {
       ]);
 
       return {
-        items,
+        data,
         total,
         pages: Math.ceil(total / pageSize),
         currentPage: page,

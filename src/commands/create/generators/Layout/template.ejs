@@ -9,7 +9,7 @@ export default function Layout({ children }: PropsWithChildren) {
     <ListLayout
       path={'/<%- adminDir %>/<%- kebabCase(plural(tableName)) %>'}
       queryKey={['<%- plural(tableName) %>']}
-      getItems={findAll<%- plural(TableName) %>}
+      getData={findAll<%- plural(TableName) %>}
       actionIcons={[<NewLink key={'new-link'} href='/admin/<%- kebabCase(plural(tableName)) %>/new' />]}
       renderItem={(it) => <ListItem id={it.id} label={it.id} />}
     >
