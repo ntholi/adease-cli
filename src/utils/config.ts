@@ -1,18 +1,27 @@
 import fs from 'fs';
 import path from 'path';
 
-export type DatabaseType = 'drizzle' | 'prisma' | 'firebase';
-export type DrizzleEngine = 'postgresql' | 'sqlite';
+export type DatabaseType = 'prisma' | 'drizzle' | 'firebase';
+export type DrizzleEngine = 'sqlite' | 'postgresql';
 
-interface Database {
+export interface DatabaseConfig {
   type: DatabaseType;
   engine?: DrizzleEngine;
+  url?: string;
+  firebaseConfig?: {
+    apiKey: string;
+    authDomain: string;
+    projectId: string;
+    storageBucket: string;
+    messagingSenderId: string;
+    appId: string;
+  };
 }
 
 interface Config {
   baseDir: string;
   adminDir: string;
-  database: Database | null;
+  database: DatabaseConfig | null;
 }
 
 export function readConfig(): Config {

@@ -1,18 +1,25 @@
+import { baseDir } from '@/utils/config';
 import Answers from '../../types/Answers';
-import { BaseGenerator } from '../BaseGenerator';
 import { Field } from '../../types/Field';
+import { BaseGenerator } from '../BaseGenerator';
+import { kebabCase } from '@/utils';
 
-class NewPage extends BaseGenerator {
+class NewPageGenerator extends BaseGenerator {
   constructor(tableName: string, fields: Field[], answers: Answers) {
-    super(tableName, fields, answers);
+    super(tableName, fields, answers, 'skip');
   }
 
   async generate(): Promise<void> {
+    const templateName = `NewPage/${this.database}.template.ejs`;
     await this.compile(
-      `NewPage/${this.database}.template.ejs`,
-      '/new/page.tsx'
+      templateName,
+      `${kebabCase(this.tableName)}/new/page.tsx`
     );
+  }
+
+  protected getOutputDir(): string {
+    return baseDir('app');
   }
 }
 
-export default NewPage;
+export default NewPageGenerator;

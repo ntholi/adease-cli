@@ -1,0 +1,10 @@
+import BaseRepository from '@/server/base/BaseRepository';
+import { <%= TableName %> } from '@/db/schema/<%= tableName %>';
+
+export default class <%= TableName %>Repository extends BaseRepository<<%= TableName %>> {
+  constructor() {
+    super('<%= kebabCase(tableName) %>');
+  }
+}
+
+export const <%= tableName %>Repository = new <%= TableName %>Repository(); 

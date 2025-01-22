@@ -1,0 +1,177 @@
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  query,
+  where,
+  orderBy,
+  limit,
+  startAfter,
+  DocumentData,
+  QueryConstraint,
+  Timestamp,
+} from 'firebase/firestore';
+import { db } from '@/db/firebase';
+
+export interface FindAllParams {
+  page?: number;
+  search?: string;
+  searchProperties?: string[];
+  orderBy?: { field: string; direction?: 'asc' | 'desc' }[];
+  pageSize?: number;
+  condition?: QueryConstraint[];
+}
+
+class BaseRepository<T extends DocumentData> {
+  constructor(private collectionName: string) {}
+
+  protected getCollection() {
+    return collection(db, this.collectionName);
+  }
+
+  async findFirst(): Promise<T | undefined> {
+    const q = query(this.getCollection(), limit(1));
+    const snapshot = await getDocs(q);
+    if (snapshot.empty) return undefined;
+    return { id: snapshot.docs[0].id, ...snapshot.docs[0].data() } as T;
+  }
+
+  async findById(id: string): Promise<T | undefined> {
+    const docRef = doc(this.getCollection(), id);
+    const docSnap = await getDoc(docRef);
+    if (!docSnap.exists()) return undefined;
+    return { id: docSnap.id, ...docSnap.data() } as T;
+  }
+
+  protected async queryExpressions(params: FindAllParams) {
+    const {
+      page = 1,
+      search = '',
+      searchProperties = [],
+      orderBy: orderByParams = [],
+      pageSize: pageSizeParam = 10,
+      condition = [],
+    } = params;
+
+    const pageSize = Math.max(1, Math.min(pageSizeParam, 100));
+    const offset = (page - 1) * pageSize;
+
+    let queryConstraints: QueryConstraint[] = [...condition];
+
+    if (search && searchProperties.length > 0) {
+      queryConstraints.push(
+        ...searchProperties.map((prop) =>
+          where(prop, '>=', search)
+        )
+      );
+    }
+
+    const orderByExpressions = orderByParams.map(({ field, direction = 'asc' }) =>
+      orderBy(field, direction)
+    );
+
+    if (orderByExpressions.length > 0) {
+      queryConstraints.push(...orderByExpressions);
+    }
+
+    queryConstraints.push(limit(pageSize));
+
+    if (offset > 0) {
+      const lastVisible = await this.getLastVisibleDoc(offset - 1, queryConstraints);
+      if (lastVisible) {
+        queryConstraints.push(startAfter(lastVisible));
+      }
+    }
+
+    return {
+      queryConstraints,
+      pageSize,
+    };
+  }
+
+  private async getLastVisibleDoc(offset: number, baseConstraints: QueryConstraint[]) {
+    const q = query(
+      this.getCollection(),
+      ...baseConstraints,
+      limit(1)
+    );
+    const snapshot = await getDocs(q);
+    return snapshot.docs[0];
+  }
+
+  protected async paginatedResults<E extends T>(
+    data: E[],
+    totalCount: number,
+    pageSize: number
+  ) {
+    return {
+      data,
+      pages: Math.ceil(totalCount / pageSize),
+    };
+  }
+
+  async findAll(
+    params: FindAllParams
+  ): Promise<{ data: T[]; pages: number }> {
+    const { queryConstraints, pageSize } = await this.queryExpressions(params);
+
+    const q = query(this.getCollection(), ...queryConstraints);
+    const snapshot = await getDocs(q);
+    
+    const data = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as T[];
+
+    const totalCount = await this.count();
+    return this.paginatedResults(data, totalCount, pageSize);
+  }
+
+  async exists(id: string): Promise<boolean> {
+    const docRef = doc(this.getCollection(), id);
+    const docSnap = await getDoc(docRef);
+    return docSnap.exists();
+  }
+
+  async create(data: Omit<T, 'id'>): Promise<T> {
+    const timestamp = Timestamp.now();
+    const docRef = await addDoc(this.getCollection(), {
+      ...data,
+      createdAt: timestamp,
+      updatedAt: timestamp,
+    });
+    return { id: docRef.id, ...data } as T;
+  }
+
+  async update(id: string, data: Partial<Omit<T, 'id'>>): Promise<T> {
+    const docRef = doc(this.getCollection(), id);
+    const timestamp = Timestamp.now();
+    await updateDoc(docRef, {
+      ...data,
+      updatedAt: timestamp,
+    });
+    return this.findById(id) as Promise<T>;
+  }
+
+  async delete(id: string): Promise<void> {
+    const docRef = doc(this.getCollection(), id);
+    await deleteDoc(docRef);
+  }
+
+  async count(): Promise<number> {
+    const snapshot = await getDocs(this.getCollection());
+    return snapshot.size;
+  }
+
+  async deleteAll(): Promise<void> {
+    const snapshot = await getDocs(this.getCollection());
+    const deletePromises = snapshot.docs.map((doc) => deleteDoc(doc.ref));
+    await Promise.all(deletePromises);
+  }
+}
+
+export default BaseRepository; 

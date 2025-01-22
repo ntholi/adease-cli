@@ -61,7 +61,7 @@ export abstract class BaseGenerator {
       snakeCase: snakeCase,
       camelCase: camelCase,
       capitalize: capitalize,
-      pkType: this.answers.pkType,
+      pkType: this.database === 'firebase' ? 'string' : this.answers.pkType,
     };
   }
 

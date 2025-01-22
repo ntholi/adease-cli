@@ -1,0 +1,27 @@
+import { notFound } from 'next/navigation';
+import { <%= TableName %>Form } from '../_components/form';
+import { get<%= TableName %> } from '../_actions/repository';
+
+interface Props {
+  params: {
+    id: string;
+  };
+}
+
+export default async function Edit<%= TableName %>Page({ params }: Props) {
+  const <%= singular(tableName) %> = await get<%= TableName %>(params.id);
+
+  if (!<%= singular(tableName) %>) {
+    return notFound();
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h1 className="text-xl font-bold">Edit <%= TableWord %></h1>
+      </div>
+
+      <<%= TableName %>Form <%= singular(tableName) %>={<%= singular(tableName) %>} />
+    </div>
+  );
+} 

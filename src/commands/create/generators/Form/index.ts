@@ -1,43 +1,25 @@
+import { baseDir } from '@/utils/config';
 import Answers from '../../types/Answers';
-import { BaseGenerator } from '../BaseGenerator';
 import { Field } from '../../types/Field';
-import path from 'path';
+import { BaseGenerator } from '../BaseGenerator';
+import { kebabCase } from '@/utils';
 
-class Form extends BaseGenerator {
+class FormGenerator extends BaseGenerator {
   constructor(tableName: string, fields: Field[], answers: Answers) {
-    super(tableName, fields, answers);
+    super(tableName, fields, answers, 'skip');
   }
 
   async generate(): Promise<void> {
-    const inputFields = this.fields.map((field) => {
-      let type = 'TextInput';
-      if (field.type.toLowerCase() === 'number') type = 'NumberInput';
-      if (field.type.toLowerCase() === 'date') type = 'DateInput';
-      if (field.type.toLowerCase() === 'boolean') type = 'Checkbox';
-      return { name: field.name, type };
-    });
-
-    const imports = this.fields.map((field) => {
-      let importType = 'TextInput';
-      if (field.type.toLowerCase() === 'number') importType = 'NumberInput';
-      if (field.type.toLowerCase() === 'date') importType = 'DateInput';
-      if (field.type.toLowerCase() === 'boolean') importType = 'Checkbox';
-      return importType;
-    });
-
-    const pathname = path.join(
-      this.baseDir,
-      'app',
-      this.adminDir,
-      this.tableName
+    const templateName = `Form/${this.database}.form.ejs`;
+    await this.compile(
+      templateName,
+      `${kebabCase(this.tableName)}/_components/form.tsx`
     );
+  }
 
-    await this.compile(`Form/${this.database}.form.ejs`, 'Form.tsx', {
-      imports: [...new Set(imports)],
-      inputFields: inputFields,
-      pathname,
-    });
+  protected getOutputDir(): string {
+    return baseDir('app');
   }
 }
 
-export default Form;
+export default FormGenerator;
