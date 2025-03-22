@@ -17,7 +17,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '@/db/firebase';
 
-export interface FindAllParams {
+export interface QueryOptions {
   page?: number;
   search?: string;
   searchProperties?: string[];
@@ -47,7 +47,7 @@ class BaseRepository<T extends DocumentData> {
     return { id: docSnap.id, ...docSnap.data() } as T;
   }
 
-  protected async queryExpressions(params: FindAllParams) {
+  protected async queryExpressions(params: QueryOptions) {
     const {
       page = 1,
       search = '',
@@ -115,7 +115,7 @@ class BaseRepository<T extends DocumentData> {
   }
 
   async findAll(
-    params: FindAllParams
+    params: QueryOptions
   ): Promise<{ data: T[]; pages: number }> {
     const { queryConstraints, pageSize } = await this.queryExpressions(params);
 

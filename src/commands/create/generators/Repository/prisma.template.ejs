@@ -3,7 +3,7 @@ import { Prisma } from '@prisma/client';
 
 type <%= TableName %> = Prisma.<%- TableName %>CreateInput;
 
-export interface FindAllParams<T extends SQLiteTable> {
+export interface QueryOptions<T extends SQLiteTable> {
   page?: number;
   search?: string;
   searchProperties?: (keyof ModelSelect<T>)[];
@@ -32,7 +32,7 @@ export default class <%= TableName %>Repository {
     }
   }
 
-  async findAll(params: FindAllParams<T>) {
+  async findAll(params: QueryOptions<T>) {
     const {
       page = 1,
       search,

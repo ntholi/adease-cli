@@ -1,7 +1,7 @@
 import { <%= TableName %> } from '@/db/schema/<%= tableName %>';
 import <%= TableName %>Repository from './repository';
 import withAuth from '@/server/base/withAuth';
-import { FindAllParams } from '@/server/base/BaseRepository';
+import { QueryOptions } from '@/server/base/BaseRepository';
 
 class <%- TableName %>Service {
   constructor(private readonly repository = new <%- TableName %>Repository()) {}
@@ -14,7 +14,7 @@ class <%- TableName %>Service {
     return withAuth(async () => this.repository.findById(id), []);
   }
 
-  async findAll(params: FindAllParams) {
+  async findAll(params: QueryOptions) {
     return withAuth(async () => this.repository.findAll(params), []);
   }
 
