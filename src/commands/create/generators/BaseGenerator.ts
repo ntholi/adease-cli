@@ -54,6 +54,7 @@ export abstract class BaseGenerator {
       TableWord: asWord(pascalCase(this.tableName)),
       adminDir: this.adminDir,
       database: this.database,
+      databaseEngine: this.databaseEngine,
       singular: (str: string) => singular(str),
       plural: (str: string) => plural(str),
       asWord: asWord,

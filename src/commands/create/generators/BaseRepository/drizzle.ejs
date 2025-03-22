@@ -1,16 +1,20 @@
 import { db } from '@/db';
-import { count, eq, like, or, sql, SQL } from 'drizzle-orm';
-import { SQLiteTable, SQLiteColumn } from 'drizzle-orm/sqlite-core';
+import { count, eq, sql, SQL } from 'drizzle-orm';
+<% if (databaseEngine === 'postgresql') { %>
+import { PgTable as Table, PgColumn as Column, ilike, or } from 'drizzle-orm/pg-core';
+<% } else { %>
+import { SQLiteTable as Table, SQLiteColumn as Column, like, or } from 'drizzle-orm/sqlite-core';
+<% } %>
 
-type ModelInsert<T extends SQLiteTable> = T['$inferInsert'];
-type ModelSelect<T extends SQLiteTable> = T['$inferSelect'];
+type ModelInsert<T extends Table> = T['$inferInsert'];
+type ModelSelect<T extends Table> = T['$inferSelect'];
 
-export interface OrderBy<T extends SQLiteTable> {
+export interface OrderBy<T extends Table> {
   field: keyof ModelSelect<T>;
   direction?: 'asc' | 'desc';
 }
 
-export interface FindAllParams<T extends SQLiteTable> {
+export interface FindAllParams<T extends Table> {
   page?: number;
   search?: string;
   searchProperties?: (keyof ModelSelect<T>)[];
@@ -20,7 +24,7 @@ export interface FindAllParams<T extends SQLiteTable> {
 }
 
 class BaseRepository<
-  T extends SQLiteTable,
+  T extends Table,
   PK extends keyof T & keyof ModelSelect<T>
 > {
   constructor(private table: T, private primaryKey: PK) {}
@@ -37,7 +41,7 @@ class BaseRepository<
     const [result] = await db
       .select()
       .from(this.table)
-      .where(eq(this.table[this.primaryKey] as SQLiteColumn, id))
+      .where(eq(this.table[this.primaryKey] as Column, id))
       .limit(1);
     return result;
   }
@@ -62,7 +66,7 @@ class BaseRepository<
     const offset = (page - 1) * pageSize;
 
     let orderByExpressions = orderBy.map((order) => {
-      const column = this.table[order.field] as SQLiteColumn;
+      const column = this.table[order.field] as Column;
       return sql`${column} ${
         order.direction === 'desc' ? sql`DESC` : sql`ASC`
       }`;
@@ -77,7 +81,11 @@ class BaseRepository<
     if (search && searchProperties.length > 0) {
       const searchCondition = or(
         ...searchProperties.map((property) =>
-          like(this.table[property as keyof T] as SQLiteColumn, `%${search}%`)
+<% if (databaseEngine === 'postgresql') { %>
+          ilike(this.table[property as keyof T] as Column, `%${search}%`)
+<% } else { %>
+          like(this.table[property as keyof T] as Column, `%${search}%`)
+<% } %>
         )
       );
 
@@ -129,7 +137,7 @@ class BaseRepository<
     const [result] = await db
       .select({ count: count() })
       .from(this.table)
-      .where(eq(this.table[this.primaryKey] as SQLiteColumn, id))
+      .where(eq(this.table[this.primaryKey] as Column, id))
       .limit(1);
     return result?.count > 0;
   }
@@ -143,18 +151,26 @@ class BaseRepository<
     id: ModelSelect<T>[PK],
     data: Partial<ModelInsert<T>>
   ): Promise<ModelSelect<T>> {
+<% if (databaseEngine === 'sqlite') { %>
     const [updated] = (await db
       .update(this.table)
       .set(data)
-      .where(eq(this.table[this.primaryKey] as SQLiteColumn, id))
+      .where(eq(this.table[this.primaryKey] as Column, id))
       .returning()) as ModelSelect<T>[];
+<% } else { %>
+    const [updated] = await db
+      .update(this.table)
+      .set(data)
+      .where(eq(this.table[this.primaryKey] as Column, id))
+      .returning();
+<% } %>
     return updated;
   }
 
   async delete(id: ModelSelect<T>[PK]): Promise<void> {
     await db
       .delete(this.table)
-      .where(eq(this.table[this.primaryKey] as SQLiteColumn, id));
+      .where(eq(this.table[this.primaryKey] as Column, id));
   }
 
   async count(condition?: SQL): Promise<number> {
