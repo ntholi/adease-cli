@@ -1,9 +1,9 @@
 import { db } from '@/db';
-import { count, eq, sql, SQL } from 'drizzle-orm';
+import { count, eq, sql, SQL, ilike, like, or } from 'drizzle-orm';
 <% if (databaseEngine === 'postgresql') { %>
-import { PgTable as Table, PgColumn as Column, ilike, or } from 'drizzle-orm/pg-core';
+import { PgTable as Table, PgColumn as Column } from 'drizzle-orm/pg-core';
 <% } else { %>
-import { SQLiteTable as Table, SQLiteColumn as Column, like, or } from 'drizzle-orm/sqlite-core';
+import { SQLiteTable as Table, SQLiteColumn as Column } from 'drizzle-orm/sqlite-core';
 <% } %>
 
 type ModelInsert<T extends Table> = T['$inferInsert'];
