@@ -1,4 +1,3 @@
-import { kebabCase } from '@/utils';
 import Answers from '../../types/Answers';
 import { Field } from '../../types/Field';
 import { BaseGenerator } from '../BaseGenerator';
@@ -10,10 +9,7 @@ class NewPageGenerator extends BaseGenerator {
 
   async generate(): Promise<void> {
     const templateName = `NewPage/${this.database}.template.ejs`;
-    await this.compile(
-      templateName,
-      `${kebabCase(this.tableName)}/new/page.tsx`
-    );
+    await this.compile(templateName, '/new/page.tsx');
   }
 }
 
