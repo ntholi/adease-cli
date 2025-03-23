@@ -27,7 +27,7 @@ class BaseRepository<
   T extends Table,
   PK extends keyof T & keyof ModelSelect<T>
 > {
-  constructor(private table: T, private primaryKey: PK) {}
+  constructor(protected table: T, private primaryKey: PK) {}
 
   async findFirst(): Promise<ModelSelect<T> | undefined> {
     return await db
