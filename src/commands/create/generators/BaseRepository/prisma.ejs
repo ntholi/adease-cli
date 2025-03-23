@@ -32,10 +32,10 @@ class BaseRepository<T extends string> {
   async findAll(
     page: number = 1,
     search: string,
-    pageSize: number = 15
+    size: number = 15
   ) {
     try {
-      const offset = (page - 1) * pageSize;
+      const offset = (page - 1) * size;
       const searchProperties: string[] = [];
       let where = {};
 
@@ -54,7 +54,7 @@ class BaseRepository<T extends string> {
         this.repository.findMany({
           where,
           skip: offset,
-          take: pageSize,
+          take: size,
         }),
         this.repository.count({ where }),
       ]);
@@ -62,7 +62,7 @@ class BaseRepository<T extends string> {
       return {
         data,
         total,
-        pages: Math.ceil(total / pageSize),
+        pages: Math.ceil(total / size),
         currentPage: page,
       };
     } catch (error) {

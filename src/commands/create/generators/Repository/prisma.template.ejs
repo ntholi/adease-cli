@@ -8,7 +8,7 @@ export interface QueryOptions<T extends SQLiteTable> {
   search?: string;
   searchProperties?: (keyof ModelSelect<T>)[];
   orderBy?: OrderBy<T>[];
-  pageSize?: number;
+  size?: number;
 }
 
 export default class <%= TableName %>Repository {
@@ -37,11 +37,11 @@ export default class <%= TableName %>Repository {
       page = 1,
       search,
       searchProperties = [],
-      pageSize = 15,
+      size = 15,
     } = params;
 
     try {
-      const offset = (page - 1) * pageSize;
+      const offset = (page - 1) * size;
       let where = {};
 
       if (search && search.trim() !== '') {
@@ -59,7 +59,7 @@ export default class <%= TableName %>Repository {
         prisma.<%= singular(tableName) %>.findMany({
           where,
           skip: offset,
-          take: pageSize,
+          take: size,
         }),
         prisma.<%= singular(tableName) %>.count({ where }),
       ]);
@@ -67,7 +67,7 @@ export default class <%= TableName %>Repository {
       return {
         data,
         total,
-        pages: Math.ceil(total / pageSize),
+        pages: Math.ceil(total / size),
         currentPage: page,
       };
     } catch (error) {

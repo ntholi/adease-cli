@@ -16,8 +16,8 @@ class <%- TableName %>Service {
     return withAuth(async () => this.repository.findById(id), []);
   }
 
-  async findAll(params: QueryOptions<typeof <%= tableName %>>) {
-    return withAuth(async () => this.repository.findAll(params), []);
+  async getAll(params: QueryOptions<typeof <%= tableName %>>) {
+    return withAuth(async () => this.repository.query(params), []);
   }
 
   async create(data: <%= TableName %>) {

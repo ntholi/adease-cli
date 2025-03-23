@@ -22,7 +22,7 @@ export interface QueryOptions {
   search?: string;
   searchProperties?: string[];
   orderBy?: { field: string; direction?: 'asc' | 'desc' }[];
-  pageSize?: number;
+  size?: number;
   condition?: QueryConstraint[];
 }
 
@@ -53,12 +53,12 @@ class BaseRepository<T extends DocumentData> {
       search = '',
       searchProperties = [],
       orderBy: orderByParams = [],
-      pageSize: pageSizeParam = 10,
+      size: sizeParam = 10,
       condition = [],
     } = params;
 
-    const pageSize = Math.max(1, Math.min(pageSizeParam, 100));
-    const offset = (page - 1) * pageSize;
+    const size = Math.max(1, Math.min(sizeParam, 100));
+    const offset = (page - 1) * size;
 
     let queryConstraints: QueryConstraint[] = [...condition];
 
@@ -78,7 +78,7 @@ class BaseRepository<T extends DocumentData> {
       queryConstraints.push(...orderByExpressions);
     }
 
-    queryConstraints.push(limit(pageSize));
+    queryConstraints.push(limit(size));
 
     if (offset > 0) {
       const lastVisible = await this.getLastVisibleDoc(offset - 1, queryConstraints);
@@ -89,7 +89,7 @@ class BaseRepository<T extends DocumentData> {
 
     return {
       queryConstraints,
-      pageSize,
+      size,
     };
   }
 
@@ -106,18 +106,18 @@ class BaseRepository<T extends DocumentData> {
   protected async paginatedResults<E extends T>(
     data: E[],
     totalCount: number,
-    pageSize: number
+    size: number
   ) {
     return {
       data,
-      pages: Math.ceil(totalCount / pageSize),
+      pages: Math.ceil(totalCount / size),
     };
   }
 
   async findAll(
     params: QueryOptions
   ): Promise<{ data: T[]; pages: number }> {
-    const { queryConstraints, pageSize } = await this.queryExpressions(params);
+    const { queryConstraints, size } = await this.queryExpressions(params);
 
     const q = query(this.getCollection(), ...queryConstraints);
     const snapshot = await getDocs(q);
@@ -128,7 +128,7 @@ class BaseRepository<T extends DocumentData> {
     })) as T[];
 
     const totalCount = await this.count();
-    return this.paginatedResults(data, totalCount, pageSize);
+    return this.paginatedResults(data, totalCount, size);
   }
 
   async exists(id: string): Promise<boolean> {

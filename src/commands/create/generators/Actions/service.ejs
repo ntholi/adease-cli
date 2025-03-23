@@ -11,8 +11,8 @@ export async function get<%= TableName %>(id: <%= pkType %>) {
   return service.get(id);
 }
 
-export async function findAll<%= plural(TableName) %>(page: number = 1, search = '') {
-  return service.query({ page, search });
+export async function get<%= plural(TableName) %>(page: number = 1, search = '') {
+  return service.getAll({ page, search });
 }
 
 export async function create<%= TableName %>(<%= singular(tableName) %>: <%= TableName %>) {
